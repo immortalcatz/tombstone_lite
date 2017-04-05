@@ -1,0 +1,11 @@
+{
+"__comment":"Cross Grave",
+"textures":{"0":"minecraft:blocks/stone"},
+"elements":[{"from":[4,0,4],"to":[12,1,12],"faces":{
+"down":{"uv":[4,4,12,12],"rotation":270,"texture":"#0"},
+"up":{"uv":[4,4,12,12],"rotation":90,"texture":"#0"},
+"north":{"uv":[4,0,12,1],"texture":"#0"},
+"south":{"uv":[4,0,12,1],"texture":"#0"},
+"west":{"uv":[4,0,12,1],"texture":"#0"},
+"east":{"uv":[4,0,12,1],"texture":"#0"}}},
+{"from":[5,1,5],"to":[11,2,11],"faces":{"up":{"uv":[5,5,11,11],"rotation":90,"texture":"#0"},"north":{"uv":[5,1,11,2],"texture":"#0"},"south":{"uv":[5,1,11,2],"texture":"#0"},"west":{"uv":[5,1,11,2],"texture":"#0"},"east":{"uv":[5,1,11,2],"texture":"#0"}}},{"from":[7,2,7],"to":[9,8,9],"faces":{"north":{"uv":[7,2,9,8],"texture":"#0"},"south":{"uv":[7,2,9,8],"texture":"#0"},"west":{"uv":[7,2,9,8],"texture":"#0"},"east":{"uv":[7,2,9,8],"texture":"#0"}}},{"from":[5,8,7],"to":[11,10,9],"faces":{"down":{"uv":[7,5,9,11],"rotation":270,"texture":"#0"},"up":{"uv":[7,5,9,11],"rotation":90,"texture":"#0"},"north":{"uv":[5,8,11,10],"texture":"#0"},"south":{"uv":[5,8,11,10],"texture":"#0"},"west":{"uv":[7,8,9,10],"texture":"#0"},"east":{"uv":[7,8,9,10],"texture":"#0"}}},{"from":[7,10,7],"to":[9,12,9],"faces":{"up":{"uv":[7,7,9,9],"rotation":90,"texture":"#0"},"north":{"uv":[7,10,9,12],"texture":"#0"},"south":{"uv":[7,10,9,12],"texture":"#0"},"west":{"uv":[7,10,9,12],"texture":"#0"},"east":{"uv":[7,10,9,12],"texture":"#0"}}}]}

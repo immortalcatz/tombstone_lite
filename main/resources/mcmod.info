@@ -1,0 +1,16 @@
+[
+{
+  "modid": "tombstone",
+  "name": "Corail Tombstone",
+  "description": "Place a tombstone with the dropped items when a players die.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://minecraft.curseforge.com/projects/corail-tombstone",
+  "updateUrl": "http://minecraft.curseforge.com/projects/corail-tombstone/files",
+  "authorList": ["Corail","MrRiegel"],
+  "credits": "Special thanks to Forge Minecraft",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

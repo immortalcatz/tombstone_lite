@@ -1,0 +1,11 @@
+{
+        "magic_use01": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "tombstone:magic_use01",
+                "stream": true
+            }
+        ]
+    }
+}

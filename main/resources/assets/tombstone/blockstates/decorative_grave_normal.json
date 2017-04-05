@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north":  { "model": "tombstone:decorative_grave_normal" },
+        "facing=south":  { "model": "tombstone:decorative_grave_normal", "y": 180 },
+        "facing=west":  { "model": "tombstone:decorative_grave_normal", "y": 270 },
+        "facing=east":  { "model": "tombstone:decorative_grave_normal", "y": 90 }
+    }
+}
