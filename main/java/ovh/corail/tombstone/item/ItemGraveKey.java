@@ -2,11 +2,9 @@ package ovh.corail.tombstone.item;
 
 import java.awt.Color;
 import java.util.List;
-import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;

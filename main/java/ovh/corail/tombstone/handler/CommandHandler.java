@@ -7,10 +7,12 @@ import com.google.common.collect.Lists;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import ovh.corail.tombstone.core.TeleportDim;
 
 public class CommandHandler implements ICommand {
 	
@@ -20,7 +22,7 @@ public class CommandHandler implements ICommand {
 	public CommandHandler() {
 		aliases.add("tombstone");
 		aliases.add("corail");
-		//commands.add("openGui");
+		commands.add("teleport");
 	}
 	
 	@Override
@@ -36,7 +38,7 @@ public class CommandHandler implements ICommand {
 	@Override
 	public String getUsage(ICommandSender sender) {
 		// TODO texte
-		return null;
+		return "/teleport <posX> <posY> <posZ> <dimension>";
 	}
 
 	@Override
@@ -52,11 +54,19 @@ public class CommandHandler implements ICommand {
 			System.out.println("message.command.denyClient");
 			return;
 		}*/
-		if (args.length != 1) {
+		/*if (args.length != 1) {
 			System.out.println("message.command.invalidArgument");
 			return;
-		} else if (args[0].equals(commands.get(0))) {
+		} else*/ 
+		if (args[0].equals(commands.get(0))) {
 			/** command 0 */
+			if (args.length == 5) {
+				int posX = Integer.parseInt(args[1]);
+				int posY = Integer.parseInt(args[2]);
+				int posZ = Integer.parseInt(args[3]);
+				int dimension = Integer.parseInt(args[4]);
+				TeleportDim.getInstance().teleport((Entity) sender, new BlockPos(posX, posY, posZ), dimension);		
+			}
 		} else {
 			System.out.println("message.command.invalidArgument");
 			return;

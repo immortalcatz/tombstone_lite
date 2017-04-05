@@ -2,9 +2,7 @@ package ovh.corail.tombstone.handler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

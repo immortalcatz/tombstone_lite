@@ -1,5 +1,7 @@
 package ovh.corail.tombstone.core;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -35,4 +37,9 @@ public class ClientProxy extends CommonProxy {
 	public Side getSide() {
 		return Side.CLIENT;
 	}
+	
+	@Override
+    public WorldServer getWorldServer(int dimId) {
+        return Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(dimId);
+    }
 }

@@ -8,6 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -72,5 +74,9 @@ public class CommonProxy {
 	public Side getSide() {
 		return Side.CLIENT;
 	}
+	
+    public WorldServer getWorldServer(int dimId) {
+        return DimensionManager.getWorld(dimId);
+    }
 	
 }
