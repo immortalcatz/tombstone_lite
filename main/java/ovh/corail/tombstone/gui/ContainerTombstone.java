@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class ContainerTombstone extends Container {
@@ -59,21 +60,10 @@ public class ContainerTombstone extends Container {
 			InventoryPlayer inv = playerIn.inventory;
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				if (!inv.getStackInSlot(i).isEmpty() && inv.getStackInSlot(i).getItem() == Main.grave_key) {
-					NBTTagCompound compound = inv.getStackInSlot(i).getTagCompound();
-					//try {
-					UUID.fromString(compound.getString("tombId"));
-					//} catch (IllegalArgumentException e) {
-					//	continue;
-					//}
-					UUID idKey = UUID.fromString(compound.getString("tombId"));
-					BlockPos tombPos = BlockPos.fromLong(compound.getLong("tombPos"));
-					if (world.getTileEntity(tombPos) instanceof TileEntityTombstone) {
-						TileEntityTombstone tomb = (TileEntityTombstone) world.getTileEntity(currentPos);
-						UUID idTomb = tomb.getPlayerId();
-						if (idKey.equals(idTomb)) {
-							inv.setInventorySlotContents(i, ItemStack.EMPTY);
-							break;
-						}
+					ItemStack key = inv.getStackInSlot(i);
+					BlockPos keyPos = ItemGraveKey.getTombPos(key);
+					if (keyPos.equals(pos)) {
+						inv.setInventorySlotContents(i, ItemStack.EMPTY);
 					}
 				}
 			}

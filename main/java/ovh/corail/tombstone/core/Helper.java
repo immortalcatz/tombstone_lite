@@ -92,10 +92,11 @@ public class Helper {
 	public static boolean isSafeBlock(World worldIn, BlockPos currentPos) {
 		IBlockState state = worldIn.getBlockState(currentPos);
 		Block block = state.getBlock();
+		if (currentPos.getY() < 0) { return false; }
 		if (block.isAir(state, worldIn, currentPos)) {
 			return true;
 		}
-		if (block.getMaterial(state).isLiquid()) {
+		/*if (block.getMaterial(state).isLiquid()) {
 			return false;
 		}
 		if (block.getBlockHardness(state, worldIn, currentPos) == -1.0F) {
@@ -106,7 +107,7 @@ public class Helper {
 		}
 		if (block.isReplaceable(worldIn, currentPos)) {
 			return true;
-		}	
+		}*/
 		return false;
 	}
 

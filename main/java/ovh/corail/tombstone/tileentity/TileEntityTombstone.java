@@ -21,10 +21,10 @@ public class TileEntityTombstone extends TileEntity implements ISidedInventory {
 	private final String name = "tileEntityTombstone";
 	private final int slotsCount = 45;
 	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(slotsCount, ItemStack.EMPTY);
-	private boolean needAccess = false;
+	private boolean needAccess;
 	private UUID ownerId;
-	private String ownerName = "";
-	private String deathDate = "";
+	private String ownerName;
+	private String deathDate;
 	
 	public TileEntityTombstone() {
 		super();
@@ -70,6 +70,7 @@ public class TileEntityTombstone extends TileEntity implements ISidedInventory {
 	}
 
 	public boolean getNeedAccess() {
+		// TODO decay time to access
 		return needAccess;
 	}
 
@@ -86,6 +87,16 @@ public class TileEntityTombstone extends TileEntity implements ISidedInventory {
 			}
 		}
 		return true;
+	}
+	
+	public int getEmptySlot() {
+		ItemStack stack;
+		for (int i = 0 ; i < inventory.size() ; i++) {
+			if (inventory.get(i).isEmpty()) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	@Override
@@ -170,7 +181,7 @@ public class TileEntityTombstone extends TileEntity implements ISidedInventory {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setString("ownerId", ownerId.toString());
+		compound.setUniqueId("ownerId", ownerId);
 		compound.setString("ownerName", ownerName);
 		compound.setString("deathDate", deathDate);
 		compound.setBoolean("needAccess", needAccess);
@@ -181,12 +192,11 @@ public class TileEntityTombstone extends TileEntity implements ISidedInventory {
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		ownerId = UUID.fromString(compound.getString("ownerId"));
+		ownerId = compound.getUniqueId("ownerId");
 		ownerName = compound.getString("ownerName");
 		deathDate = compound.getString("deathDate");
 		needAccess = compound.getBoolean("needAccess");
 		ItemStackHelper.loadAllItems(compound, inventory);
-		NBTTagList tagList = compound.getTagList("inventory", Constants.NBT.TAG_COMPOUND);
 	}
 
 	@Override

@@ -1,5 +1,9 @@
 package ovh.corail.tombstone.block;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,6 +21,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.GuiHandler;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
@@ -65,18 +70,35 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 		boolean valid = false;	
 		if (!tile.getNeedAccess() || playerIn.capabilities.isCreativeMode) {
 			valid = true;
-		/** if the tomb is linked with a key and not in creative mode */
+		
 		} else {
-			/** if a key is in hand */
-			if (playerIn.getHeldItemMainhand().getItem() == Main.grave_key) {
+			/** decay time before access are no more needed */
+			if (ConfigurationHandler.decayTime > -1) {
+				int seconds = 0;
+				Date deathDate = null;
+				try {
+					deathDate = new SimpleDateFormat("ddMMyyyy_HHmmss").parse(tile.getOwnerDeathDate());
+				} catch (ParseException e) { e.printStackTrace(); }
+				long timeElapsed = worldIn.getWorldTime()-deathDate.getTime();
+				seconds = (int) (timeElapsed % 60);
+				if (seconds > ConfigurationHandler.decayTime) {
+					valid = true;
+				}
+			}
+			/** if the tomb is linked with a key and not in creative mode */
+			if (!valid && playerIn.getHeldItemMainhand().getItem() == Main.grave_key) {
 				/** check the id of the tomb */
 				if (playerIn.getUniqueID().equals(tile.getPlayerId())) {
 					valid = true;
 				} else {
-					Helper.sendMessage("gui.message.wrongKey", playerIn, true);
+					if (worldIn.isRemote) {
+						Helper.sendMessage("gui.message.wrongKey", playerIn, true);
+					}
 				}
 			} else {
-				Helper.sendMessage("gui.message.youNeedAKey", playerIn, true);
+				if (worldIn.isRemote) {
+					Helper.sendMessage("gui.message.youNeedAKey", playerIn, true);
+				}
 			}
 		}
 		if (valid) {

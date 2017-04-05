@@ -1,7 +1,10 @@
 package ovh.corail.tombstone.handler;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -38,8 +41,9 @@ public class EventHandler {
 		if (player.isCreative()) { return; }
 		/** need to be a grave key */
 		if (!event.getEntityItem().getEntityItem().getItem().equals(Main.grave_key)) { return; }
+		System.out.println("ItemTossEvent GraveKey, cancelable ="+event.isCancelable());
 		if (event.isCancelable()) {
-			if (event.getPlayer().world.isRemote) {
+			if (event.getPlayer().world.isRemote && !player.isDead) {
 				Helper.sendMessage("item.message.cantDrop", player, true);
 			}
 			/** need to put the item in inventory */
@@ -59,24 +63,38 @@ public class EventHandler {
 		/** no drop or too much drops */
 		if (event.getDrops().size() <= 0 || event.getDrops().size() > 45) {	return; }
 		/** create the tombstone */
-		//buildTombstone(event, playerIn);
+		buildTombstone(event, playerIn);
 		playerIn.addStat(AchievementHandler.getAchievement("firstTomb"), 1);
 	}
 
 	@SubscribeEvent
 	/** change experience loss depending on config */
 	public void give(PlayerEvent.Clone event) {
+		EntityPlayer player = event.getEntityPlayer();
+		EntityPlayer original = event.getOriginal();
 		/** if player was dead and not in creative mode */
-		if (event.isWasDeath() && !event.getEntityPlayer().isCreative()) {
-			/** calcul of experience */
-			if (!ConfigurationHandler.xpLoss) {
-				event.getEntityPlayer().experienceTotal = event.getOriginal().experienceTotal;
-			} else {
-				event.getEntityPlayer().experienceTotal = (int) Math.floor(event.getOriginal().experienceTotal * (100 - ConfigurationHandler.percentXpLoss) / 100);
+		if (!event.isWasDeath() || player.isCreative()) { return; }
+		/** calcul of experience */
+		if (!ConfigurationHandler.xpLoss) {
+			player.experienceTotal = event.getOriginal().experienceTotal;
+		} else {
+			player.experienceTotal = (int) Math.floor(original.experienceTotal * (100 - ConfigurationHandler.percentXpLoss) / 100);
+		}
+		int[] result = Helper.calculXp(player.experienceTotal);
+		player.experienceLevel = result[0];
+		player.experience = (float) result[1] / result[2];
+		/** transfer all the grave's keys from the original to the player */
+		if (!ConfigurationHandler.tombAccess || player.world.getGameRules().getBoolean("keepInventory")) { return; }
+		int slot;
+		ItemStack stack;
+		for (int i = 0; i < original.inventory.getSizeInventory(); i++) {
+			stack = original.inventory.getStackInSlot(i);
+			if (!stack.isEmpty() && stack.getItem().equals(Main.grave_key)) {
+				slot = player.inventory.getFirstEmptyStack();
+				if (slot != -1) {
+					player.inventory.setInventorySlotContents(slot, stack);
+				} else { break; }
 			}
-			int[] result = Helper.calculXp(event.getEntityPlayer().experienceTotal);
-			event.getEntityPlayer().experienceLevel = result[0];
-			event.getEntityPlayer().experience = (float) result[1] / result[2];
 		}
 	}
 
@@ -95,36 +113,28 @@ public class EventHandler {
 		/** surface */
 		BlockPos currentPos = event.getEntityLiving().getPosition();
 		/** go up to find air */
-		while (!Helper.isSafeBlock(world, currentPos)) {
+		while (currentPos.getY() < 0 || !world.isAirBlock(currentPos)) {
 			currentPos = currentPos.up();
 		}
 		world.setBlockState(currentPos, Main.tombstone.getDefaultState().withProperty(BlockFacing.FACING, event.getEntityLiving().getHorizontalFacing().getOpposite()));
 		TileEntityTombstone tile = (TileEntityTombstone) world.getTileEntity(currentPos);
 		/** owner infos */
-		UUID tombId = playerIn.getUniqueID();
-		//tile.setTombId(tombId);
-		String ownerName = (event.getEntityLiving().hasCustomName() ? event.getEntityLiving().getCustomNameTag() : event.getEntityLiving().getName());
-		//tile.setOwnerName(ownerName);
-		//tile.setOwnerDeathDate(new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date()));
-		/** fill tombstone with items except xp balls */
-		/** reverse the inventory (equipable first) */
-		int i;
-		for (i = event.getDrops().size() - 1; i >= 0; i--) {
-			ItemStack stack = event.getDrops().get(i).getEntityItem();
-			if (!stack.isEmpty()) {
+		tile.setOwner(playerIn, new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date(world.getWorldTime())), ConfigurationHandler.tombAccess);
+		/** fill tombstone with items and reverse the inventory (equipable first) */
+		ItemStack stack;
+		for (int i = event.getDrops().size() - 1; i >= 0; i--) {
+			stack = event.getDrops().get(i).getEntityItem();
+			if (!stack.isEmpty() && !stack.getItem().equals(Main.grave_key)) {
 				EntityItem n = event.getDrops().get(i);
 				n.setEntityItemStack(Helper.addToInventoryWithLeftover(stack, tile, false));
 				event.getDrops().remove(i);
 			}
 		}
-		/** access are for players only */
-		if (ConfigurationHandler.tombAccess && event.getEntityLiving() instanceof EntityPlayer) {
-			//tile.setNeedAccess(true);
-			ItemStack stack = new ItemStack(Main.grave_key, 1, 0);
-			ItemGraveKey.setOwner(stack, tombId, ownerName, currentPos, world.provider.getDimension());
+		/** add a grave key to player inventory if access are needed */
+		if (ConfigurationHandler.tombAccess) {;
+			stack = new ItemStack(Main.grave_key, 1, 0);
+			ItemGraveKey.setTombPos(stack, currentPos, world.provider.getDimension());
 			playerIn.inventory.setInventorySlotContents(playerIn.inventory.getFirstEmptyStack(), stack);
-		} else {
-			//tile.setNeedAccess(false);
 		}
 	}
 }

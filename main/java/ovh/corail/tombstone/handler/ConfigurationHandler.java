@@ -7,7 +7,7 @@ public class ConfigurationHandler {
 	public static Configuration config;
 	public static boolean tombAccess, upgradeTombKey, uniqueTeleport, xpLoss;
 	public static String ingredientToUpgradeKey;
-	public static int percentXpLoss;
+	public static int percentXpLoss, decayTime;
 
 	public static void refreshConfig() {
 		tombAccess = config.getBoolean("tombAccess", Configuration.CATEGORY_GENERAL, true, Helper.getTranslation("config.tombAccess"));
@@ -16,6 +16,7 @@ public class ConfigurationHandler {
 		xpLoss = config.getBoolean("xpLoss", Configuration.CATEGORY_GENERAL, false, Helper.getTranslation("config.xpLoss"));
 		percentXpLoss = config.getInt("percentXpLoss", Configuration.CATEGORY_GENERAL, 0, 0, 100, Helper.getTranslation("config.percentXpLoss"));
 		ingredientToUpgradeKey = config.getString("ingredientToUpgradeKey", Configuration.CATEGORY_GENERAL, "minecraft:ender_pearl:1", Helper.getTranslation("config.ingredientToUpgradeKey"));
+		decayTime = config.getInt("decayTime", Configuration.CATEGORY_GENERAL, -1, -1, 50000, Helper.getTranslation("config.decayTime"));
 		if (config.hasChanged()) {
 			config.save();
 		}
