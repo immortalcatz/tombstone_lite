@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
+/** ref Blood Magic */
 public class TeleportDim extends Teleporter {
 	
 	private static TeleportDim instance;

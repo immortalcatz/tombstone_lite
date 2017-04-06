@@ -1,23 +1,25 @@
 package ovh.corail.tombstone.render;
 
-import net.minecraft.block.state.IBlockState;
+import java.awt.Color;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.block.BlockFacing;
 import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.core.ModProps;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 @SideOnly(Side.CLIENT)
 public class RenderTombstone extends TileEntitySpecialRenderer<TileEntityTombstone> {
 	public static final ModelTombstone model = new ModelTombstone();
-	public static final ResourceLocation textures = (new ResourceLocation("minecraft:textures/blocks/stone.png"));
+	public static final ResourceLocation textures = (new ResourceLocation(ModProps.MOD_ID + ":textures/blocks/tombstone.png"));
 
 	@Override
 	public void renderTileEntityAt(TileEntityTombstone te, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -44,6 +46,7 @@ public class RenderTombstone extends TileEntitySpecialRenderer<TileEntityTombsto
 			modZ = 0.32f;
 			break;
 		}
+		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5f, (float) y + 1.5f, (float) z + 0.5f);
 		GlStateManager.rotate(90f * rotationIndex, 0f, 1f, 0f);
@@ -51,18 +54,22 @@ public class RenderTombstone extends TileEntitySpecialRenderer<TileEntityTombsto
 		this.bindTexture(textures);
 		RenderTombstone.model.render((Entity) null, 0.0f, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
 		GlStateManager.popMatrix();
-
+		
+		GlStateManager.enableRescaleNormal();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + modX, (float) y + 0.15f, (float) z + modZ);
 		GlStateManager.rotate(90f * rotationIndex, 0f, 1f, 0f);
 		/** string size */
-		float scale = 0.007F;
+		float scale = 0.005f;
 		GlStateManager.scale(scale, -scale, scale);
+		GlStateManager.depthMask(false);
 		/** draw string */
-		showString("R.I.P.", getFontRenderer(), 0, 0x000000);
-		if (te.getOwnerName() != null) {
-			showString(te.getOwnerName(), getFontRenderer(), 10, 0xffffff);
-		}
+		showString(TextFormatting.BOLD + "R.I.P.", getFontRenderer(), 0, 14339760);
+		showString(TextFormatting.ITALIC + te.getOwnerName(), getFontRenderer(), 10, 625944);
+		showString(te.getOwnerDeathDate(1), getFontRenderer(), 20, 10261372);
+		showString(te.getOwnerDeathDate(2), getFontRenderer(), 30, 10261372);
+		GlStateManager.depthMask(true);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.popMatrix();
 
 	}

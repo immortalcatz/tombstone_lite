@@ -1,6 +1,6 @@
 {
 "__comment":"Normal Grave",
-"textures":{"0":"minecraft:blocks/stone"},
+"textures":{"0":"tombstone:blocks/tombstone"},
 "elements":[{"from":[4,0,2],"to":[12,3,14],"faces":{
     "down":{"uv":[4,2,12,14],"texture":"#0"},
     "up":{"uv":[4,2,12,14],"texture":"#0"},

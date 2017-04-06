@@ -14,15 +14,12 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
-import ovh.corail.tombstone.handler.GuiHandler;
-import ovh.corail.tombstone.handler.PacketHandler;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class CommonProxy {
@@ -56,15 +53,11 @@ public class CommonProxy {
 			RecipeSorter.register("recycler:upgradeKey", UpgradeGraveKeyRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
 			GameRegistry.addRecipe(new UpgradeGraveKeyRecipe(res, inputList));
 		}
-		/** packet handler */
-		PacketHandler.init();
 	}
 
 	public void init(FMLInitializationEvent event) {
 		/** achievements */
 		AchievementHandler.registerAchievements();
-		/** gui handler */
-		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiHandler());
 	}
 
 	public void postInit(FMLPostInitializationEvent event) {

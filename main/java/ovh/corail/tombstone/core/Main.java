@@ -21,7 +21,6 @@ import ovh.corail.tombstone.block.BlockDecorativeGraveSimple;
 import ovh.corail.tombstone.block.BlockDecorativeTombstone;
 import ovh.corail.tombstone.block.BlockTombstone;
 import ovh.corail.tombstone.handler.AchievementHandler;
-import ovh.corail.tombstone.handler.CommandHandler;
 import ovh.corail.tombstone.handler.EventHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.item.ItemAchievement001;
@@ -71,11 +70,6 @@ public class Main {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
-	}
-	
-	@Mod.EventHandler
-	public void serverLoad(FMLServerStartingEvent event) {
-		event.registerServerCommand(new CommandHandler());
 	}
 
 }

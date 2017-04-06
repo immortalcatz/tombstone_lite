@@ -22,9 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -68,9 +66,6 @@ public class ItemGraveKey extends Item {
 		TileEntity tile = world.getTileEntity(tombPos);
 		if (tile == null || !(tile instanceof TileEntityTombstone)) {
 			entity.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
-			if (world.isRemote) {
-				Helper.sendMessage("item.grave_key.message.disappear", (EntityPlayer) entity, true);
-			}
 		}
     }
 
@@ -147,9 +142,7 @@ public class ItemGraveKey extends Item {
 			BlockPos pos = getTombPos(stack);
 			int dimId = this.getTombDim(stack);
 			if (world.provider.getDimension() == dimId) {
-				if (ConfigurationHandler.uniqueTeleport) {
-					stack.getTagCompound().setBoolean("enchant", false);
-				}
+				stack.getTagCompound().setBoolean("enchant", false);
 				player.setPositionAndUpdate(pos.getX() + .5, pos.getY() + 1.05, pos.getZ() + .5);
 				player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
 			} else {

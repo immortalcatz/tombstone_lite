@@ -1,9 +1,5 @@
 package ovh.corail.tombstone.block;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,8 +18,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
-import ovh.corail.tombstone.handler.ConfigurationHandler;
-import ovh.corail.tombstone.handler.GuiHandler;
 import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
@@ -84,7 +78,7 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 			}
 		}
 		if (valid) {
-			playerIn.openGui(Main.instance, GuiHandler.TOMB, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			tile.giveInventory(playerIn);
 		} else {
 			Helper.sendMessage("gui.message.youNeedAKey", playerIn, true);
 		}

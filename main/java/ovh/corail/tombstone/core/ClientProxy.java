@@ -42,4 +42,5 @@ public class ClientProxy extends CommonProxy {
     public WorldServer getWorldServer(int dimId) {
         return Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(dimId);
     }
+	
 }

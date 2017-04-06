@@ -1,8 +1,8 @@
 package ovh.corail.tombstone.handler;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,7 +31,7 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	/** avoid to drop the tombstone key */
 	public void itemEvent(ItemTossEvent event) {
 		EntityPlayer player = event.getPlayer();
@@ -39,7 +39,6 @@ public class EventHandler {
 		if (player.isCreative()) { return; }
 		/** need to be a grave key */
 		if (!event.getEntityItem().getEntityItem().getItem().equals(Main.grave_key)) { return; }
-		System.out.println("ItemTossEvent GraveKey, cancelable ="+event.isCancelable());
 		if (event.isCancelable()) {
 			if (event.getPlayer().world.isRemote && !player.isDead) {
 				Helper.sendMessage("item.message.cantDrop", player, true);
@@ -65,7 +64,7 @@ public class EventHandler {
 		playerIn.addStat(AchievementHandler.getAchievement("firstTomb"), 1);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	/** change experience loss depending on config */
 	public void give(PlayerEvent.Clone event) {
 		EntityPlayer player = event.getEntityPlayer();
@@ -96,7 +95,7 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	/** remove experience balls */
 	public void onLivingExperienceDrop(LivingExperienceDropEvent event) {
 		if (event.getEntityLiving() instanceof EntityPlayer) {
@@ -114,10 +113,11 @@ public class EventHandler {
 		while (currentPos.getY() < 0 || !world.isAirBlock(currentPos)) {
 			currentPos = currentPos.up();
 		}
-		world.setBlockState(currentPos, Main.tombstone.getDefaultState().withProperty(BlockFacing.FACING, event.getEntityLiving().getHorizontalFacing().getOpposite()));
+		IBlockState state = Main.tombstone.getDefaultState().withProperty(BlockFacing.FACING, event.getEntityLiving().getHorizontalFacing().getOpposite());
+		world.setBlockState(currentPos, state);
 		TileEntityTombstone tile = (TileEntityTombstone) world.getTileEntity(currentPos);
 		/** owner infos */
-		tile.setOwner(playerIn, new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date(world.getWorldTime())), ConfigurationHandler.tombAccess);
+		tile.setOwner(playerIn, new Date().getTime(), ConfigurationHandler.tombAccess);
 		/** fill tombstone with items and reverse the inventory (equipable first) */
 		ItemStack stack;
 		for (int i = event.getDrops().size() - 1; i >= 0; i--) {
@@ -134,5 +134,6 @@ public class EventHandler {
 			ItemGraveKey.setTombPos(stack, currentPos, world.provider.getDimension());
 			playerIn.inventory.setInventorySlotContents(playerIn.inventory.getFirstEmptyStack(), stack);
 		}
+		world.notifyBlockUpdate(currentPos, state, state, 2);
 	}
 }

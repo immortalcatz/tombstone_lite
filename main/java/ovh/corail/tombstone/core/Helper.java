@@ -10,6 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
@@ -96,18 +97,6 @@ public class Helper {
 		if (block.isAir(state, worldIn, currentPos)) {
 			return true;
 		}
-		/*if (block.getMaterial(state).isLiquid()) {
-			return false;
-		}
-		if (block.getBlockHardness(state, worldIn, currentPos) == -1.0F) {
-			return false;
-		}
-		if (block.hasTileEntity(state)) {
-			return false;
-		}
-		if (block.isReplaceable(worldIn, currentPos)) {
-			return true;
-		}*/
 		return false;
 	}
 
@@ -190,6 +179,24 @@ public class Helper {
 		ItemStack tmp = stack.copy();
 		tmp.setCount(Math.min(size, stack.getMaxStackSize()));
 		return tmp;
+	}
+	
+	public static void produceTombstoneParticles(BlockPos pos) {
+		BlockPos currentPos = pos;
+		double motionX = 0.0D;
+		double motionY = 0.01D;
+		double motionZ = 0.0D;
+		int[] params = new int[4];
+		params[0] = 0;
+		params[1] = 0;
+		params[2] = 66;
+		params[3] = 66;
+		for (int i = -1; i < 1; i++) {
+			for (int j = -1; j < 1; j++) {
+				currentPos = pos.south(j + 1).east(i + 1);
+				Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, currentPos.getX(), currentPos.getY(), currentPos.getZ(), motionX, motionY, motionZ, params);
+			}
+		}
 	}
 
 }
