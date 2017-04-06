@@ -38,7 +38,7 @@ public class CommandHandler implements ICommand {
 	@Override
 	public String getUsage(ICommandSender sender) {
 		// TODO texte
-		return "/teleport <posX> <posY> <posZ> <dimension>";
+		return "/tombstone teleport <posX> <posY> <posZ> <dimension>";
 	}
 
 	@Override

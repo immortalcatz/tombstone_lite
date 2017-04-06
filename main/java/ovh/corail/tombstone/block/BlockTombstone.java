@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -23,6 +24,7 @@ import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.GuiHandler;
+import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
@@ -64,45 +66,27 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
-		if (worldIn.isRemote) { return false; }
+		if (worldIn.isRemote) { return true; }
 		TileEntityTombstone tile = (TileEntityTombstone) worldIn.getTileEntity(pos);
 		if (tile == null) { return false; }
-		boolean valid = false;	
+		boolean valid = false;
+		/** creative mode or no need of access */
 		if (!tile.getNeedAccess() || playerIn.capabilities.isCreativeMode) {
 			valid = true;
-		
-		} else {
-			/** decay time before access are no more needed */
-			if (ConfigurationHandler.decayTime > -1) {
-				int seconds = 0;
-				Date deathDate = null;
-				try {
-					deathDate = new SimpleDateFormat("ddMMyyyy_HHmmss").parse(tile.getOwnerDeathDate());
-				} catch (ParseException e) { e.printStackTrace(); }
-				long timeElapsed = worldIn.getWorldTime()-deathDate.getTime();
-				seconds = (int) (timeElapsed % 60);
-				if (seconds > ConfigurationHandler.decayTime) {
-					valid = true;
-				}
-			}
-			/** if the tomb is linked with a key and not in creative mode */
-			if (!valid && playerIn.getHeldItemMainhand().getItem() == Main.grave_key) {
-				/** check the id of the tomb */
-				if (playerIn.getUniqueID().equals(tile.getPlayerId())) {
-					valid = true;
-				} else {
-					if (worldIn.isRemote) {
-						Helper.sendMessage("gui.message.wrongKey", playerIn, true);
-					}
-				}
+		/** if the tomb is linked with a key */
+		} else if (playerIn.getHeldItemMainhand().getItem() == Main.grave_key) {
+			/** only check the same position/dimension for the tomb and the key */
+			ItemStack stack = playerIn.getHeldItemMainhand();
+			if (ItemGraveKey.getTombPos(stack).compareTo(tile.getPos()) == 0 && ItemGraveKey.getTombDim(stack)==worldIn.provider.getDimension()) {
+				valid = true;
 			} else {
-				if (worldIn.isRemote) {
-					Helper.sendMessage("gui.message.youNeedAKey", playerIn, true);
-				}
+				Helper.sendMessage("gui.message.wrongKey", playerIn, true);
 			}
 		}
 		if (valid) {
 			playerIn.openGui(Main.instance, GuiHandler.TOMB, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		} else {
+			Helper.sendMessage("gui.message.youNeedAKey", playerIn, true);
 		}
 		return valid;
 	}

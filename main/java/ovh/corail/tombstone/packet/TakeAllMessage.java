@@ -94,6 +94,8 @@ public class TakeAllMessage implements IMessage {
 					}
 				}
 				player.openContainer.detectAndSendChanges();
+				/** auto close gui if empty */
+				if (tombstone.isEmpty()) { player.closeScreen(); }
 			}
 		});
 		return null;

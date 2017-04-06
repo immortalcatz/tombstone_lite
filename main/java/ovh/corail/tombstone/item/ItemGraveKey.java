@@ -21,11 +21,16 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.core.TeleportDim;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
@@ -35,6 +40,14 @@ public class ItemGraveKey extends Item {
 
 	private static final String name = "grave_key";
 
+	public ItemGraveKey() {
+		super();
+		setRegistryName(name);
+		setUnlocalizedName(name);
+		setCreativeTab(null);
+		setMaxStackSize(1);
+	}
+	
 	/** add a compound if needed */
 	private static void checkCompound(ItemStack stack) {
 		if (!stack.hasTagCompound()) {
@@ -47,14 +60,16 @@ public class ItemGraveKey extends Item {
 	}
 	
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
 		if (!(stack.getItem() instanceof ItemGraveKey)) { return; }
+		int tombDimId = getTombDim(stack);
+		if (tombDimId != world.provider.getDimension()) { return; }
 		BlockPos tombPos = getTombPos(stack);
-		TileEntity tile = worldIn.getTileEntity(tombPos);
+		TileEntity tile = world.getTileEntity(tombPos);
 		if (tile == null || !(tile instanceof TileEntityTombstone)) {
-			entityIn.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
-			if (worldIn.isRemote) {
-				Helper.sendMessage("Une clef a disparu de votre équipement", (EntityPlayer) entityIn, false);
+			entity.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
+			if (world.isRemote) {
+				Helper.sendMessage("item.grave_key.message.disappear", (EntityPlayer) entity, true);
 			}
 		}
     }
@@ -80,15 +95,11 @@ public class ItemGraveKey extends Item {
 		NBTTagCompound compound = stack.getTagCompound();
 		return compound.getInteger("tombDim");
 	}
-
-	/** constructor */
-	public ItemGraveKey() {
-		super();
-		setRegistryName(name);
-		setUnlocalizedName(name);
-		setCreativeTab(null);
-		setMaxStackSize(1);
-	}
+	
+	@Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return hasEffect(stack) ? Helper.getTranslation("item.grave_key.nameUpgraded") : I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name").trim();
+    }
 
 	@Override
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
@@ -98,7 +109,7 @@ public class ItemGraveKey extends Item {
 	}
 
 	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
+	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
 		/**
 		 * because it's possible to drop the key while leaving the gui of the
 		 * empty tomb and to have a key without the related tomb
@@ -116,35 +127,36 @@ public class ItemGraveKey extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		if (itemStack.getTagCompound() != null) {
-			BlockPos tombPos = BlockPos.fromLong(itemStack.getTagCompound().getLong("tombPos"));
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+		if (stack.getTagCompound() != null) {
+			int tombDimId = getTombDim(stack);
+			String worldType = DimensionManager.getWorld(tombDimId).provider.getDimensionType().getName();
+			list.add(TextFormatting.WHITE + Helper.getTranslation("item.grave_key.info.dimTitle") + " : " + worldType + "(" + tombDimId + ")");
+			BlockPos tombPos = getTombPos(stack);
 			list.add(TextFormatting.WHITE + Helper.getTranslation("item.grave_key.info.posTitle") + " :  X=" + tombPos.getX() + "  Y=" + tombPos.getY());
-			// TODO teleport through dim
-			if (hasEffect(itemStack) && player.world.provider.getDimension() == getTombDim(itemStack)) {
-				list.add(TextFormatting.WHITE + Helper.getTranslation("item.grave_key.info.tele"));
+			if (hasEffect(stack)) {
+				list.add(TextFormatting.AQUA + Helper.getTranslation("item.grave_key.info.tele"));
 			}
 		}
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		ItemStack itemStackIn = playerIn.getHeldItemMainhand();
-		if (upgraded(itemStackIn)) {
-			if (worldIn.provider.getDimension() == getTombDim(itemStackIn)) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItemMainhand();
+		if (upgraded(stack)) {
+			BlockPos pos = getTombPos(stack);
+			int dimId = this.getTombDim(stack);
+			if (world.provider.getDimension() == dimId) {
 				if (ConfigurationHandler.uniqueTeleport) {
-					itemStackIn.getTagCompound().setBoolean("enchant", false);
+					stack.getTagCompound().setBoolean("enchant", false);
 				}
-				BlockPos p = getTombPos(itemStackIn);
-				playerIn.setPositionAndUpdate(p.getX() + .5, p.getY() + 1.05, p.getZ() + .5);
-				playerIn.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
+				player.setPositionAndUpdate(pos.getX() + .5, pos.getY() + 1.05, pos.getZ() + .5);
+				player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
 			} else {
-				if (worldIn.isRemote) {
-					Helper.sendMessage("item.message.sameDimension", playerIn, true);
-				}
+				TeleportDim.getInstance().teleport(player, pos, dimId);
 			}
 		}
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.onItemRightClick(world, player, hand);
 	}
 
 	@SubscribeEvent

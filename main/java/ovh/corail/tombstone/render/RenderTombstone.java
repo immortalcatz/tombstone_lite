@@ -1,9 +1,11 @@
 package ovh.corail.tombstone.render;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,9 +21,7 @@ public class RenderTombstone extends TileEntitySpecialRenderer<TileEntityTombsto
 
 	@Override
 	public void renderTileEntityAt(TileEntityTombstone te, double x, double y, double z, float partialTicks, int destroyStage) {
-		if (te.getWorld().getBlockState(te.getPos()).getBlock() != Main.tombstone) {
-			return;
-		}
+		if (te.getWorld().getBlockState(te.getPos()).getBlock() != Main.tombstone) { return; }
 		EnumFacing facing = te.getWorld().getBlockState(te.getPos()).getValue(BlockFacing.FACING);
 		int rotationIndex = 0;
 		float modX = 0.5f, modZ = 0.5f;
@@ -55,25 +55,24 @@ public class RenderTombstone extends TileEntitySpecialRenderer<TileEntityTombsto
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + modX, (float) y + 0.15f, (float) z + modZ);
 		GlStateManager.rotate(90f * rotationIndex, 0f, 1f, 0f);
-		FontRenderer var17 = this.getFontRenderer();
 		/** string size */
-		float var12 = 0.007F;
-		GlStateManager.scale(var12, -var12, var12);
+		float scale = 0.007F;
+		GlStateManager.scale(scale, -scale, scale);
 		/** draw string */
-		showString("R.I.P.", var17, 0, 0x000000);
+		showString("R.I.P.", getFontRenderer(), 0, 0x000000);
 		if (te.getOwnerName() != null) {
-			showString(te.getOwnerName(), var17, 10, 0xffffff);
+			showString(te.getOwnerName(), getFontRenderer(), 10, 0xffffff);
 		}
 		GlStateManager.popMatrix();
 
 	}
 
-	private void showString(String content, FontRenderer var17, int posY, int color) {
+	private void showString(String content, FontRenderer fontRenderer, int posY, int color) {
 		String deathText = content;
 		String[] splitString = new String[1];
 		splitString[0] = deathText;
 		for (int i = 0; i < splitString.length; i++) {
-			var17.drawString(splitString[i], -var17.getStringWidth(splitString[i]) / 2, (i * 10) - 30 + posY, color, false);
+			fontRenderer.drawString(splitString[i], -fontRenderer.getStringWidth(splitString[i]) / 2, (i * 10) - 30 + posY, color, false);
 		}
 	}
 }
