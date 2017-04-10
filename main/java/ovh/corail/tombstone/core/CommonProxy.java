@@ -20,6 +20,8 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
+import ovh.corail.tombstone.handler.PacketHandler;
+import ovh.corail.tombstone.tileentity.TileEntityFake;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class CommonProxy {
@@ -31,6 +33,7 @@ public class CommonProxy {
 		Helper.register();
 		/** register tileentities */
 		GameRegistry.registerTileEntity(TileEntityTombstone.class, "inventoryTombstone");
+		GameRegistry.registerTileEntity(TileEntityFake.class, "fakeTombstone");
 		/** new crafting recipes */
 		/** recipe to upgrade the tomb's key */
 		if (ConfigurationHandler.upgradeTombKey) {
@@ -53,6 +56,8 @@ public class CommonProxy {
 			RecipeSorter.register("recycler:upgradeKey", UpgradeGraveKeyRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
 			GameRegistry.addRecipe(new UpgradeGraveKeyRecipe(res, inputList));
 		}
+		/** packet handler */
+		PacketHandler.init();
 	}
 
 	public void init(FMLInitializationEvent event) {

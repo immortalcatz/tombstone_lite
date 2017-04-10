@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import ovh.corail.tombstone.render.RenderTombstone;
+import ovh.corail.tombstone.tileentity.TileEntityFake;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class ClientProxy extends CommonProxy {
@@ -24,6 +25,7 @@ public class ClientProxy extends CommonProxy {
 		Helper.render();
 		/** render tileentities */
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTombstone.class, new RenderTombstone());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFake.class, new RenderTombstone());
 		/** register key event */
 		MinecraftForge.EVENT_BUS.register(Main.grave_key);
 	}
@@ -40,7 +42,8 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
     public WorldServer getWorldServer(int dimId) {
-        return Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(dimId);
+		Minecraft mc = Minecraft.getMinecraft();
+		return mc.getIntegratedServer().worldServerForDimension(dimId);
     }
 	
 }

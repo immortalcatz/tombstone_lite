@@ -1,5 +1,7 @@
 package ovh.corail.tombstone.block;
 
+import java.util.Random;
+
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.item.ItemGraveKey;
@@ -23,10 +27,10 @@ import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 	private static final String name = "tombstone";
-	protected static final AxisAlignedBB east = new AxisAlignedBB(3.0F / 16, 0.0F / 16, 0.5F / 16, 13.0F / 16, 8.0F / 16, 15.5F / 16);;
-	protected static final AxisAlignedBB north = new AxisAlignedBB(0.5F / 16, 0.0F / 16, 3.0F / 16, 15.5F / 16, 8.0F / 16, 13.0F / 16);
-	protected static final AxisAlignedBB west = new AxisAlignedBB(3.0F / 16, 0.0F / 16, 0.5F / 16, 13.0F / 16, 8.0F / 16, 15.5F / 16);
-	protected static final AxisAlignedBB south = new AxisAlignedBB(0.5F / 16, 0.0F / 16, 3.0F / 16, 15.5F / 16, 8.0F / 16, 13.0F / 16);
+	protected static final AxisAlignedBB east = new AxisAlignedBB(0.1875f, 0f, 0.03125f, 0.8125f, 0.5f, 0.96875f);
+	protected static final AxisAlignedBB north = new AxisAlignedBB(0.03125, 0f, 0.1875f, 0.96875f, 0.5f, 0.8125f);
+	protected static final AxisAlignedBB west = new AxisAlignedBB(0.1875f, 0f, 0.03125f, 0.8125f, 0.5f, 0.96875f);
+	protected static final AxisAlignedBB south = new AxisAlignedBB(0.03125f, 0f, 0.1875f, 0.96875f, 0.5f, 0.8125f);
 
 	public BlockTombstone() {
 		super(Material.ROCK, name);
@@ -113,4 +117,12 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 		}
 		super.breakBlock(world, pos, state);
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		super.randomDisplayTick(state, world, pos, rand);
+		Helper.produceTombstoneParticles(pos);
+	}
+	
 }

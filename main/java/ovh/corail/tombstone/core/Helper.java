@@ -180,7 +180,7 @@ public class Helper {
 		tmp.setCount(Math.min(size, stack.getMaxStackSize()));
 		return tmp;
 	}
-	
+	// TODO proxy
 	public static void produceTombstoneParticles(BlockPos pos) {
 		BlockPos currentPos = pos;
 		double motionX = 0.0D;

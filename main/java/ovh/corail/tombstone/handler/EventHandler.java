@@ -58,7 +58,7 @@ public class EventHandler {
 		/** not in creative mode and no rule of keep inventory on death */
 		if (playerIn.world.getGameRules().getBoolean("keepInventory") || playerIn.isCreative()) { return; }
 		/** no drop or too much drops */
-		if (event.getDrops().size() <= 0 || event.getDrops().size() > 45) {	return; }
+		if (event.getDrops().size() <= 0 || event.getDrops().size() > 60) {	return; }
 		/** create the tombstone */
 		buildTombstone(event, playerIn);
 		playerIn.addStat(AchievementHandler.getAchievement("firstTomb"), 1);

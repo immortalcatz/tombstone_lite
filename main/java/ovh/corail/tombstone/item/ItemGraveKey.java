@@ -24,13 +24,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
-import ovh.corail.tombstone.core.TeleportDim;
+import ovh.corail.tombstone.core.TeleportationHelper;
 import ovh.corail.tombstone.handler.AchievementHandler;
-import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
@@ -98,17 +96,13 @@ public class ItemGraveKey extends Item {
 
 	@Override
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-		if (stack.hasEffect()) {
+		if (upgraded(stack)) {
 			playerIn.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
 		}
 	}
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
-		/**
-		 * because it's possible to drop the key while leaving the gui of the
-		 * empty tomb and to have a key without the related tomb
-		 */
 		return false;
 	}
 
@@ -117,6 +111,7 @@ public class ItemGraveKey extends Item {
 	}
 
 	@Override
+	/** ! client side ! */
 	public boolean hasEffect(ItemStack stack) {
 		return upgraded(stack);
 	}
@@ -125,7 +120,7 @@ public class ItemGraveKey extends Item {
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		if (stack.getTagCompound() != null) {
 			int tombDimId = getTombDim(stack);
-			String worldType = DimensionManager.getWorld(tombDimId).provider.getDimensionType().getName();
+			String worldType = "";//DimensionManager.getWorld(tombDimId).provider.getDimensionType().getName();
 			list.add(TextFormatting.WHITE + Helper.getTranslation("item.grave_key.info.dimTitle") + " : " + worldType + "(" + tombDimId + ")");
 			BlockPos tombPos = getTombPos(stack);
 			list.add(TextFormatting.WHITE + Helper.getTranslation("item.grave_key.info.posTitle") + " :  X=" + tombPos.getX() + "  Y=" + tombPos.getY());
@@ -140,13 +135,13 @@ public class ItemGraveKey extends Item {
 		ItemStack stack = player.getHeldItemMainhand();
 		if (upgraded(stack)) {
 			BlockPos pos = getTombPos(stack);
-			int dimId = this.getTombDim(stack);
-			if (world.provider.getDimension() == dimId) {
+			int dimId = getTombDim(stack);
+			if (player.dimension == dimId) {
 				stack.getTagCompound().setBoolean("enchant", false);
 				player.setPositionAndUpdate(pos.getX() + .5, pos.getY() + 1.05, pos.getZ() + .5);
 				player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
 			} else {
-				TeleportDim.getInstance().teleport(player, pos, dimId);
+				TeleportationHelper.teleportToDim(player, dimId, pos);
 			}
 		}
 		return super.onItemRightClick(world, player, hand);
