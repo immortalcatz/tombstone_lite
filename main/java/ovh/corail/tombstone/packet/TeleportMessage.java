@@ -15,7 +15,7 @@ public class TeleportMessage implements IMessage {
 	public static class Handler implements IMessageHandler<TeleportMessage, IMessage> {
 		@Override
 		public IMessage onMessage(final TeleportMessage message, final MessageContext ctx) {
-			IThreadListener mainThread = (IThreadListener) ctx.getServerHandler().player.world;
+			IThreadListener mainThread = Minecraft.getMinecraft();
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
