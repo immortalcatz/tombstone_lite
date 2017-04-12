@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
@@ -118,6 +119,7 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		super.randomDisplayTick(state, world, pos, rand);
+		if (!ConfigurationHandler.showFog) { return; }
 		Helper.produceTombstoneParticles(pos);
 	}
 	

@@ -87,10 +87,11 @@ public class EventHandler {
 		for (int i = 0; i < original.inventory.getSizeInventory(); i++) {
 			stack = original.inventory.getStackInSlot(i);
 			if (!stack.isEmpty() && stack.getItem().equals(Main.grave_key)) {
-				slot = player.inventory.getFirstEmptyStack();
+				original.inventory.setInventorySlotContents(i, Helper.addToInventoryWithLeftover(stack, player.inventory, false));
+				/*slot = player.inventory.getFirstEmptyStack();
 				if (slot != -1) {
 					player.inventory.setInventorySlotContents(slot, stack);
-				} else { break; }
+				} else { break; }*/
 			}
 		}
 	}
@@ -122,17 +123,21 @@ public class EventHandler {
 		ItemStack stack;
 		for (int i = event.getDrops().size() - 1; i >= 0; i--) {
 			stack = event.getDrops().get(i).getEntityItem();
-			if (!stack.isEmpty() && !stack.getItem().equals(Main.grave_key)) {
-				EntityItem n = event.getDrops().get(i);
-				n.setEntityItemStack(Helper.addToInventoryWithLeftover(stack, tile, false));
-				event.getDrops().remove(i);
+			if (stack.isEmpty()) { continue; }
+			EntityItem n = event.getDrops().get(i);
+			if (!stack.getItem().equals(Main.grave_key)) {			
+				n.setEntityItemStack(Helper.addToInventoryWithLeftover(stack, tile, false));		
+			} else {
+				n.setEntityItemStack(Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false));
 			}
+			event.getDrops().remove(i);
 		}
 		/** add a grave key to player inventory if access are needed */
 		if (ConfigurationHandler.tombAccess) {;
 			stack = new ItemStack(Main.grave_key, 1, 0);
 			ItemGraveKey.setTombPos(stack, currentPos, world.provider.getDimension());
-			playerIn.inventory.setInventorySlotContents(playerIn.inventory.getFirstEmptyStack(), stack);
+			Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false);
+			//playerIn.inventory.setInventorySlotContents(playerIn.inventory.getFirstEmptyStack(), stack);
 		}
 		world.notifyBlockUpdate(currentPos, state, state, 2);
 	}

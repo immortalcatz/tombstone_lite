@@ -24,6 +24,7 @@ import ovh.corail.tombstone.handler.EventHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.item.ItemAchievement001;
 import ovh.corail.tombstone.item.ItemAchievement002;
+import ovh.corail.tombstone.item.ItemFakeFog;
 import ovh.corail.tombstone.item.ItemGraveKey;
 
 @Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER, guiFactory = "ovh.corail." + MOD_ID + ".gui.GuiFactory")
@@ -45,6 +46,7 @@ public class Main {
 	};
 	public static BlockTombstone tombstone = new BlockTombstone();
 	public static ItemGraveKey grave_key = new ItemGraveKey();
+	public static ItemFakeFog fake_fog = new ItemFakeFog();
 	public static BlockDecorativeGraveNormal decorative_grave_normal = new BlockDecorativeGraveNormal();
 	public static BlockDecorativeGraveSimple decorative_grave_simple = new BlockDecorativeGraveSimple();
 	public static BlockDecorativeGraveCross decorative_grave_cross = new BlockDecorativeGraveCross();

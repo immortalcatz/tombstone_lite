@@ -1,5 +1,7 @@
 package ovh.corail.tombstone.core;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -19,6 +21,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Helper {
 	
+	private static Random random = new Random();
+	
+	public static int getRandom(int min, int max) {
+		return random.nextInt(max - min + 1) + min;
+	}
+	
 	public static void sendMessage(String message, EntityPlayer currentPlayer, boolean translate) {
 		if (currentPlayer != null) {
 			if (translate) {
@@ -30,6 +38,13 @@ public class Helper {
 	
 	public static String getTranslation(String message) {
 		return I18n.translateToLocal(message);
+	}
+	
+	public static void sendLog(String message) {
+		boolean develop = false;
+		if (develop) {
+			System.out.println(message);
+		}
 	}
 	
 	public static boolean areItemEqual(ItemStack s1, ItemStack s2) {
@@ -48,6 +63,7 @@ public class Helper {
 		render(Main.itemAchievement002);
 		/** render items */
 		render(Main.grave_key);
+		render(Main.fake_fog);
 	}
 	
 	private static void render(Block block) {
@@ -79,6 +95,7 @@ public class Helper {
 		register(Main.itemAchievement002);
 		/** register items */
 		register(Main.grave_key);
+		register(Main.fake_fog);
 	}
 	
 	private static void register(Block block) {
@@ -186,12 +203,12 @@ public class Helper {
 		double motionY = 0.01D;
 		double motionZ = 0.0D;
 		WorldClient world = Minecraft.getMinecraft().world;
-		for (double i = -1d; i < 0.5d; i += 0.5d) {
-			for (double j = -1d; j < 0.5d; j += 0.5d) {
-				if (i==-0.5d && j ==-0.5d) {
+		for (double i = 0.2d; i <= 0.8d; i += 0.3d) {
+			for (double j = 0.2d; j <= 0.8d; j += 0.3d) {		
+				if (i == 0.5d && j == 0.5d) {
 					continue;
 				}
-				ParticleGrave particle = new ParticleGrave(world, currentPos.getX()-i, currentPos.getY(), currentPos.getZ()-j, motionX, motionY, motionZ);
+				ParticleGrave particle = new ParticleGrave(world, currentPos.getX()+i, currentPos.getY(), currentPos.getZ()+j, motionX, motionY, motionZ);
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
 		}

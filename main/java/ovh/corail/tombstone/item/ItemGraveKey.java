@@ -27,7 +27,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
-import ovh.corail.tombstone.core.TeleportationHelper;
+import ovh.corail.tombstone.core.TeleportUtils;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
@@ -137,13 +137,13 @@ public class ItemGraveKey extends Item {
 		if (upgraded(stack)) {
 			BlockPos pos = getTombPos(stack);
 			int dimId = getTombDim(stack);
-			if (player.dimension == dimId) {
-				stack.getTagCompound().setBoolean("enchant", false);
-				player.setPositionAndUpdate(pos.getX() + .5, pos.getY() + 1.05, pos.getZ() + .5);
-				player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
+			if (player.dimension != dimId && !ConfigurationHandler.teleportDim) {
+				Helper.sendMessage("config.teleportDim", player, true);
 			} else {
-				TeleportationHelper.teleportToDim(player, dimId, pos);
-			}
+				stack.getTagCompound().setBoolean("enchant", false);
+				TeleportUtils.teleportEntity(player, dimId, (double)pos.getX()+0.5d, (double)pos.getY()+1.05d, (double)pos.getZ()+0.5d);
+				player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
+			}	
 		}
 		return super.onItemRightClick(world, player, hand);
 	}
