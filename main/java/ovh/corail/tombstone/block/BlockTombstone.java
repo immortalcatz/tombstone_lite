@@ -10,7 +10,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -26,7 +25,7 @@ import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
-	private static final String name = "tombstone";
+	protected final static String name = "tombstone";
 	protected static final AxisAlignedBB east = new AxisAlignedBB(0.1875f, 0f, 0.03125f, 0.8125f, 0.5f, 0.96875f);
 	protected static final AxisAlignedBB north = new AxisAlignedBB(0.03125, 0f, 0.1875f, 0.96875f, 0.5f, 0.8125f);
 	protected static final AxisAlignedBB west = new AxisAlignedBB(0.1875f, 0f, 0.03125f, 0.8125f, 0.5f, 0.96875f);
@@ -41,6 +40,23 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 		setLightLevel(0.8F);
 		isBlockContainer = true;
 	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		EnumFacing enumfacing = state.getValue(FACING);
+		switch (enumfacing) {
+		case NORTH:
+			return north;
+		case SOUTH:
+			return south; 
+		case WEST:
+			return west;
+		case EAST:
+			return east;
+		default:
+			return north;
+		}
+	}
 
 	@Override
 	protected boolean canSilkHarvest() {
@@ -50,11 +66,6 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityTombstone();
-	}
-
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
@@ -87,21 +98,6 @@ public class BlockTombstone extends BlockFacing implements ITileEntityProvider {
 			Helper.sendMessage("gui.message.youNeedAKey", playerIn, true);
 		}
 		return valid;
-	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		EnumFacing enumfacing = state.getValue(FACING);
-		if (enumfacing == EnumFacing.NORTH) {
-			return north;
-		} else if (enumfacing == EnumFacing.EAST) {
-			return east;
-		} else if (enumfacing == EnumFacing.SOUTH) {
-			return south;
-		} else if (enumfacing == EnumFacing.WEST) {
-			return west;
-		}
-		return north;
 	}
 
 	@Override

@@ -1,5 +1,19 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "tombstone:decorative_grave_cross",
+    "textures": {
+      "all": "tombstone:blocks/tombstone"
+    }
+  },
     "variants": {
+        "normal" : [{
+                
+            }], 
+        "inventory" : [{
+                "transform" : "forge:default-block", 
+                "y" : 90
+            }], 
         "facing=north":  { "model": "tombstone:decorative_grave_cross" },
         "facing=south":  { "model": "tombstone:decorative_grave_cross", "y": 180 },
         "facing=west":  { "model": "tombstone:decorative_grave_cross", "y": 270 },

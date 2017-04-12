@@ -18,22 +18,21 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.PacketHandler;
-import ovh.corail.tombstone.tileentity.TileEntityFake;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class CommonProxy {
 	public void preInit(FMLPreInitializationEvent event) {
-		ConfigurationHandler.config = new Configuration(event.getSuggestedConfigurationFile());
+		ConfigurationHandler.config = new Configuration(event.getSuggestedConfigurationFile(), ModProps.MOD_VER);
 		ConfigurationHandler.config.load();
 		ConfigurationHandler.refreshConfig();
-		/** register items and blocks */
-		Helper.register();
 		/** register tileentities */
 		GameRegistry.registerTileEntity(TileEntityTombstone.class, "inventoryTombstone");
-		GameRegistry.registerTileEntity(TileEntityFake.class, "fakeTombstone");
+		/** register items and blocks */
+		Helper.register();
 		/** new crafting recipes */
 		/** recipe to upgrade the tomb's key */
 		if (ConfigurationHandler.upgradeTombKey) {
@@ -56,6 +55,26 @@ public class CommonProxy {
 			RecipeSorter.register("recycler:upgradeKey", UpgradeGraveKeyRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
 			GameRegistry.addRecipe(new UpgradeGraveKeyRecipe(res, inputList));
 		}
+		/** decorative_grave_simple recipe */
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Main.decorative_grave_simple, 1),	new Object[] { " 0 ", "010", 
+				Character.valueOf('0'), "stone",
+				Character.valueOf('1'), Items.SKULL, 
+		}));
+		/** decorative_grave_normal recipe */
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Main.decorative_grave_normal, 1),	new Object[] { " 0 ", " 0 ", "010", 
+				Character.valueOf('0'), "stone",
+				Character.valueOf('1'), Items.SKULL, 
+		}));
+		/** decorative_grave_cross recipe */
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Main.decorative_grave_cross, 1),	new Object[] { " 0 ", "010", " 0 ", 
+				Character.valueOf('0'), "stone",
+				Character.valueOf('1'), Items.SKULL, 
+		}));
+		/** decorative_tombstone recipe */
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Main.decorative_tombstone, 1),	new Object[] { " 0 ", "010", "000", 
+				Character.valueOf('0'), "stone",
+				Character.valueOf('1'), Items.SKULL, 
+		}));
 		/** packet handler */
 		PacketHandler.init();
 	}

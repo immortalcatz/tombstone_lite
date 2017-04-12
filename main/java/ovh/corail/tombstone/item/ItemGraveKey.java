@@ -29,6 +29,7 @@ import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.TeleportationHelper;
 import ovh.corail.tombstone.handler.AchievementHandler;
+import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
@@ -149,6 +150,7 @@ public class ItemGraveKey extends Item {
 
 	@SubscribeEvent
 	public void render(RenderWorldLastEvent event) {
+		if (!ConfigurationHandler.highlight) { return; }
 		/** show the target tomb when holding the tomb's key */
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		if (player.getHeldItemMainhand().isEmpty() || player.getHeldItemMainhand().getItem() != this) {

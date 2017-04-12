@@ -23,6 +23,7 @@ config.xpLoss=失去经验
 config.percentXpLoss=Percent of xp lost
 config.ingredientToUpgradeKey=升级钥匙的材料
 config.decayTime=Time before tomb doesn't need key
+config.highlight=Highlight the tomb from far when holding the key
 achievement.FirstTomb=Your first tomb !
 achievement.FirstTomb.desc=A tomb was erected at the place of your death !
 achievement.UpgradedKey=A fast comeback !

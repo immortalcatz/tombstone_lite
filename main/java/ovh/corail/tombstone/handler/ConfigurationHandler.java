@@ -5,7 +5,7 @@ import ovh.corail.tombstone.core.Helper;
 
 public class ConfigurationHandler {
 	public static Configuration config;
-	public static boolean tombAccess, upgradeTombKey, xpLoss;
+	public static boolean tombAccess, upgradeTombKey, xpLoss, highlight;
 	public static String ingredientToUpgradeKey;
 	public static int percentXpLoss, decayTime;
 
@@ -16,6 +16,7 @@ public class ConfigurationHandler {
 		percentXpLoss = config.getInt("percentXpLoss", Configuration.CATEGORY_GENERAL, 0, 0, 100, Helper.getTranslation("config.percentXpLoss"));
 		ingredientToUpgradeKey = config.getString("ingredientToUpgradeKey", Configuration.CATEGORY_GENERAL, "minecraft:ender_pearl:1", Helper.getTranslation("config.ingredientToUpgradeKey"));
 		decayTime = config.getInt("decayTime", Configuration.CATEGORY_GENERAL, -1, -1, 50000, Helper.getTranslation("config.decayTime"));
+		highlight = config.getBoolean("highlight", Configuration.CATEGORY_CLIENT, true, Helper.getTranslation("config.highlight"));
 		if (config.hasChanged()) {
 			config.save();
 		}

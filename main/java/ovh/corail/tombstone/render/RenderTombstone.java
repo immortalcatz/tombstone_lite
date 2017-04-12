@@ -4,60 +4,46 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ovh.corail.tombstone.block.BlockFacing;
-import ovh.corail.tombstone.core.ModProps;
-import ovh.corail.tombstone.tileentity.TileEntityFake;
+import ovh.corail.tombstone.block.BlockTombstone;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 @SideOnly(Side.CLIENT)
 public class RenderTombstone extends TileEntitySpecialRenderer<TileEntity> {
-	public static final ModelTombstone model = new ModelTombstone();
-	public static final ResourceLocation textures = (new ResourceLocation(ModProps.MOD_ID + ":textures/blocks/tombstone.png"));
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
 		if  (te == null) { return; }
-		if (!(te instanceof TileEntityFake) && !(te instanceof TileEntityTombstone)) { return; }
-		IBlockState block = te.getWorld().getBlockState(te.getPos());
-		//if (block != Main.decorative_tombstone && block != Main.tombstone) { return; }
-		EnumFacing facing = block.getValue(BlockFacing.FACING);
+		if (!(te instanceof TileEntityTombstone)) { return; }
+		IBlockState state = te.getWorld().getBlockState(te.getPos());
+		if (state.getBlock() == null || !(state.getBlock() instanceof BlockTombstone)) { return; }
+		BlockTombstone block = (BlockTombstone)state.getBlock();
+		EnumFacing facing = state.getValue(block.FACING);
 		int rotationIndex = 0;
 		float modX = 0.5f, modZ = 0.5f;
 		switch (facing) {
 		case SOUTH:
 			rotationIndex = 0;
-			modZ = 0.68f;
+			modZ = 0.73f;
 			break;
 		case WEST:
 			rotationIndex = -1;
-			modX = 0.32f;
+			modX = 0.27f;
 			break;
 		case EAST:
 			rotationIndex = 1;
-			modX = 0.68f;
+			modX = 0.73f;
 			break;
 		case NORTH:
 		default:
 			rotationIndex = 2;
-			modZ = 0.32f;
+			modZ = 0.27f;
 			break;
 		}
-		
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x + 0.5f, (float) y + 1.5f, (float) z + 0.5f);
-		GlStateManager.rotate(90f * rotationIndex, 0f, 1f, 0f);
-		GlStateManager.rotate(180f, 1.0f, 0.0F, 1.0f);
-		this.bindTexture(textures);
-		RenderTombstone.model.render((Entity) null, 0.0f, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
-		GlStateManager.popMatrix();
-		
 		if (te instanceof TileEntityTombstone) {
 			TileEntityTombstone tile = (TileEntityTombstone) te;
 			GlStateManager.enableRescaleNormal();

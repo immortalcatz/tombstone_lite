@@ -1,5 +1,6 @@
 {
 "__comment":"Cross Grave",
+"parent": "block/stone",
 "textures":{"0":"tombstone:blocks/tombstone"},
 "elements":[{"from":[4,0,4],"to":[12,1,12],"faces":{
 "down":{"uv":[4,4,12,12],"rotation":270,"texture":"#0"},

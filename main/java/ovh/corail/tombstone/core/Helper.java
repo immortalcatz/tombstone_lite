@@ -3,6 +3,7 @@ package ovh.corail.tombstone.core;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -10,7 +11,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
@@ -181,20 +181,18 @@ public class Helper {
 		return tmp;
 	}
 	// TODO proxy
-	public static void produceTombstoneParticles(BlockPos pos) {
-		BlockPos currentPos = pos;
+	public static void produceTombstoneParticles(BlockPos currentPos) {
 		double motionX = 0.0D;
 		double motionY = 0.01D;
 		double motionZ = 0.0D;
-		int[] params = new int[4];
-		params[0] = 0;
-		params[1] = 0;
-		params[2] = 66;
-		params[3] = 66;
-		for (int i = -1; i < 1; i++) {
-			for (int j = -1; j < 1; j++) {
-				currentPos = pos.south(j + 1).east(i + 1);
-				Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, currentPos.getX(), currentPos.getY(), currentPos.getZ(), motionX, motionY, motionZ, params);
+		WorldClient world = Minecraft.getMinecraft().world;
+		for (double i = -1d; i < 0.5d; i += 0.5d) {
+			for (double j = -1d; j < 0.5d; j += 0.5d) {
+				if (i==-0.5d && j ==-0.5d) {
+					continue;
+				}
+				ParticleGrave particle = new ParticleGrave(world, currentPos.getX()-i, currentPos.getY(), currentPos.getZ()-j, motionX, motionY, motionZ);
+				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
 		}
 	}

@@ -1,7 +1,0 @@
-{
-    "parent": "block/stone",
-    "__comment": "Advanced Grave",
-    "textures": {
-        "0": "tombstone:blocks/tombstone"
-    }
-}

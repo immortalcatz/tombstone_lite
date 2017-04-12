@@ -1,8 +1,22 @@
 {
-    "variants": {
-        "facing=north":  { "model": "tombstone:decorative_tombstone" },
-        "facing=south":  { "model": "tombstone:decorative_tombstone", "y": 180 },
-        "facing=west":  { "model": "tombstone:decorative_tombstone", "y": 270 },
-        "facing=east":  { "model": "tombstone:decorative_tombstone", "y": 90 }
+  "forge_marker": 1,
+  "defaults": {
+    "model": "tombstone:decorative_tombstone",
+    "textures": {
+      "all": "tombstone:blocks/tombstone"
+    }
+  },
+    "variants": { 
+	    "normal" : [{
+                
+            }], 
+        "inventory" : [{
+                "transform" : "forge:default-block", 
+                "y" : 90
+            }], 
+        "facing=north": { "model": "tombstone:decorative_tombstone", "y": 90 },
+        "facing=south": { "model": "tombstone:decorative_tombstone", "y": 270 },
+        "facing=west":  { "model": "tombstone:decorative_tombstone", "y": 0 },
+        "facing=east":  { "model": "tombstone:decorative_tombstone", "y": 180 }
     }
 }
