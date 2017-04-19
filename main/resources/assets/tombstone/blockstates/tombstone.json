@@ -8,15 +8,22 @@
   },
     "variants": {
 	    "normal" : [{
-                
             }], 
         "inventory" : [{
                 "transform" : "forge:default-block", 
                 "y" : 90
             }], 
-        "facing=north": { "model": "tombstone:decorative_tombstone", "y": 90 },
-        "facing=south": { "model": "tombstone:decorative_tombstone", "y": 270 },
-        "facing=west":  { "model": "tombstone:decorative_tombstone", "y": 0 },
-        "facing=east":  { "model": "tombstone:decorative_tombstone", "y": 180 }
+		"facing": {
+			"east": {},
+			"west": {"y": 180},
+			"north": {"y": 270},
+			"south": {"y": 90},
+			"up": {"x": -90},
+			"down": {"x": 90}
+		},
+		"has_soul": {
+			"false": {},
+			"true": {}
+		}
     }
 }

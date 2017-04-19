@@ -13,9 +13,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
@@ -26,34 +24,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
-import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.TeleportUtils;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
-public class ItemGraveKey extends Item {
+public class ItemGraveKey extends ItemScrollOfRecall {
 
 	private static final String name = "grave_key";
 
 	public ItemGraveKey() {
-		super();
-		setRegistryName(name);
-		setUnlocalizedName(name);
+		super(name);
 		setCreativeTab(null);
-		setMaxStackSize(1);
-	}
-	
-	/** add a compound if needed */
-	private static void checkCompound(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
-	}
-	
-	private static boolean isGraveKey(ItemStack stack) {
-		return stack.getItem() == Main.grave_key;
 	}
 	
 	@Override
@@ -67,28 +50,6 @@ public class ItemGraveKey extends Item {
 			entity.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
 		}
     }
-
-	/** write the compound of the itemStack */
-	public static boolean setTombPos(ItemStack stack, BlockPos tombPos, int tombDim) {
-		if (!isGraveKey(stack)) { return false; }
-		checkCompound(stack);
-		NBTTagCompound compound = stack.getTagCompound();
-		compound.setLong("tombPos", tombPos.toLong());
-		compound.setInteger("tombDim", tombDim);
-		return true;
-	}
-
-	public static BlockPos getTombPos(ItemStack stack) {
-		if (!isGraveKey(stack) || !stack.hasTagCompound()) { return null; }
-		NBTTagCompound compound = stack.getTagCompound();
-		return BlockPos.fromLong(compound.getLong("tombPos"));
-	}
-
-	public static int getTombDim(ItemStack stack) {
-		if (!isGraveKey(stack) || !stack.hasTagCompound()) { return Integer.MAX_VALUE; }
-		NBTTagCompound compound = stack.getTagCompound();
-		return compound.getInteger("tombDim");
-	}
 	
 	@Override
     public String getItemStackDisplayName(ItemStack stack) {
@@ -119,14 +80,14 @@ public class ItemGraveKey extends Item {
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-		if (stack.getTagCompound() != null) {
+		if (stack.hasTagCompound()) {
 			int tombDimId = getTombDim(stack);
-			String worldType = "";//DimensionManager.getWorld(tombDimId).provider.getDimensionType().getName();
-			list.add(TextFormatting.WHITE + Helper.getTranslation("item.grave_key.info.dimTitle") + " : " + worldType + "(" + tombDimId + ")");
 			BlockPos tombPos = getTombPos(stack);
-			list.add(TextFormatting.WHITE + Helper.getTranslation("item.grave_key.info.posTitle") + " :  X=" + tombPos.getX() + "  Y=" + tombPos.getY());
+			//TODO //String worldType = "";//DimensionManager.getWorld(tombDimId).provider.getDimensionType().getName();
+			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.dimTitle") + " : " + tombDimId);
+			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.posTitle") + " :  X=" + tombPos.getX() + "  Y=" + tombPos.getY() + "  Z=" + tombPos.getZ());
 			if (hasEffect(stack)) {
-				list.add(TextFormatting.AQUA + Helper.getTranslation("item.grave_key.info.tele"));
+				list.add(TextFormatting.AQUA + Helper.getTranslation("item.info.tele"));
 			}
 		}
 	}

@@ -15,7 +15,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import ovh.corail.tombstone.block.BlockFacing;
+import ovh.corail.tombstone.block.BlockFacingGrave;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.ModProps;
@@ -111,10 +111,10 @@ public class EventHandler {
 		/** surface */
 		BlockPos currentPos = event.getEntityLiving().getPosition();
 		/** go up to find air */
-		while (currentPos.getY() < 0 || !world.isAirBlock(currentPos)) {
+		while (!Helper.isSafeBlock(world, currentPos)) {
 			currentPos = currentPos.up();
 		}
-		IBlockState state = Main.tombstone.getDefaultState().withProperty(BlockFacing.FACING, event.getEntityLiving().getHorizontalFacing().getOpposite());
+		IBlockState state = Main.tombstone.getDefaultState().withProperty(BlockFacingGrave.FACING, event.getEntityLiving().getHorizontalFacing().getOpposite());
 		world.setBlockState(currentPos, state);
 		TileEntityTombstone tile = (TileEntityTombstone) world.getTileEntity(currentPos);
 		/** owner infos */

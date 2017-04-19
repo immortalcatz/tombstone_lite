@@ -16,6 +16,9 @@ public class AchievementHandler {
 	public static void initAchievements() {
 		addAchievement("firstTomb", 0, 0, Main.itemAchievement001, null);
 		addAchievement("upgradedKey", 1, 1, Main.itemAchievement002, "firstTomb");
+		addAchievement("makeScroll", -1, -1, Main.scroll_of_recall, null);
+		addAchievement("activateScroll", -2, -2, Main.soul, "makeScroll");
+		addAchievement("recall", -3, -3, Main.itemAchievement003, "activateScroll");
 	}
 	
 	private static void addAchievement(String name, int col, int row, Item icon, String parent) {

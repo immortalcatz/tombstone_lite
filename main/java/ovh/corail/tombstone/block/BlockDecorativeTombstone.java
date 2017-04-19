@@ -10,13 +10,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.core.Helper;
-import ovh.corail.tombstone.handler.ConfigurationHandler;
 
-public class BlockDecorativeTombstone extends BlockFacing {
+public class BlockDecorativeTombstone extends BlockFacingGrave {
 	protected final static String name = "decorative_tombstone";
 	protected static final AxisAlignedBB east = new AxisAlignedBB(0.1875f, 0f, 0.03125f, 0.8125f, 0.5f, 0.96875f);
 	protected static final AxisAlignedBB north = new AxisAlignedBB(0.03125, 0f, 0.1875f, 0.96875f, 0.5f, 0.8125f);
@@ -59,14 +55,6 @@ public class BlockDecorativeTombstone extends BlockFacing {
 	@Override
 	protected boolean canSilkHarvest() {
 		return true;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-		super.randomDisplayTick(state, world, pos, rand);
-		if (!ConfigurationHandler.showFog) { return; }
-		Helper.produceTombstoneParticles(pos);
 	}
 
 }

@@ -10,13 +10,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.core.Helper;
-import ovh.corail.tombstone.handler.ConfigurationHandler;
 
-public class BlockDecorativeGraveNormal extends BlockFacing {
+public class BlockDecorativeGraveNormal extends BlockFacingGrave {
 	public static final String name = "decorative_grave_normal";
 	protected static final AxisAlignedBB east = new AxisAlignedBB(0f, 0f, 0.25f, 0.875f, 0.5f, 0.75f);
 	protected static final AxisAlignedBB north = new AxisAlignedBB(0.25f, 0f, 0.125f, 0.75f, 0.5f, 1f);
@@ -63,11 +59,4 @@ public class BlockDecorativeGraveNormal extends BlockFacing {
 		return true;
 	}
 	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-		super.randomDisplayTick(state, world, pos, rand);
-		if (!ConfigurationHandler.showFog) { return; }
-		Helper.produceTombstoneParticles(pos);
-	}
 }

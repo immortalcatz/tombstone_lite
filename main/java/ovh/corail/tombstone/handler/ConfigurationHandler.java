@@ -1,13 +1,20 @@
 package ovh.corail.tombstone.handler;
 
+import java.io.File;
+
 import net.minecraftforge.common.config.Configuration;
 import ovh.corail.tombstone.core.Helper;
+import ovh.corail.tombstone.core.ModProps;
 
 public class ConfigurationHandler {
 	public static Configuration config;
+	private static File configDir;
 	public static boolean tombAccess, upgradeTombKey, xpLoss, highlight, teleportDim, showFog;
 	public static String ingredientToUpgradeKey;
 	public static int percentXpLoss, decayTime;
+	
+	private ConfigurationHandler() {
+	}
 
 	public static void refreshConfig() {
 		tombAccess = config.getBoolean("tombAccess", Configuration.CATEGORY_GENERAL, true, Helper.getTranslation("config.tombAccess"));
@@ -22,5 +29,19 @@ public class ConfigurationHandler {
 		if (config.hasChanged()) {
 			config.save();
 		}
+	}
+
+	public static void loadConfig(File configDir) {
+		ConfigurationHandler.configDir= configDir;
+		if (!configDir.exists()) {
+			configDir.mkdir();
+		}
+		config = new Configuration(new File(configDir, ModProps.MOD_ID + ".cfg"), ModProps.MOD_VER);
+		config.load();
+		ConfigurationHandler.refreshConfig();
+	}
+
+	public static File getConfigDir() {
+		return configDir;
 	}
 }

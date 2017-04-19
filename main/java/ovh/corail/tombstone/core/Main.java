@@ -4,6 +4,10 @@ import static ovh.corail.tombstone.core.ModProps.MOD_ID;
 import static ovh.corail.tombstone.core.ModProps.MOD_NAME;
 import static ovh.corail.tombstone.core.ModProps.MOD_VER;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,8 +28,11 @@ import ovh.corail.tombstone.handler.EventHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.item.ItemAchievement001;
 import ovh.corail.tombstone.item.ItemAchievement002;
+import ovh.corail.tombstone.item.ItemAchievement003;
 import ovh.corail.tombstone.item.ItemFakeFog;
 import ovh.corail.tombstone.item.ItemGraveKey;
+import ovh.corail.tombstone.item.ItemScrollOfRecall;
+import ovh.corail.tombstone.item.ItemSoul;
 
 @Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER, guiFactory = "ovh.corail." + MOD_ID + ".gui.GuiFactory")
 public class Main {
@@ -47,6 +54,8 @@ public class Main {
 	public static BlockTombstone tombstone = new BlockTombstone();
 	public static ItemGraveKey grave_key = new ItemGraveKey();
 	public static ItemFakeFog fake_fog = new ItemFakeFog();
+	public static ItemSoul soul = new ItemSoul();
+	public static ItemScrollOfRecall scroll_of_recall = new ItemScrollOfRecall();
 	public static BlockDecorativeGraveNormal decorative_grave_normal = new BlockDecorativeGraveNormal();
 	public static BlockDecorativeGraveSimple decorative_grave_simple = new BlockDecorativeGraveSimple();
 	public static BlockDecorativeGraveCross decorative_grave_cross = new BlockDecorativeGraveCross();
@@ -54,6 +63,10 @@ public class Main {
 
 	public static ItemAchievement001 itemAchievement001 = new ItemAchievement001();
 	public static ItemAchievement002 itemAchievement002 = new ItemAchievement002();
+	public static ItemAchievement003 itemAchievement003 = new ItemAchievement003();
+	
+	public static File whitelistFile;
+	public static Set<String> whitelist = new HashSet<String>();
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

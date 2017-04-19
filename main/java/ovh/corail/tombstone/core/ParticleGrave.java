@@ -25,6 +25,7 @@ public class ParticleGrave extends Particle {
         this.particleScale *= 2.5F;
         this.particleMaxAge = (int)(8.0D / (Math.random() * 0.8D + 0.3D));
         this.particleMaxAge = (int)((float)this.particleMaxAge * 2.5F);
+        this.canCollide = false;
 	}
 	
 	public ParticleGrave(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn) {

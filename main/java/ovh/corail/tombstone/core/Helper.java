@@ -1,6 +1,18 @@
 package ovh.corail.tombstone.core;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -25,6 +37,49 @@ public class Helper {
 	
 	public static int getRandom(int min, int max) {
 		return random.nextInt(max - min + 1) + min;
+	}
+	
+	public static Set<String> loadWhitelist(File whitelistFile) {
+		Set<String> whitelist = new HashSet<String>();
+		if (!whitelistFile.exists()) {
+			/** default list */			
+			whitelist.add("minecraft:tallgrass:0");
+			whitelist.add("minecraft:tallgrass:1");
+			whitelist.add("minecraft:tallgrass:2");
+			whitelist.add("minecraft:deadbush:0");
+			whitelist.add("minecraft:double_plant:0");
+			whitelist.add("minecraft:double_plant:1");
+			whitelist.add("minecraft:double_plant:2");
+			whitelist.add("minecraft:double_plant:3");
+			whitelist.add("minecraft:double_plant:4");
+			whitelist.add("minecraft:double_plant:5");
+			Helper.saveAsJson(whitelistFile, whitelist);
+		} else {
+			Type token = new TypeToken<Set<String>>() {}.getType();
+			whitelist = (Set<String>) Helper.loadAsJson(whitelistFile, token);
+		}
+		return whitelist;
+	}
+	
+	public static boolean saveAsJson(File file, Set<?> list) {
+		if (file.exists()) { file.delete(); }
+		try {
+			if (file.createNewFile()) {
+				FileWriter fw = new FileWriter(file);
+				fw.write(new GsonBuilder().setPrettyPrinting().create().toJson(list));
+				fw.close();
+				return true;
+			}
+		} catch (IOException e) { e.printStackTrace(); }
+		return false;
+	}
+	
+	public static Set<?> loadAsJson(File file, Type token) {
+		Set<?> list = null;
+		try {
+			list = new Gson().fromJson(new BufferedReader(new FileReader(file)), token);
+		} catch (Exception e) { e.printStackTrace(); }
+		return list;
 	}
 	
 	public static void sendMessage(String message, EntityPlayer currentPlayer, boolean translate) {
@@ -61,9 +116,12 @@ public class Helper {
 		/** render achievement icon items */
 		render(Main.itemAchievement001);
 		render(Main.itemAchievement002);
+		render(Main.itemAchievement003);
 		/** render items */
 		render(Main.grave_key);
 		render(Main.fake_fog);
+		render(Main.soul);
+		render(Main.scroll_of_recall);
 	}
 	
 	private static void render(Block block) {
@@ -93,9 +151,12 @@ public class Helper {
 		/** register achievement icon items */
 		register(Main.itemAchievement001);
 		register(Main.itemAchievement002);
+		register(Main.itemAchievement003);
 		/** register items */
 		register(Main.grave_key);
 		register(Main.fake_fog);
+		register(Main.soul);
+		register(Main.scroll_of_recall);	
 	}
 	
 	private static void register(Block block) {
@@ -107,13 +168,13 @@ public class Helper {
 		GameRegistry.register(item);
 	}
 	
-	public static boolean isSafeBlock(World worldIn, BlockPos currentPos) {
-		IBlockState state = worldIn.getBlockState(currentPos);
+	public static boolean isSafeBlock(World world, BlockPos currentPos) {
+		IBlockState state = world.getBlockState(currentPos);
 		Block block = state.getBlock();
 		if (currentPos.getY() < 0) { return false; }
-		if (block.isAir(state, worldIn, currentPos)) {
-			return true;
-		}
+		if (world.isAirBlock(currentPos)) { return true; }
+		/** replaceable blocks */
+		if (Main.whitelist.contains(block.getRegistryName().toString() + ":" + block.getMetaFromState(state))) { return true; }
 		return false;
 	}
 
