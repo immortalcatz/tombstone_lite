@@ -58,7 +58,7 @@ public class ItemGraveKey extends ItemScrollOfRecall {
 
 	@Override
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-		if (upgraded(stack)) {
+		if (isEnchanted(stack)) {
 			playerIn.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
 		}
 	}
@@ -68,14 +68,9 @@ public class ItemGraveKey extends ItemScrollOfRecall {
 		return false;
 	}
 
-	private boolean upgraded(ItemStack stack) {
-		return stack.hasTagCompound() ? stack.getTagCompound().getBoolean("enchant") : false;
-	}
-
 	@Override
-	/** ! client side ! */
-	public boolean hasEffect(ItemStack stack) {
-		return upgraded(stack);
+	public boolean isEnchanted(ItemStack stack) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getBoolean("enchant") : false;
 	}
 
 	@Override
@@ -95,7 +90,7 @@ public class ItemGraveKey extends ItemScrollOfRecall {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItemMainhand();
-		if (upgraded(stack)) {
+		if (isEnchanted(stack)) {
 			BlockPos pos = getTombPos(stack);
 			int dimId = getTombDim(stack);
 			if (player.dimension != dimId && !ConfigurationHandler.teleportDim) {

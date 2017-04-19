@@ -53,13 +53,13 @@ public class BlockFacingGrave extends Block {
 		if (state.getValue(HAS_SOUL)) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleShowItemOver(world, Main.soul, pos.getX(), pos.getY(), pos.getZ()));
 		/** update has_soul property */
-		} else if (world.isThundering() && world.thunderingStrength > 0.5f && !(this instanceof BlockTombstone) && Helper.getRandom(1, 5000) <= 1) {
+		} else if (world.isThundering() && world.thunderingStrength > 0.5f && !(this instanceof BlockTombstone) && Helper.getRandom(1, 3000) <= 1) {
 			PacketHandler.INSTANCE.sendToServer(new UpdateSoulMessage(pos, true));
 		}
 		/** fog particle */
 		if (!ConfigurationHandler.showFog) { return; }
 		if (!(this instanceof BlockTombstone) && ((double)world.getCelestialAngle(0.0f) < 0.245d || (double)world.getCelestialAngle(0.0f) > 0.755d)) { return; }
-		Helper.produceTombstoneParticles(pos);
+		Main.proxy.produceTombstoneParticles(pos);
 	}
 	
 	@Override
@@ -68,17 +68,14 @@ public class BlockFacingGrave extends Block {
 		/** activated by a scroll of recall to define the loc of teleport */
 		if (state.getValue(HAS_SOUL)) {
 			ItemStack stack = player.getHeldItemMainhand();
-			if (!stack.isEmpty() && !stack.hasEffect() && stack.getItem() instanceof ItemScrollOfRecall) {	
-				if (stack.getItem() instanceof ItemGraveKey && ConfigurationHandler.upgradeTombKey) {
-					stack.getTagCompound().setBoolean("enchant", true);
-					player.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
-					world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);
-				} else {
-					ItemScrollOfRecall.setTombPos(stack, pos, world.provider.getDimension());
-					player.addStat(AchievementHandler.getAchievement("activateScroll"), 1);
-					world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);
-				}
-				
+			if (!stack.isEmpty() && stack.getItem() instanceof ItemGraveKey && ConfigurationHandler.upgradeTombKey && !((ItemGraveKey)stack.getItem()).isEnchanted(stack)) {
+				stack.getTagCompound().setBoolean("enchant", true);
+				player.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
+				world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);
+			} else if (!stack.isEmpty() && stack.getItem() instanceof ItemScrollOfRecall && !((ItemScrollOfRecall)stack.getItem()).isEnchanted(stack)) {
+				ItemScrollOfRecall.setTombPos(stack, pos, world.provider.getDimension());
+				player.addStat(AchievementHandler.getAchievement("activateScroll"), 1);
+				world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);				
 			}
 		}
 		return true;

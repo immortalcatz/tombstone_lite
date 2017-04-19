@@ -12,7 +12,7 @@ public class ParticleShowItemOver extends Particle {
 		particleTexture = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(item);
 		this.particleAlpha = 0.5f;
 		this.particleScale = 0.5f;
-		this.particleMaxAge = 100;
+		this.particleMaxAge = 50;
 		this.canCollide = false;
 		float f1 = 1F - (float)(Math.random() * 0.30000001192092896D);
         this.particleRed = f1;

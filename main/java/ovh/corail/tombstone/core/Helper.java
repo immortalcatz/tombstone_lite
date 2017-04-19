@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -257,22 +256,6 @@ public class Helper {
 		ItemStack tmp = stack.copy();
 		tmp.setCount(Math.min(size, stack.getMaxStackSize()));
 		return tmp;
-	}
-	// TODO proxy
-	public static void produceTombstoneParticles(BlockPos currentPos) {
-		double motionX = 0.0D;
-		double motionY = 0.01D;
-		double motionZ = 0.0D;
-		WorldClient world = Minecraft.getMinecraft().world;
-		for (double i = 0.2d; i <= 0.8d; i += 0.3d) {
-			for (double j = 0.2d; j <= 0.8d; j += 0.3d) {		
-				if (i == 0.5d && j == 0.5d) {
-					continue;
-				}
-				ParticleGrave particle = new ParticleGrave(world, currentPos.getX()+i, currentPos.getY(), currentPos.getZ()+j, motionX, motionY, motionZ);
-				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-			}
-		}
 	}
 
 }

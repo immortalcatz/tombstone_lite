@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -101,5 +102,9 @@ public class CommonProxy {
     public WorldServer getWorldServer(int dimId) {
         return DimensionManager.getWorld(dimId);
     }
+
+	public void produceTombstoneParticles(BlockPos currentPos) {
+		
+	}
 	
 }

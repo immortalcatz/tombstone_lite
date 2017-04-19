@@ -70,9 +70,13 @@ public class ItemScrollOfRecall extends Item {
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
 		playerIn.addStat(AchievementHandler.getAchievement("makeScroll"), 1);
 	}
-
+	
 	@Override
 	public boolean hasEffect(ItemStack stack) {
+		return isEnchanted(stack);
+	}
+	
+	public boolean isEnchanted(ItemStack stack) {
 		return getTombPos(stack) != null;
 	}
 
