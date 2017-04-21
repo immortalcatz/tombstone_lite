@@ -13,31 +13,21 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.TeleportUtils;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 
-public class ItemScrollOfRecall extends Item {
+public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 	
 	private static final String name = "scroll_of_recall";
-
-	public ItemScrollOfRecall() {
-		this(name);
-	}
 	
-	public ItemScrollOfRecall(String name) {
+	public ItemScrollOfRecall() {
 		super();
 		setRegistryName(name);
 		setUnlocalizedName(name);
 		setCreativeTab(Main.tabTombstone);
 		setMaxStackSize(1);
-	}
-
-	/** add a compound if needed */
-	protected static void checkCompound(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
 	}
 	
 	protected static boolean isStackValid(ItemStack stack) {
@@ -47,23 +37,19 @@ public class ItemScrollOfRecall extends Item {
 	/** write the compound of the itemStack */
 	public static boolean setTombPos(ItemStack stack, BlockPos tombPos, int tombDim) {
 		if (!isStackValid(stack)) { return false; }
-		checkCompound(stack);
-		NBTTagCompound compound = stack.getTagCompound();
-		compound.setLong("tombPos", tombPos.toLong());
-		compound.setInteger("tombDim", tombDim);
+		NBTStackHelper.setBlockPos(stack, "tombPos", tombPos);
+		NBTStackHelper.setInteger(stack, "tombDim", tombDim);
 		return true;
 	}
 
 	public static BlockPos getTombPos(ItemStack stack) {
-		if (!isStackValid(stack) || !stack.hasTagCompound()) { return null; }
-		NBTTagCompound compound = stack.getTagCompound();
-		return BlockPos.fromLong(compound.getLong("tombPos"));
+		if (!isStackValid(stack)) { return BlockPos.ORIGIN; }
+		return NBTStackHelper.getBlockPos(stack, "tombPos");
 	}
 	
 	public static int getTombDim(ItemStack stack) {
-		if (!isStackValid(stack) || !stack.hasTagCompound()) { return Integer.MAX_VALUE; }
-		NBTTagCompound compound = stack.getTagCompound();
-		return compound.getInteger("tombDim");
+		if (!isStackValid(stack)) { return Integer.MAX_VALUE; }
+		return NBTStackHelper.getInteger(stack, "tombDim");
 	}
 	
 	@Override
@@ -77,13 +63,22 @@ public class ItemScrollOfRecall extends Item {
 	}
 	
 	public boolean isEnchanted(ItemStack stack) {
-		return getTombPos(stack) != null;
+		return getTombPos(stack) != BlockPos.ORIGIN;
+	}
+	
+	public boolean setEnchant(World world, BlockPos gravePos, EntityPlayer player, ItemStack stack) {
+		boolean valid = setTombPos(stack, gravePos, world.provider.getDimension());
+		if (valid) {
+			player.addStat(AchievementHandler.getAchievement("activateScroll"), 1);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		if (!stack.hasTagCompound()) {
-			list.add(TextFormatting.WHITE + Helper.getTranslation("item.scroll_of_recall.desc1"));
+			list.add(TextFormatting.AQUA + Helper.getTranslation("item.scroll_of_recall.desc1"));
 		} else {
 			list.add(TextFormatting.WHITE + Helper.getTranslation("item.scroll_of_recall.desc2"));
 			int tombDimId = getTombDim(stack);
@@ -99,7 +94,7 @@ public class ItemScrollOfRecall extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote && !player.getHeldItemMainhand().isEmpty()) {//&& player.isSneaking()
 			ItemStack stack = player.getHeldItemMainhand();
-			if (((ItemScrollOfRecall) stack.getItem()).hasEffect(stack)) {
+			if (((ItemScrollOfRecall) stack.getItem()).isEnchanted(stack)) {
 				BlockPos tombPos = ItemScrollOfRecall.getTombPos(stack);
 				int tombDim = ItemScrollOfRecall.getTombDim(stack);
 				if (world.provider.getDimension() == tombDim && tombPos.distanceSq(player.posX, player.posY, player.posZ) < 10) {

@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
@@ -24,19 +25,42 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
+import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.TeleportUtils;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
-public class ItemGraveKey extends ItemScrollOfRecall {
+public class ItemGraveKey extends Item implements ISoulConsumption {
 
 	private static final String name = "grave_key";
 
 	public ItemGraveKey() {
-		super(name);
+		super();
+		setRegistryName(name);
+		setUnlocalizedName(name);
 		setCreativeTab(null);
+		setMaxStackSize(1);
+	}
+	
+	/** read/write the compound of the itemStack */
+	public static boolean setTombPos(ItemStack stack, BlockPos tombPos, int tombDim) {
+		if (!isStackValid(stack)) { return false; }
+		NBTStackHelper.setBlockPos(stack, "tombPos", tombPos);
+		NBTStackHelper.setInteger(stack, "tombDim", tombDim);
+		return true;
+	}
+
+	public static BlockPos getTombPos(ItemStack stack) {
+		if (!isStackValid(stack)) { return BlockPos.ORIGIN; }
+		return NBTStackHelper.getBlockPos(stack, "tombPos");
+	}
+	
+	public static int getTombDim(ItemStack stack) {
+		if (!isStackValid(stack)) { return Integer.MAX_VALUE; }
+		return NBTStackHelper.getInteger(stack, "tombDim");
 	}
 	
 	@Override
@@ -50,6 +74,10 @@ public class ItemGraveKey extends ItemScrollOfRecall {
 			entity.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
 		}
     }
+	
+	protected static boolean isStackValid(ItemStack stack) {
+		return !stack.isEmpty() && stack.getItem() instanceof ItemGraveKey;
+	}
 	
 	@Override
     public String getItemStackDisplayName(ItemStack stack) {
@@ -67,10 +95,21 @@ public class ItemGraveKey extends ItemScrollOfRecall {
 	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
 		return false;
 	}
-
+	
 	@Override
+	public boolean hasEffect(ItemStack stack) {
+		return isEnchanted(stack);
+	}
+
 	public boolean isEnchanted(ItemStack stack) {
-		return stack.hasTagCompound() ? stack.getTagCompound().getBoolean("enchant") : false;
+		return NBTStackHelper.getBoolean(stack, "enchant");
+	}
+	
+	public boolean setEnchant(World world, BlockPos gravePos, EntityPlayer player, ItemStack stack) {
+		if (!isStackValid(stack) || !ConfigurationHandler.upgradeTombKey) { return false; }
+		NBTStackHelper.setBoolean(stack, "enchant", true);
+		player.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
+		return true;
 	}
 
 	@Override
@@ -78,10 +117,9 @@ public class ItemGraveKey extends ItemScrollOfRecall {
 		if (stack.hasTagCompound()) {
 			int tombDimId = getTombDim(stack);
 			BlockPos tombPos = getTombPos(stack);
-			//TODO //String worldType = "";//DimensionManager.getWorld(tombDimId).provider.getDimensionType().getName();
-			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.dimTitle") + " : " + tombDimId);
-			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.posTitle") + " :  X=" + tombPos.getX() + "  Y=" + tombPos.getY() + "  Z=" + tombPos.getZ());
-			if (hasEffect(stack)) {
+			String tombDim = (tombDimId==0 ? "The Overworld" : (tombDimId == -1 ? "The Nether" : (tombDimId==-1? "The End": "Unknown Land " + tombDimId)));
+			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.dimTitle") + " : " + tombDim);
+			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.posTitle") + " :  " + tombPos.getX() + ", " + tombPos.getY() + ", " + tombPos.getZ());			if (hasEffect(stack)) {
 				list.add(TextFormatting.AQUA + Helper.getTranslation("item.info.tele"));
 			}
 		}

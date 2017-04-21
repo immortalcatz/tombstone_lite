@@ -23,10 +23,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
+import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.ParticleShowItemOver;
 import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.PacketHandler;
+import ovh.corail.tombstone.item.ISoulConsumption;
 import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.item.ItemScrollOfRecall;
 import ovh.corail.tombstone.packet.UpdateSoulMessage;
@@ -68,14 +70,18 @@ public class BlockFacingGrave extends Block {
 		/** activated by a scroll of recall to define the loc of teleport */
 		if (state.getValue(HAS_SOUL)) {
 			ItemStack stack = player.getHeldItemMainhand();
-			if (!stack.isEmpty() && stack.getItem() instanceof ItemGraveKey && ConfigurationHandler.upgradeTombKey && !((ItemGraveKey)stack.getItem()).isEnchanted(stack)) {
-				stack.getTagCompound().setBoolean("enchant", true);
-				player.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
-				world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);
-			} else if (!stack.isEmpty() && stack.getItem() instanceof ItemScrollOfRecall && !((ItemScrollOfRecall)stack.getItem()).isEnchanted(stack)) {
-				ItemScrollOfRecall.setTombPos(stack, pos, world.provider.getDimension());
-				player.addStat(AchievementHandler.getAchievement("activateScroll"), 1);
-				world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);				
+			if (!stack.isEmpty() && stack.getItem() instanceof ISoulConsumption) {
+				ISoulConsumption item = ((ISoulConsumption)stack.getItem());
+				if (!item.isEnchanted(stack)) {
+					if (item.setEnchant(world, pos, player, stack)) {
+						Helper.sendMessage("La magie de la tombe se répand dans votre objet.", player, false);
+						world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);
+					} else {
+						Helper.sendMessage("La magie ne semble pas opérer.", player, false);
+					}
+				} else {
+					Helper.sendMessage("L'objet est déjà enchanté.", player, false);
+				}
 			}
 		}
 		return true;
