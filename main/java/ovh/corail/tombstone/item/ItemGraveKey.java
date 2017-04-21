@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
-import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.TeleportUtils;
 import ovh.corail.tombstone.handler.AchievementHandler;

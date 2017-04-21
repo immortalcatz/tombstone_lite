@@ -1,23 +1,23 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/corail-tombstone/files/",
   "1.11.2": {
-    "1.2.1": "Scroll of Recall and Grave Soul",
-	"1.2.0": "Complete stable rewrite of the mod and how it was working.",
+    "1.2.2": "Scroll of Recall, Grave Soul and release updater",
+    "1.2.0": "Complete stable rewrite of the mod and how it was working.",
   },
   "1.10.2": {
     "1.2.1": "Scroll of Recall and Grave Soul",
-	"1.2.0": "Complete stable rewrite of the mod and how it was working.",
+    "1.2.0": "Complete stable rewrite of the mod and how it was working.",
   },
   "1.9.4": {
     "1.2.1": "Scroll of Recall and Grave Soul",
-	"1.2.0": "Complete stable rewrite of the mod and how it was working.",
+    "1.2.0": "Complete stable rewrite of the mod and how it was working.",
   },
   "1.8.9": {
     "1.2.1": "Scroll of Recall and Grave Soul",
-	"1.2.0": "Complete stable rewrite of the mod and how it was working.",
+    "1.2.0": "Complete stable rewrite of the mod and how it was working.",
   },
   "promos": {
-    "1.11.2-latest": "1.2.1-1.11.2",
+    "1.11.2-latest": "1.2.2-1.11.2",
     "1.11.2-recommended": "1.2.0-1.11.2",
 	"1.10.2-latest": "1.2.1-1.10.2",
     "1.10.2-recommended": "1.2.0-1.10.2",

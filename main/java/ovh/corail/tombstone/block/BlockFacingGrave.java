@@ -23,14 +23,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
-import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.ParticleShowItemOver;
-import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.PacketHandler;
 import ovh.corail.tombstone.item.ISoulConsumption;
-import ovh.corail.tombstone.item.ItemGraveKey;
-import ovh.corail.tombstone.item.ItemScrollOfRecall;
 import ovh.corail.tombstone.packet.UpdateSoulMessage;
 
 public class BlockFacingGrave extends Block {
@@ -74,13 +70,13 @@ public class BlockFacingGrave extends Block {
 				ISoulConsumption item = ((ISoulConsumption)stack.getItem());
 				if (!item.isEnchanted(stack)) {
 					if (item.setEnchant(world, pos, player, stack)) {
-						Helper.sendMessage("La magie de la tombe se répand dans votre objet.", player, false);
+						Helper.sendMessage("decorative_grave.message.enchant", player, true);
 						world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 2);
 					} else {
-						Helper.sendMessage("La magie ne semble pas opérer.", player, false);
+						Helper.sendMessage("decorative_grave.message.cantEnchant", player, true);
 					}
 				} else {
-					Helper.sendMessage("L'objet est déjà enchanté.", player, false);
+					Helper.sendMessage("decorative_grave.message.alreadyEnchant", player, true);
 				}
 			}
 		}

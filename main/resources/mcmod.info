@@ -1,7 +1,7 @@
 [
 {
   "modid": "tombstone",
-  "name": "\u00A75\u00A7lCorail Tombstone",
+  "name": "Corail Tombstone",
   "description": "\u00A7ePlace a tombstone with the dropped items when a players die.",
   "version": "${version}",
   "mcversion": "${mcversion}",

@@ -2,6 +2,7 @@ package ovh.corail.tombstone.core;
 
 import static ovh.corail.tombstone.core.ModProps.MOD_ID;
 import static ovh.corail.tombstone.core.ModProps.MOD_NAME;
+import static ovh.corail.tombstone.core.ModProps.MOD_UPDATE;
 import static ovh.corail.tombstone.core.ModProps.MOD_VER;
 
 import java.io.File;
@@ -34,7 +35,7 @@ import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.item.ItemScrollOfRecall;
 import ovh.corail.tombstone.item.ItemSoul;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER, guiFactory = "ovh.corail." + MOD_ID + ".gui.GuiFactory")
+@Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER,  updateJSON = MOD_UPDATE, guiFactory = "ovh.corail." + MOD_ID + ".gui.GuiFactory")
 public class Main {
 	@Instance(MOD_ID)
 	public static Main instance;

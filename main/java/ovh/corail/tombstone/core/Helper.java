@@ -123,15 +123,15 @@ public class Helper {
 		render(Main.scroll_of_recall);
 	}
 	
-	private static void render(Block block) {
+	public static void render(Block block) {
 		render(Item.getItemFromBlock(block), 0);
 	}
 	
-	private static void render(Item item) {
+	public static void render(Item item) {
 		render(item, 0);
 	}
 
-	private static void render(Block block, int meta) {
+	public static void render(Block block, int meta) {
 		render(Item.getItemFromBlock(block), meta);
 	}
 
@@ -158,12 +158,12 @@ public class Helper {
 		register(Main.scroll_of_recall);	
 	}
 	
-	private static void register(Block block) {
+	public static void register(Block block) {
 		GameRegistry.register(block);
 		GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 	}
 
-	private static void register(Item item) {
+	public static void register(Item item) {
 		GameRegistry.register(item);
 	}
 	
