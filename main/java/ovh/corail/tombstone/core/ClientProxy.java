@@ -47,7 +47,6 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void produceTombstoneParticles(BlockPos currentPos) {
-		if (Main.proxy.getSide() != Side.CLIENT) { return; }
 		double motionX = 0.0D;
 		double motionY = 0.01D;
 		double motionZ = 0.0D;

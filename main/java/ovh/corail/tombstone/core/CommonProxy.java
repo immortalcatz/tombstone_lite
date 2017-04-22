@@ -96,7 +96,7 @@ public class CommonProxy {
 	}
 	
 	public Side getSide() {
-		return Side.CLIENT;
+		return Side.SERVER;
 	}
 	
     public WorldServer getWorldServer(int dimId) {
