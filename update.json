@@ -13,7 +13,7 @@
     "1.2.0": "Complete stable rewrite of the mod and how it was working - Client only version",
   },
   "1.8.9": {
-    "1.2.1": "Scroll of Recall and Grave Soul - Server/Client version - 1.8.9 is in beta",
+	"1.2.2": "Scroll of Recall, Grave Soul, fix achievements on server and release updater - Server/Client version - also fix interaction with graves for 1.8.9",
     "1.2.0": "Complete stable rewrite of the mod and how it was working - Client only version",
   },
   "promos": {
@@ -23,7 +23,7 @@
     "1.10.2-recommended": "1.2.2-1.10.2",
 	"1.9.4-latest": "1.2.2-1.9.4",
     "1.9.4-recommended": "1.2.2-1.9.4",
-	"1.8.9-latest": "1.2.1-1.8.9",
-    "1.8.9-recommended": "1.2.1-1.8.9",
+	"1.8.9-latest": "1.2.2-1.8.9",
+    "1.8.9-recommended": "1.2.2-1.8.9",
   }
 }
