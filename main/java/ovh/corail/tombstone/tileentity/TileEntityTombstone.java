@@ -31,7 +31,7 @@ public class TileEntityTombstone extends TileEntityInventory {
 			boolean set = false;
 			if (stack.getItem() instanceof ItemArmor) {
 				int slotId = ((ItemArmor) stack.getItem()).armorType.getIndex();
-				if (player.inventory.armorItemInSlot(slotId).isEmpty()) {
+				if (player.inventory.armorInventory.get(slotId).isEmpty()) {
 					player.inventory.armorInventory.set(slotId, stack);
 					setInventorySlotContents(i, ItemStack.EMPTY);
 					set = true;

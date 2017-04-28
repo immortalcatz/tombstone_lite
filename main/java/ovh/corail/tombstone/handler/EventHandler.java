@@ -32,24 +32,6 @@ public class EventHandler {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	/** avoid to drop the tombstone key */
-	public void itemEvent(ItemTossEvent event) {
-		EntityPlayer player = event.getPlayer();
-		/** not in creative mode */
-		if (player.isCreative()) { return; }
-		/** need to be a grave key */
-		if (!event.getEntityItem().getEntityItem().getItem().equals(Main.grave_key)) { return; }
-		if (event.isCancelable()) {
-			if (event.getPlayer().world.isRemote && !player.isDead) {
-				Helper.sendMessage("item.message.cantDrop", player, true);
-			}
-			/** need to put the item in inventory */
-			player.inventory.addItemStackToInventory(event.getEntityItem().getEntityItem());
-			event.setCanceled(true);
-		}
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
 	/** create a tombstone with drops on death */
 	public void onLivingDrops(LivingDropsEvent event) {
 		/** if it's a player */
@@ -64,7 +46,7 @@ public class EventHandler {
 		playerIn.addStat(AchievementHandler.getAchievement("firstTomb"), 1);
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	/** change experience loss depending on config */
 	public void give(PlayerEvent.Clone event) {
 		EntityPlayer player = event.getEntityPlayer();
@@ -88,15 +70,11 @@ public class EventHandler {
 			stack = original.inventory.getStackInSlot(i);
 			if (!stack.isEmpty() && stack.getItem().equals(Main.grave_key)) {
 				original.inventory.setInventorySlotContents(i, Helper.addToInventoryWithLeftover(stack, player.inventory, false));
-				/*slot = player.inventory.getFirstEmptyStack();
-				if (slot != -1) {
-					player.inventory.setInventorySlotContents(slot, stack);
-				} else { break; }*/
 			}
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	/** remove experience balls */
 	public void onLivingExperienceDrop(LivingExperienceDropEvent event) {
 		if (event.getEntityLiving() instanceof EntityPlayer) {
@@ -105,7 +83,6 @@ public class EventHandler {
 	}
 
 	public void buildTombstone(LivingDropsEvent event, EntityPlayer playerIn) {
-		// TODO
 		/** world dimension */
 		World world = event.getEntityLiving().world;
 		/** surface */
@@ -137,7 +114,6 @@ public class EventHandler {
 			stack = new ItemStack(Main.grave_key, 1, 0);
 			ItemGraveKey.setTombPos(stack, currentPos, world.provider.getDimension());
 			Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false);
-			//playerIn.inventory.setInventorySlotContents(playerIn.inventory.getFirstEmptyStack(), stack);
 		}
 		world.notifyBlockUpdate(currentPos, state, state, 2);
 	}

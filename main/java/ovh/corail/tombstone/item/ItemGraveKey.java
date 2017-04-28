@@ -89,11 +89,6 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 			playerIn.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
 		}
 	}
-
-	@Override
-	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
-		return false;
-	}
 	
 	@Override
 	public boolean hasEffect(ItemStack stack) {
