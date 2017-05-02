@@ -64,10 +64,10 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 	
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slotId, boolean isSelected) {
+		if (!isStackValid(stack)) { return; }
 		if (world.isRemote) { return; }
 		if (entity == null || !(entity instanceof EntityPlayer)) { return; }
 		EntityPlayer player = (EntityPlayer) entity;
-		if (!(stack.getItem() instanceof ItemGraveKey)) { return; }
 		int tombDimId = getTombDim(stack);
 		if (tombDimId != world.provider.getDimension()) { return; }
 		BlockPos tombPos = getTombPos(stack);
