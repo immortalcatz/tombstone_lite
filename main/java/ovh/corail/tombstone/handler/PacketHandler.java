@@ -11,7 +11,6 @@ public class PacketHandler {
 
 	public static void init() {
 		int id = 0;
-		//INSTANCE.registerMessage(TeleportMessage.Handler.class, TeleportMessage.class, id++, Side.CLIENT);
 		INSTANCE.registerMessage(UpdateSoulMessage.Handler.class, UpdateSoulMessage.class, id++, Side.SERVER);
 	}
 }

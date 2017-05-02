@@ -63,14 +63,19 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 	}
 	
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slotId, boolean isSelected) {
+		if (world.isRemote) { return; }
+		if (entity == null || !(entity instanceof EntityPlayer)) { return; }
+		EntityPlayer player = (EntityPlayer) entity;
 		if (!(stack.getItem() instanceof ItemGraveKey)) { return; }
 		int tombDimId = getTombDim(stack);
 		if (tombDimId != world.provider.getDimension()) { return; }
 		BlockPos tombPos = getTombPos(stack);
+		if (!world.isBlockLoaded(tombPos)) { return; } 
 		TileEntity tile = world.getTileEntity(tombPos);
 		if (tile == null || !(tile instanceof TileEntityTombstone)) {
-			entity.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
+			player.replaceItemInInventory(slotId, ItemStack.EMPTY);
+			player.inventoryContainer.detectAndSendChanges();
 		}
     }
 	
