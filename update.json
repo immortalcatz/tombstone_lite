@@ -1,18 +1,18 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/corail-tombstone/files/",
   "1.11.2": {
-	"1.2.4": "Fix the vanishing of grave's key when the tombstone block is not loaded",
-    "1.2.3": "Fix a call to a client method on server making trouble with grave key",
+	"1.2.4-1.11.2": "Fix the vanishing of grave's key when the tombstone block is not loaded",
+    "1.2.3-1.11.2": "Fix a call to a client method on server making trouble with grave key",
   },
   "1.10.2": {
-	"1.2.4": "Fix the vanishing of grave's key when the tombstone block is not loaded",
-    "1.2.3": "Fix a call to a client method on server making trouble with grave key",  },
+	"1.2.4-1.10.2": "Fix the vanishing of grave's key when the tombstone block is not loaded",
+    "1.2.3-1.10.2": "Fix a call to a client method on server making trouble with grave key",  },
   "1.9.4": {
-	"1.2.4": "Fix the vanishing of grave's key when the tombstone block is not loaded",
-    "1.2.3": "Fix a call to a client method on server making trouble with grave key",  },
+	"1.2.4-1.9.4": "Fix the vanishing of grave's key when the tombstone block is not loaded",
+    "1.2.3-1.9.4": "Fix a call to a client method on server making trouble with grave key",  },
   "1.8.9": {
-	"1.2.4": "Fix the vanishing of grave's key when the tombstone block is not loaded",
-    "1.2.3": "Fix a call to a client method on server making trouble with grave key",  },
+	"1.2.4-1.8.9": "Fix the vanishing of grave's key when the tombstone block is not loaded",
+    "1.2.3-1.8.9": "Fix a call to a client method on server making trouble with grave key",  },
   "promos": {
     "1.11.2-latest": "1.2.4-1.11.2",
     "1.11.2-recommended": "1.2.4-1.11.2",
