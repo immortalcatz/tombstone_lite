@@ -64,11 +64,15 @@ public class EventHandler {
 		/** transfer all the grave's keys from the original to the player */
 		if (!ConfigurationHandler.tombAccess || player.world.getGameRules().getBoolean("keepInventory")) { return; }
 		int slot;
-		ItemStack stack;
+		ItemStack originalStack;
+		ItemStack playerStack;
 		for (int i = 0; i < original.inventory.getSizeInventory(); i++) {
-			stack = original.inventory.getStackInSlot(i);
-			if (!stack.isEmpty() && stack.getItem().equals(Main.grave_key)) {
-				original.inventory.setInventorySlotContents(i, Helper.addToInventoryWithLeftover(stack, player.inventory, false));
+			originalStack = original.inventory.getStackInSlot(i).copy();
+			playerStack = player.inventory.getStackInSlot(i);
+			if (!originalStack.isEmpty() && originalStack.getItem() instanceof ItemGraveKey) {
+				if (playerStack.getItem() instanceof ItemGraveKey) { continue; } /** already transferred */
+				player.inventory.setInventorySlotContents(i, originalStack);
+				original.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
 			}
 		}
 	}
