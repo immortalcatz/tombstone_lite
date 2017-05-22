@@ -56,9 +56,9 @@ public class RenderTombstone extends TileEntitySpecialRenderer<TileEntity> {
 			GlStateManager.depthMask(false);
 			/** draw string */
 			showString(TextFormatting.BOLD + "R.I.P.", getFontRenderer(), 0, 14339760);
-			showString(TextFormatting.ITALIC + tile.getOwnerName(), getFontRenderer(), 10, 625944);
-			showString(tile.getOwnerDeathDate(1), getFontRenderer(), 20, 10261372);
-			showString(tile.getOwnerDeathDate(2), getFontRenderer(), 30, 10261372);
+			showString(TextFormatting.ITALIC + tile.getOwnerName(), getFontRenderer(), 10, 2966992);
+			showString(tile.getOwnerDeathDate(1), getFontRenderer(), 20, 14339760);
+			showString(tile.getOwnerDeathDate(2), getFontRenderer(), 30, 14339760);
 			GlStateManager.depthMask(true);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.popMatrix();
@@ -70,7 +70,7 @@ public class RenderTombstone extends TileEntitySpecialRenderer<TileEntity> {
 		String[] splitString = new String[1];
 		splitString[0] = deathText;
 		for (int i = 0; i < splitString.length; i++) {
-			fontRenderer.drawString(splitString[i], -fontRenderer.getStringWidth(splitString[i]) / 2, (i * 10) - 30 + posY, color, false);
+			fontRenderer.drawString(splitString[i], -fontRenderer.getStringWidth(splitString[i]) / 2, (i * 10) - 30 + posY, color, true);
 		}
 	}
 }
