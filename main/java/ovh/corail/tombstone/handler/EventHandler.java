@@ -3,6 +3,7 @@ package ovh.corail.tombstone.handler;
 import java.util.Date;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -67,6 +68,7 @@ public class EventHandler {
 		ItemStack originalStack;
 		ItemStack playerStack;
 		for (int i = 0; i < original.inventory.getSizeInventory(); i++) {
+			if (original.inventory.getStackInSlot(i).isEmpty()) { continue; }
 			originalStack = original.inventory.getStackInSlot(i).copy();
 			playerStack = player.inventory.getStackInSlot(i);
 			if (!originalStack.isEmpty() && originalStack.getItem() instanceof ItemGraveKey) {
@@ -98,7 +100,14 @@ public class EventHandler {
 		world.setBlockState(currentPos, state);
 		TileEntityTombstone tile = (TileEntityTombstone) world.getTileEntity(currentPos);
 		/** owner infos */
-		tile.setOwner(playerIn, new Date().getTime(), ConfigurationHandler.tombAccess);
+		boolean needAccess = ConfigurationHandler.tombAccess;
+		if (needAccess && ConfigurationHandler.pvpMode && event.getSource() != null) {
+			Entity killer = event.getSource().getEntity();
+			if (killer != null && killer instanceof EntityPlayer) {
+				needAccess = false;
+			}
+		}
+		tile.setOwner(playerIn, new Date().getTime(), needAccess);
 		/** fill tombstone with items and reverse the inventory (equipable first) */
 		ItemStack stack;
 		for (int i = event.getDrops().size() - 1; i >= 0; i--) {

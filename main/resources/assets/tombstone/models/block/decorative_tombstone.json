@@ -1,9 +1,5 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
-	"parent": "block/stone",
-    "textures": {
-        "0": "tombstone:blocks/tombstone"
-    },
     "elements": [
         {
             "name": "Socle01",

@@ -3,17 +3,16 @@
   "defaults": {
     "model": "tombstone:decorative_grave_cross",
     "textures": {
-      "all": "tombstone:blocks/tombstone"
+      "0": "tombstone:blocks/tombstone",
+	  "particle": "tombstone:blocks/tombstone"
     }
   },
     "variants": {
-        "normal" : [{
-                
-            }], 
+        "normal" : [{}], 
         "inventory" : [{
-                "transform" : "forge:default-block", 
-                "y" : 90
-            }], 
+			"transform" : "forge:default-block",
+			"y": -90
+		}], 
 		"facing": {
 			"north": {},
 			"south": {"y": 180},

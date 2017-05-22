@@ -9,7 +9,7 @@ import ovh.corail.tombstone.core.ModProps;
 public class ConfigurationHandler {
 	public static Configuration config;
 	private static File configDir;
-	public static boolean tombAccess, upgradeTombKey, xpLoss, highlight, teleportDim, showFog;
+	public static boolean tombAccess, upgradeTombKey, xpLoss, highlight, teleportDim, showFog, pvpMode;
 	public static String ingredientToUpgradeKey;
 	public static int percentXpLoss, decayTime;
 	
@@ -26,6 +26,7 @@ public class ConfigurationHandler {
 		highlight = config.getBoolean("highlight", Configuration.CATEGORY_GENERAL, true, Helper.getTranslation("config.highlight"));
 		teleportDim = config.getBoolean("teleportDim", Configuration.CATEGORY_GENERAL, true, Helper.getTranslation("config.teleportDim"));
 		showFog = config.getBoolean("showFog", Configuration.CATEGORY_GENERAL, true, Helper.getTranslation("config.showFog"));
+		pvpMode = config.getBoolean("pvpMode", Configuration.CATEGORY_GENERAL, false, Helper.getTranslation("config.pvpMode"));
 		if (config.hasChanged()) {
 			config.save();
 		}

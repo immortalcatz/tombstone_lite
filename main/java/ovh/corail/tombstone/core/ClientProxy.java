@@ -1,5 +1,9 @@
 package ovh.corail.tombstone.core;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.math.BlockPos;
@@ -47,18 +51,24 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void produceTombstoneParticles(BlockPos currentPos) {
-		double motionX = 0.0D;
-		double motionY = 0.01D;
-		double motionZ = 0.0D;
+		double motionX = 0.01d;
+		double motionY = 0.0d;
+		double motionZ = 0.01d;
+		double motion_null = 0.0d;
+		List<List<Double>> list = Lists.newArrayList();
+		list.add(Lists.newArrayList(0.2d, 0.2d, -motionX, motionY, -motionZ));
+		list.add(Lists.newArrayList(0.2d, 0.8d, -motionX, motionY, motionZ));
+		list.add(Lists.newArrayList(0.8d, 0.2d, motionX, motionY, -motionZ));
+		list.add(Lists.newArrayList(0.8d, 0.8d, motionX, motionY, motionZ));
+		list.add(Lists.newArrayList(0.2d, 0.5d, -motionX, motionY, motion_null));
+		list.add(Lists.newArrayList(0.8d, 0.5d, motionX, motionY, motion_null));
+		list.add(Lists.newArrayList(0.5d, 0.2d, motion_null, motionY, -motionZ));
+		list.add(Lists.newArrayList(0.5d, 0.8d, motion_null, motionY, motionZ));
+		
 		WorldClient world = Minecraft.getMinecraft().world;
-		for (double i = 0.2d; i <= 0.8d; i += 0.3d) {
-			for (double j = 0.2d; j <= 0.8d; j += 0.3d) {		
-				if (i == 0.5d && j == 0.5d) {
-					continue;
-				}
-				ParticleGrave particle = new ParticleGrave(world, currentPos.getX()+i, currentPos.getY(), currentPos.getZ()+j, motionX, motionY, motionZ);
-				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-			}
+		for (List<Double> values : list) {
+			ParticleGrave particle = new ParticleGrave(world, currentPos.getX()+values.get(0), currentPos.getY()+0.2d, currentPos.getZ()+values.get(1), values.get(2), values.get(3), values.get(4));
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 	}
 	

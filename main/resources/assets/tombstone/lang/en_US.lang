@@ -35,6 +35,7 @@ config.decayTime=Time before tomb doesn't need key
 config.highlight=Highlight the tomb from far when holding the key
 config.teleportDim=Allow teleport to dimension with the key
 config.showFog=Show fog around the graves
+config.pvpMode=PVP Mode allowing to open the tombstone of killed players
 achievement.FirstTomb=Your first tomb !
 achievement.FirstTomb.desc=A tomb was erected at the place of your death !
 achievement.UpgradedKey=A fast comeback !

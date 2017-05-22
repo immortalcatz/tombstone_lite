@@ -22,7 +22,7 @@ public class BlockDecorativeGraveCross extends BlockFacingGrave {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.25f, 0f, 0.25f, 0.75f, 0.5625f, 0.75f);
+		return new AxisAlignedBB(0.1875f, 0f, 0.1875f, 0.8125f, 0.75f, 0.8125f);
 	}
 	
 	@Override
