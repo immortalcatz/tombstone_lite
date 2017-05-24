@@ -18,12 +18,12 @@
   },
   "promos": {
     "1.11.2-latest": "1.2.6",
-    "1.11.2-recommended": "1.2.5",
+    "1.11.2-recommended": "1.2.6",
 	"1.10.2-latest": "1.2.6",
-    "1.10.2-recommended": "1.2.5",
+    "1.10.2-recommended": "1.2.6",
 	"1.9.4-latest": "1.2.6",
-    "1.9.4-recommended": "1.2.5",
+    "1.9.4-recommended": "1.2.6",
 	"1.8.9-latest": "1.2.6",
-    "1.8.9-recommended": "1.2.5"
+    "1.8.9-recommended": "1.2.6"
   }
 }
