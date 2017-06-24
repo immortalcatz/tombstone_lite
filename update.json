@@ -1,6 +1,7 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/corail-tombstone/files/",
   "1.12": {
+    "1.2.6.001": "Update to last forge changes (registry)",
     "1.2.6": "First version for 1.12, with same changes as others versions. Advancements are disabled and PVP hasn't been tested"
   },
   "1.11.2": {
@@ -20,8 +21,8 @@
     "1.2.5": "Compatibity with mod levels"
   },
   "promos": {
-    "1.12-latest": "1.2.6",
-    "1.12-recommended": "1.2.6",
+    "1.12-latest": "1.2.6.001",
+    "1.12-recommended": "1.2.6.001",
     "1.11.2-latest": "1.2.6",
     "1.11.2-recommended": "1.2.6",
 	"1.10.2-latest": "1.2.6",
