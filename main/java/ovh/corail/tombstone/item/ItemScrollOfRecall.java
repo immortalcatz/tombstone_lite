@@ -2,6 +2,7 @@ package ovh.corail.tombstone.item;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.TeleportUtils;
-import ovh.corail.tombstone.handler.AchievementHandler;
+import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 
 public class ItemScrollOfRecall extends Item implements ISoulConsumption {
@@ -38,6 +39,7 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 		if (!isStackValid(stack)) { return false; }
 		NBTStackHelper.setBlockPos(stack, "tombPos", tombPos);
 		NBTStackHelper.setInteger(stack, "tombDim", tombDim);
+		setUseCount(stack, ConfigurationHandler.scrollOfRecallUseCount);
 		return true;
 	}
 
@@ -51,9 +53,20 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 		return NBTStackHelper.getInteger(stack, "tombDim");
 	}
 	
+	private static ItemStack setUseCount(ItemStack stack, int useCount) {
+		NBTStackHelper.setInteger(stack, "useCount", useCount);
+		return stack;
+	}
+	
+	public static int getUseCount(ItemStack stack) {
+		if (!isStackValid(stack)) { return 0; }
+		return NBTStackHelper.getInteger(stack, "useCount");
+	}
+	
 	@Override
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-		playerIn.addStat(AchievementHandler.getAchievement("makeScroll"), 1);
+		// TODO Advancement
+		//playerIn.addStat(AchievementHandler.getAchievement("makeScroll"), 1);
 	}
 	
 	@Override
@@ -68,14 +81,15 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 	public boolean setEnchant(World world, BlockPos gravePos, EntityPlayer player, ItemStack stack) {
 		boolean valid = setTombPos(stack, gravePos, world.provider.getDimension());
 		if (valid) {
-			player.addStat(AchievementHandler.getAchievement("activateScroll"), 1);
+			// TODO Advancement
+			//player.addStat(AchievementHandler.getAchievement("activateScroll"), 1);
 			return true;
 		}
 		return false;
 	}
 
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+	@Override 
+	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag par4) {
 		if (!stack.hasTagCompound()) {
 			list.add(TextFormatting.AQUA + Helper.getTranslation("item.scroll_of_recall.desc1"));
 		} else {
@@ -85,6 +99,7 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 			String tombDim = (tombDimId==0 ? "The Overworld" : (tombDimId == -1 ? "The Nether" : (tombDimId==-1? "The End": "Unknown Land " + tombDimId)));
 			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.dimTitle") + " : " + tombDim);
 			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.posTitle") + " :  " + tombPos.getX() + ", " + tombPos.getY() + ", " + tombPos.getZ());
+			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.useCount") + " : " + getUseCount(stack));
 			list.add(TextFormatting.AQUA + Helper.getTranslation("item.info.tele"));
 		}
 	}
@@ -100,11 +115,20 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 					Helper.sendMessage("item.scroll_of_recall.message.tooClose", player, true);
 					return super.onItemRightClick(world, player, hand);
 				}
-				player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
-				TeleportUtils.teleportEntity(player, tombDim, (double)tombPos.getX()+0.5d, (double)tombPos.getY()+1.05d, (double)tombPos.getZ()+0.5d);
-				player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
-				Helper.sendMessage("item.scroll_of_recall.message.success", player, true);
-				player.addStat(AchievementHandler.getAchievement("recall"), 1);
+				int useCount = getUseCount(stack)-1;
+				if (useCount <= 0) {
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+				} else {
+					setUseCount(stack, useCount);
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
+				}
+				if (useCount >= 0) {
+					TeleportUtils.teleportEntity(player, tombDim, (double)tombPos.getX()+0.5d, (double)tombPos.getY()+1.05d, (double)tombPos.getZ()+0.5d);
+					player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
+					Helper.sendMessage("item.scroll_of_recall.message.success", player, true);
+				}
+				// TODO Advancement
+				//player.addStat(AchievementHandler.getAchievement("recall"), 1);
 			} else {
 				Helper.sendMessage("item.scroll_of_recall.message.needSoul", player, true);
 			}

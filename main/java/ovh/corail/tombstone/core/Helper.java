@@ -28,7 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class Helper {
 	
@@ -159,12 +159,12 @@ public class Helper {
 	}
 	
 	public static void register(Block block) {
-		GameRegistry.register(block);
-		GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		ForgeRegistries.BLOCKS.register(block);
+		ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 	}
 
 	public static void register(Item item) {
-		GameRegistry.register(item);
+		ForgeRegistries.ITEMS.register(item);
 	}
 	
 	public static boolean isSafeBlock(World world, BlockPos currentPos) {

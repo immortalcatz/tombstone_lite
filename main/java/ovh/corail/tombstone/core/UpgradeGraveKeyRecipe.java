@@ -1,15 +1,16 @@
 package ovh.corail.tombstone.core;
 
-import java.util.List;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
 public class UpgradeGraveKeyRecipe extends ShapelessRecipes {
 
-	public UpgradeGraveKeyRecipe(ItemStack res, List<ItemStack> inputList) {
-		super(res, inputList);
+	public UpgradeGraveKeyRecipe(ResourceLocation group, ItemStack res, NonNullList<Ingredient> ingredients) {
+		super(group.toString(), res, ingredients);
 	}
 
 	@Override

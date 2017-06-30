@@ -16,7 +16,7 @@ import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 public class RenderTombstone extends TileEntitySpecialRenderer<TileEntity> {
 
 	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if  (te == null) { return; }
 		if (!(te instanceof TileEntityTombstone)) { return; }
 		IBlockState state = te.getWorld().getBlockState(te.getPos());

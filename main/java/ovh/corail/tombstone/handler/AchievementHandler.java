@@ -1,6 +1,6 @@
 package ovh.corail.tombstone.handler;
 
-import java.util.HashMap;
+/*import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.item.Item;
@@ -8,7 +8,7 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.ModProps;
-
+// TODO Advancement
 public class AchievementHandler {
 	private static Map<String, Achievement> achievements = new HashMap<String, Achievement>();
 	private static int achievementCount = 0;
@@ -35,4 +35,4 @@ public class AchievementHandler {
 	public static void registerAchievements() {
 		AchievementPage.registerAchievementPage(new AchievementPage(ModProps.MOD_ID, achievements.values().toArray(new Achievement[achievements.values().size()])));
 	}
-}
+}*/

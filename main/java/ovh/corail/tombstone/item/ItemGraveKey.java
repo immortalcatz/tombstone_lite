@@ -7,10 +7,11 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,7 +28,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.TeleportUtils;
-import ovh.corail.tombstone.handler.AchievementHandler;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
@@ -91,7 +91,8 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 	@Override
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
 		if (isEnchanted(stack)) {
-			playerIn.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
+			// TODO Advancement
+			//playerIn.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
 		}
 	}
 	
@@ -107,12 +108,13 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 	public boolean setEnchant(World world, BlockPos gravePos, EntityPlayer player, ItemStack stack) {
 		if (!isStackValid(stack) || !ConfigurationHandler.upgradeTombKey) { return false; }
 		NBTStackHelper.setBoolean(stack, "enchant", true);
-		player.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
+		// TODO Advancement
+		//player.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
 		return true;
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag par4) {
 		if (stack.hasTagCompound()) {
 			int tombDimId = getTombDim(stack);
 			BlockPos tombPos = getTombPos(stack);
@@ -169,7 +171,7 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 		float x = p.getX(), y = p.getY(), z = p.getZ();
 		// RenderHelper.enableStandardItemLighting();
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer renderer = tessellator.getBuffer();
+		BufferBuilder renderer = tessellator.getBuffer();
 		renderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 		GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1f);
 		GL11.glLineWidth(2.5f);

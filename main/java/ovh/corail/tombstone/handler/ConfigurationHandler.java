@@ -11,7 +11,7 @@ public class ConfigurationHandler {
 	private static File configDir;
 	public static boolean tombAccess, upgradeTombKey, xpLoss, highlight, teleportDim, showFog, pvpMode;
 	public static String ingredientToUpgradeKey;
-	public static int percentXpLoss, decayTime;
+	public static int percentXpLoss, decayTime, scrollOfRecallUseCount;
 	
 	private ConfigurationHandler() {
 	}
@@ -27,6 +27,7 @@ public class ConfigurationHandler {
 		teleportDim = config.getBoolean("teleportDim", Configuration.CATEGORY_GENERAL, true, Helper.getTranslation("config.teleportDim"));
 		showFog = config.getBoolean("showFog", Configuration.CATEGORY_GENERAL, true, Helper.getTranslation("config.showFog"));
 		pvpMode = config.getBoolean("pvpMode", Configuration.CATEGORY_GENERAL, false, Helper.getTranslation("config.pvpMode"));
+		scrollOfRecallUseCount = config.getInt("scrollOfRecallUseCount", Configuration.CATEGORY_GENERAL, 1, 1, 10, Helper.getTranslation("config.scrollOfRecallUseCount"));
 		if (config.hasChanged()) {
 			config.save();
 		}

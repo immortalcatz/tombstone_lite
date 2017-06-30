@@ -43,7 +43,8 @@ public class EventHandler {
 		if (event.getDrops().size() <= 0 || event.getDrops().size() > 60) {	return; }
 		/** create the tombstone */
 		buildTombstone(event, playerIn);
-		playerIn.addStat(AchievementHandler.getAchievement("firstTomb"), 1);
+		// TODO Advancement
+		//playerIn.addStat(AchievementHandler.getAchievement("firstTomb"), 1);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -102,7 +103,8 @@ public class EventHandler {
 		/** owner infos */
 		boolean needAccess = ConfigurationHandler.tombAccess;
 		if (needAccess && ConfigurationHandler.pvpMode && event.getSource() != null) {
-			Entity killer = event.getSource().getEntity();
+			// TODO check trueSource is killer
+			Entity killer = event.getSource().getTrueSource();
 			if (killer != null && killer instanceof EntityPlayer) {
 				needAccess = false;
 			}
@@ -111,13 +113,13 @@ public class EventHandler {
 		/** fill tombstone with items and reverse the inventory (equipable first) */
 		ItemStack stack;
 		for (int i = event.getDrops().size() - 1; i >= 0; i--) {
-			stack = event.getDrops().get(i).getEntityItem();
+			stack = event.getDrops().get(i).getItem();
 			if (stack.isEmpty()) { continue; }
 			EntityItem n = event.getDrops().get(i);
 			if (!stack.getItem().equals(Main.grave_key)) {			
-				n.setEntityItemStack(Helper.addToInventoryWithLeftover(stack, tile, false));		
+				n.setItem(Helper.addToInventoryWithLeftover(stack, tile, false));		
 			} else {
-				n.setEntityItemStack(Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false));
+				n.setItem(Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false));
 			}
 			event.getDrops().remove(i);
 		}
