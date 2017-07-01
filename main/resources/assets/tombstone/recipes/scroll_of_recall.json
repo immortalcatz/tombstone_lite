@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tombstone:scroll",
+  "pattern": [
+    "01"
+  ],
+  "key": {
+    "0": {
+      "item": "minecraft:paper"
+    },
+    "1": {
+      "item": "minecraft:dye",
+	  "data": 15
+    }
+  },
+  "result": {
+    "item": "scroll_of_recall"
+  }
+}

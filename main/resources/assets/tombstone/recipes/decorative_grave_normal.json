@@ -1,0 +1,20 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "tombstone:grave",
+  "pattern": [
+    " 0 ",
+	" 0 ",
+	"010"
+  ],
+  "key": {
+    "0": {
+      "item": "#STONE"
+    },
+    "1": {
+      "item": "#SKULL"
+    }
+  },
+  "result": {
+    "item": "decorative_grave_normal"
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "display": {
+        "icon": {
+            "item": "tombstone:decorative_tombstone"
+        },
+        "title": {
+            "translate": "tabTombstone"
+        },
+        "description": {
+            "translate": "tabTombstone"
+        },
+        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+        "show_toast": false,
+        "announce_to_chat": false
+    },
+    "criteria": {
+      "new_tombstone": {
+        "trigger": "minecraft:placed_block",
+	    "conditions": {
+          "items": [
+            {
+              "item": "tombstone:tombstone",
+			  "data": 0
+            }
+          ]
+        }
+      }
+    },
+	"requirements": [
+      [  "new_tombstone" ]
+    ]
+}

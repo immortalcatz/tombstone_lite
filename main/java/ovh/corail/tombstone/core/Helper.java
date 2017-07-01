@@ -20,15 +20,23 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.RecipeSorter.Category;
+import ovh.corail.tombstone.handler.ConfigurationHandler;
 
 public class Helper {
 	
@@ -256,6 +264,33 @@ public class Helper {
 		ItemStack tmp = stack.copy();
 		tmp.setCount(Math.min(size, stack.getMaxStackSize()));
 		return tmp;
+	}
+	
+	public static void registerEncodedRecipes() {
+		/** recipe to upgrade the tomb's key */
+		if (ConfigurationHandler.upgradeTombKey) {
+			String[] parts = ConfigurationHandler.ingredientToUpgradeKey.split(":");
+			ItemStack ingredient;
+			if (parts.length == 4) {
+				ingredient = new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(parts[0], parts[1])), Integer.valueOf(parts[2]), Integer.valueOf(parts[3]));
+			} else if (parts.length == 3) {
+				ingredient = new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(parts[0], parts[1])), Integer.valueOf(parts[2]));
+			} else {
+				ingredient = new ItemStack(Items.ENDER_PEARL, 1);
+			}
+			ItemStack res = new ItemStack(Main.grave_key);
+			res.setTagCompound(new NBTTagCompound());
+			res.getTagCompound().setBoolean("enchant", true);
+
+			NonNullList<Ingredient> inputList = NonNullList.create();
+			inputList.add(Ingredient.fromItem(Main.grave_key));
+			inputList.add(Ingredient.fromStacks(ingredient));
+			RecipeSorter.register(ModProps.MOD_ID + ":upgrade_key", UpgradeGraveKeyRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
+			ResourceLocation group = new ResourceLocation("tombstone", "grave");
+			UpgradeGraveKeyRecipe recipe_upgrade_key = new UpgradeGraveKeyRecipe(group, res, inputList);
+			recipe_upgrade_key.setRegistryName(new ResourceLocation(ModProps.MOD_ID, "upgrade_key"));
+			ForgeRegistries.RECIPES.register(recipe_upgrade_key);
+		}
 	}
 
 }

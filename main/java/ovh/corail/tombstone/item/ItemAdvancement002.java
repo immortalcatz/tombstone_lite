@@ -3,11 +3,11 @@ package ovh.corail.tombstone.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemAchievement001 extends Item {
-	private static final String name = "achievement_001";
+public class ItemAdvancement002 extends Item {
+	private static final String name = "advancement_002";
 
 	/** constructor */
-	public ItemAchievement001() {
+	public ItemAdvancement002() {
 		super();
 		setRegistryName(name);
 		setUnlocalizedName(name);

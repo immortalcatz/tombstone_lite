@@ -1,0 +1,20 @@
+[
+  {
+    "name": "STONE",
+    "ingredient": [
+	  {
+	    "type": "forge:ore_dict",
+        "ore": "stone"
+      }
+    ]
+  },
+  {
+    "name": "SKULL",
+    "ingredient": [
+	  {
+	    "item": "minecraft:skull",
+		"data": 32767
+      }
+    ]
+  }
+]
