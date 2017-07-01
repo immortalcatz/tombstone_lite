@@ -14,19 +14,11 @@
         "announce_to_chat": false
     },
     "criteria": {
-      "new_tombstone": {
-        "trigger": "minecraft:placed_block",
-	    "conditions": {
-          "items": [
-            {
-              "item": "tombstone:tombstone",
-			  "data": 0
-            }
-          ]
-        }
+      "auto": {
+        "trigger": "location"
       }
     },
 	"requirements": [
-      [  "new_tombstone" ]
+      [  "auto" ]
     ]
 }

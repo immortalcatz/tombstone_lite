@@ -14,11 +14,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementManager;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -44,6 +48,23 @@ public class Helper {
 	
 	public static int getRandom(int min, int max) {
 		return random.nextInt(max - min + 1) + min;
+	}
+	
+	public static boolean triggerAdvancement(EntityPlayerMP player, String name) {
+		return triggerAdvancement(player, ModProps.MOD_ID, name);
+	}
+	
+	public static boolean triggerAdvancement(EntityPlayerMP player, String domain, String name) {
+		AdvancementManager am = player.getServerWorld().getAdvancementManager();
+		Advancement advancement = am.getAdvancement(new ResourceLocation(domain, name));
+		if (advancement == null) { return false; }
+		AdvancementProgress advancementprogress = player.getAdvancements().getProgress(advancement);
+        if (!advancementprogress.isDone()) {
+        	for (String criteria : advancementprogress.getRemaningCriteria()) {
+                player.getAdvancements().grantCriterion(advancement, criteria);
+            }
+        }
+		return true;
 	}
 	
 	public static Set<String> loadWhitelist(File whitelistFile) {

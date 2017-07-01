@@ -3,6 +3,7 @@ package ovh.corail.tombstone.handler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import ovh.corail.tombstone.core.ModProps;
+import ovh.corail.tombstone.packet.TriggerAdvancementMessage;
 import ovh.corail.tombstone.packet.UpdateSoulMessage;
 
 public class PacketHandler {
@@ -12,5 +13,6 @@ public class PacketHandler {
 	public static void init() {
 		int id = 0;
 		INSTANCE.registerMessage(UpdateSoulMessage.Handler.class, UpdateSoulMessage.class, id++, Side.SERVER);
+		INSTANCE.registerMessage(TriggerAdvancementMessage.Handler.class, TriggerAdvancementMessage.class, id++, Side.SERVER);
 	}
 }

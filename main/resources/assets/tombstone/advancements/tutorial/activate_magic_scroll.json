@@ -1,0 +1,27 @@
+{
+    "display": {
+        "icon": {
+            "item": "tombstone:soul"
+        },
+        "title": {
+            "translate": "advancement.activate_magic_scroll.title"
+        },
+        "description": {
+            "translate": "advancement.activate_magic_scroll.desc"
+        },
+		"frame": "challenge",
+		"hidden": false
+    },
+	"parent": "tombstone:tutorial/create_magic_scroll",
+    "criteria": {
+      "new_tombstone": {
+        "trigger": "minecraft:placed_block",
+	    "conditions": {
+          "block": "tombstone:decorative_tombstone"
+        }
+      }
+    },
+	"requirements": [
+      [  "new_tombstone" ]
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "display": {
+        "icon": {
+            "item": "tombstone:scroll_of_recall"
+        },
+        "title": {
+            "translate": "advancement.create_magic_scroll.title"
+        },
+        "description": {
+            "translate": "advancement.create_magic_scroll.desc"
+        },
+		"frame": "task",
+		"hidden": false
+    },
+	"parent": "tombstone:tutorial/root",
+    "criteria": {
+      "new_tombstone": {
+        "trigger": "minecraft:placed_block",
+	    "conditions": {
+          "block": "tombstone:decorative_tombstone"
+        }
+      }
+    },
+	"requirements": [
+      [  "new_tombstone" ]
+    ]
+}

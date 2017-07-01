@@ -4,28 +4,21 @@
             "item": "tombstone:advancement_001"
         },
         "title": {
-            "translate": "advancement.FirstTomb"
+            "translate": "advancement.first_tomb.title"
         },
         "description": {
-            "translate": "advancement.FirstTomb.desc"
+            "translate": "advancement.first_tomb.desc"
         },
-		"frame": "goal"
+		"frame": "goal",
+		"hidden": false
     },
 	"parent": "tombstone:tutorial/root",
     "criteria": {
-      "new_tombstone": {
-        "trigger": "minecraft:placed_block",
-	    "conditions": {
-          "items": [
-            {
-              "item": "tombstone:tombstone",
-			  "data": 0
-            }
-          ]
-        }
+      "coded_trigger": {
+        "trigger": "minecraft:impossible"
       }
     },
 	"requirements": [
-      [  "new_tombstone" ]
+      [  "coded_trigger" ]
     ]
 }

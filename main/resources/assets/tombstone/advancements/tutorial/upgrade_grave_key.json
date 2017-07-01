@@ -4,28 +4,21 @@
             "item": "tombstone:advancement_002"
         },
         "title": {
-            "translate": "advancement.UpgradedKey"
+            "translate": "advancement.upgrade_grave_key.title"
         },
         "description": {
-            "translate": "advancement.UpgradedKey.desc"
+            "translate": "advancement.upgrade_grave_key.desc"
         },
-		"frame": "challenge"
+		"frame": "challenge",
+		"hidden": false
     },
 	"parent": "tombstone:tutorial/first_tomb",
     "criteria": {
-      "upgraded_key": {
-        "trigger": "minecraft:inventory_changed",
-		"conditions": {
-		  "items": [
-	        {
-              "item": "tombstone:grave_key",
-			  "nbt": "{enchant:true}"
-            }
-          ]
-        }
+      "coded_trigger": {
+        "trigger": "minecraft:impossible"
       }
     },
 	"requirements": [
-      [  "upgraded_key" ]
+      [  "coded_trigger" ]
     ]
 }

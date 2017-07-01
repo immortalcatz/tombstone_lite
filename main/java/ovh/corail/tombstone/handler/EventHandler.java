@@ -6,6 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,6 +21,7 @@ import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.ModProps;
 import ovh.corail.tombstone.item.ItemGraveKey;
+import ovh.corail.tombstone.packet.TriggerAdvancementMessage;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class EventHandler {
@@ -33,7 +35,7 @@ public class EventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	/** create a tombstone with drops on death */
-	public void onLivingDrops(LivingDropsEvent event) {
+	public void onLivingDrops(LivingDropsEvent event) {	
 		/** if it's a player */
 		if (!(event.getEntityLiving() instanceof EntityPlayer)) { return; }
 		EntityPlayer playerIn = (EntityPlayer) event.getEntityLiving();
@@ -129,6 +131,8 @@ public class EventHandler {
 			ItemGraveKey.setTombPos(stack, currentPos, world.provider.getDimension());
 			Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false);
 		}
+		PacketHandler.INSTANCE.sendToServer(new TriggerAdvancementMessage("tutorial/first_tomb"));
+		//Helper.validAdvancement(playerIn, "tutorial/first_tomb");
 		world.notifyBlockUpdate(currentPos, state, state, 2);
 	}
 }
