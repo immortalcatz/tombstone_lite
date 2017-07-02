@@ -14,14 +14,11 @@
     },
 	"parent": "tombstone:tutorial/create_magic_scroll",
     "criteria": {
-      "new_tombstone": {
-        "trigger": "minecraft:placed_block",
-	    "conditions": {
-          "block": "tombstone:decorative_tombstone"
-        }
+      "coded_trigger": {
+        "trigger": "minecraft:impossible"
       }
     },
 	"requirements": [
-      [  "new_tombstone" ]
+      [  "coded_trigger" ]
     ]
 }

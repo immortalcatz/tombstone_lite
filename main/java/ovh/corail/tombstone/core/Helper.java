@@ -31,12 +31,14 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
@@ -50,18 +52,22 @@ public class Helper {
 		return random.nextInt(max - min + 1) + min;
 	}
 	
-	public static boolean triggerAdvancement(EntityPlayerMP player, String name) {
-		return triggerAdvancement(player, ModProps.MOD_ID, name);
+	public static boolean grantAdvancement(EntityPlayer player, String name) {
+		return grantAdvancement(player, ModProps.MOD_ID, name);
 	}
 	
-	public static boolean triggerAdvancement(EntityPlayerMP player, String domain, String name) {
-		AdvancementManager am = player.getServerWorld().getAdvancementManager();
+	public static boolean grantAdvancement(EntityPlayer player, String domain, String name) {
+		if (player == null) { return false; }
+		if (player.world.isRemote) { return true; }
+		PlayerList playerList = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
+		EntityPlayerMP player_mp = playerList.getPlayerByUUID(player.getUniqueID());
+		AdvancementManager am = player_mp.getServerWorld().getAdvancementManager();
 		Advancement advancement = am.getAdvancement(new ResourceLocation(domain, name));
 		if (advancement == null) { return false; }
-		AdvancementProgress advancementprogress = player.getAdvancements().getProgress(advancement);
+		AdvancementProgress advancementprogress = player_mp.getAdvancements().getProgress(advancement);
         if (!advancementprogress.isDone()) {
         	for (String criteria : advancementprogress.getRemaningCriteria()) {
-                player.getAdvancements().grantCriterion(advancement, criteria);
+                player_mp.getAdvancements().grantCriterion(advancement, criteria);
             }
         }
 		return true;

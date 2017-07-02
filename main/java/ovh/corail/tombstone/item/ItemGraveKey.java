@@ -29,9 +29,7 @@ import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.TeleportUtils;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
-import ovh.corail.tombstone.handler.PacketHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
-import ovh.corail.tombstone.packet.TriggerAdvancementMessage;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class ItemGraveKey extends Item implements ISoulConsumption {
@@ -91,10 +89,10 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
     }
 
 	@Override
-	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+	public void onCreated(ItemStack stack, World worldIn, EntityPlayer player) {
 		if (isEnchanted(stack)) {
-			// TODO Advancement
-			//playerIn.addStat(AchievementHandler.getAchievement("upgradedKey"), 1);
+			/** advancement upgrade_grave_key */
+			Helper.grantAdvancement(player, "tutorial/upgrade_grave_key");
 		}
 	}
 	
@@ -110,7 +108,6 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 	public boolean setEnchant(World world, BlockPos gravePos, EntityPlayer player, ItemStack stack) {
 		if (!isStackValid(stack) || !ConfigurationHandler.upgradeTombKey) { return false; }
 		NBTStackHelper.setBoolean(stack, "enchant", true);
-		PacketHandler.INSTANCE.sendToServer(new TriggerAdvancementMessage("tutorial/upgrade_grave_key"));
 		return true;
 	}
 

@@ -4,10 +4,10 @@
             "item": "tombstone:decorative_tombstone"
         },
         "title": {
-            "translate": "tabTombstone"
+            "translate": "advancement.tutorial.title"
         },
         "description": {
-            "translate": "tabTombstone"
+            "translate": "advancement.tutorial.desc"
         },
         "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
         "show_toast": false,

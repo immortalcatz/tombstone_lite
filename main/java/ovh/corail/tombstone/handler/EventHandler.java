@@ -6,7 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,7 +20,6 @@ import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.ModProps;
 import ovh.corail.tombstone.item.ItemGraveKey;
-import ovh.corail.tombstone.packet.TriggerAdvancementMessage;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class EventHandler {
@@ -45,8 +43,8 @@ public class EventHandler {
 		if (event.getDrops().size() <= 0 || event.getDrops().size() > 60) {	return; }
 		/** create the tombstone */
 		buildTombstone(event, playerIn);
-		// TODO Advancement
-		//playerIn.addStat(AchievementHandler.getAchievement("firstTomb"), 1);
+		/** advancement first_tomb */
+		Helper.grantAdvancement(playerIn, "tutorial/first_tomb");
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -131,8 +129,6 @@ public class EventHandler {
 			ItemGraveKey.setTombPos(stack, currentPos, world.provider.getDimension());
 			Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false);
 		}
-		PacketHandler.INSTANCE.sendToServer(new TriggerAdvancementMessage("tutorial/first_tomb"));
-		//Helper.validAdvancement(playerIn, "tutorial/first_tomb");
 		world.notifyBlockUpdate(currentPos, state, state, 2);
 	}
 }

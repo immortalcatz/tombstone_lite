@@ -64,9 +64,9 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 	}
 	
 	@Override
-	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-		// TODO Advancement
-		//playerIn.addStat(AchievementHandler.getAchievement("makeScroll"), 1);
+	public void onCreated(ItemStack stack, World worldIn, EntityPlayer player) {
+		/** advancement create_magic_scroll */
+		Helper.grantAdvancement(player, "tutorial/create_magic_scroll");
 	}
 	
 	@Override
@@ -81,8 +81,8 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 	public boolean setEnchant(World world, BlockPos gravePos, EntityPlayer player, ItemStack stack) {
 		boolean valid = setTombPos(stack, gravePos, world.provider.getDimension());
 		if (valid) {
-			// TODO Advancement
-			//player.addStat(AchievementHandler.getAchievement("activateScroll"), 1);
+			/** advancement activate_magic_scroll */
+			Helper.grantAdvancement(player, "tutorial/activate_magic_scroll");
 			return true;
 		}
 		return false;
@@ -127,8 +127,8 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 					player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
 					Helper.sendMessage("item.scroll_of_recall.message.success", player, true);
 				}
-				// TODO Advancement
-				//player.addStat(AchievementHandler.getAchievement("recall"), 1);
+				/** advancement recall */
+				Helper.grantAdvancement(player, "tutorial/recall");
 			} else {
 				Helper.sendMessage("item.scroll_of_recall.message.needSoul", player, true);
 			}

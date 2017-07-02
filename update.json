@@ -1,6 +1,7 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/corail-tombstone/files/",
   "1.12": {
+    "1.2.8": "Recipes in json format, advancements (tutorial part)",
 	"1.2.7": "Add an option to set the number of uses of Scroll of Recall, update to last forge changes (gui factory)",
     "1.2.6.001": "Update to last forge changes (registry)",
     "1.2.6": "First version for 1.12, with same changes as others versions. Advancements are disabled and PVP hasn't been tested"
@@ -22,8 +23,8 @@
     "1.2.6": "config option for PVP Mode, change grave texture and fog animation, improve display of informations on tombstone"
   },
   "promos": {
-    "1.12-latest": "1.2.7",
-    "1.12-recommended": "1.2.7",
+    "1.12-latest": "1.2.8",
+    "1.12-recommended": "1.2.8",
     "1.11.2-latest": "1.2.7",
     "1.11.2-recommended": "1.2.7",
 	"1.10.2-latest": "1.2.7",
