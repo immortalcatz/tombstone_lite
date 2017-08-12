@@ -3,34 +3,39 @@
   "1.12": {
 	"1.2.7": "Add an option to set the number of uses of Scroll of Recall, update to last forge changes (gui factory)",
 	"1.2.8": "Recipes in json format, advancements (tutorial part)",
-	"1.2.9": "Compatibility with claimed lands mods"
+	"1.2.9": "Compatibility with claimed lands mods",
+	"1.2.10": "Compatibility with claimed lands mods (again) + grave mods"
   },
   "1.11.2": {
     "1.2.7": "Add an option to set the number of uses of Scroll of Recall",
-	"1.2.9": "Compatibility with claimed lands mods"
+	"1.2.9": "Compatibility with claimed lands mods",
+	"1.2.10": "Compatibility with claimed lands mods (again) + grave mods"
   },
   "1.10.2": {
     "1.2.7": "Add an option to set the number of uses of Scroll of Recall",
-	"1.2.9": "Compatibility with claimed lands mods"
+	"1.2.9": "Compatibility with claimed lands mods",
+	"1.2.10": "Compatibility with claimed lands mods (again) + grave mods"
   },
   "1.9.4": {
     "1.2.7": "Add an option to set the number of uses of Scroll of Recall",
-	"1.2.9": "Compatibility with claimed lands mods"
+	"1.2.9": "Compatibility with claimed lands mods",
+	"1.2.10": "Compatibility with claimed lands mods (again) + grave mods"
   },
   "1.8.9": {
     "1.2.7": "Add an option to set the number of uses of Scroll of Recall",
-	"1.2.9": "Compatibility with claimed lands mods"
+	"1.2.9": "Compatibility with claimed lands mods",
+	"1.2.10": "Compatibility with claimed lands mods (again) + grave mods"
   },
   "promos": {
-    "1.12-latest": "1.2.9",
-    "1.12-recommended": "1.2.9",
-    "1.11.2-latest": "1.2.9",
-    "1.11.2-recommended": "1.2.9",
-	"1.10.2-latest": "1.2.9",
-    "1.10.2-recommended": "1.2.9",
-	"1.9.4-latest": "1.2.9",
-    "1.9.4-recommended": "1.2.9",
-	"1.8.9-latest": "1.2.9",
-    "1.8.9-recommended": "1.2.9"
+    "1.12-latest": "1.2.10",
+    "1.12-recommended": "1.2.10",
+    "1.11.2-latest": "1.2.10",
+    "1.11.2-recommended": "1.2.10",
+	"1.10.2-latest": "1.2.10",
+    "1.10.2-recommended": "1.2.10",
+	"1.9.4-latest": "1.2.10",
+    "1.9.4-recommended": "1.2.10",
+	"1.8.9-latest": "1.2.10",
+    "1.8.9-recommended": "1.2.10"
   }
 }
