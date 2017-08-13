@@ -2,6 +2,7 @@ package ovh.corail.tombstone.handler;
 
 import java.util.Date;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -9,13 +10,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.block.BlockFacingGrave;
+import ovh.corail.tombstone.block.BlockTombstone;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.ModProps;
@@ -130,5 +137,60 @@ public class EventHandler {
 			Helper.addToInventoryWithLeftover(stack, playerIn.inventory, false);
 		}
 		world.notifyBlockUpdate(currentPos, state, state, 2);
+	}
+	
+	/** compatibility with Claimed Block Mod */
+	@SubscribeEvent(priority = EventPriority.LOWEST,receiveCanceled=true)
+	public void uncancelGraveRightClick(PlayerInteractEvent.RightClickBlock event) {
+		if (event.isCanceled()) {
+			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+			if (block instanceof BlockTombstone) {
+				event.setCanceled(false);
+				event.setUseBlock(Result.DEFAULT);
+				event.setUseItem(Result.DEFAULT);
+			}
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+	public void uncancelGraveBuild(BlockEvent.PlaceEvent event) {
+		if (event.isCanceled()) {
+			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+			if (block instanceof BlockTombstone) {
+				event.setCanceled(false);
+			}
+		}
+	}
+	
+	/** compatibility with NighKosh Grave Mod */
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onEntityLivingDeathStart(LivingDeathEvent event) {
+		if (!(event.getEntityLiving() instanceof EntityPlayer)) { return; }
+		if ((Loader.isModLoaded("gravestone") || Loader.isModLoaded("GraveStone"))) {
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+	public void onEntityLivingDeathEnd(LivingDeathEvent event) {
+		if (!(event.getEntityLiving() instanceof EntityPlayer)) { return; }
+		if ((Loader.isModLoaded("gravestone") || Loader.isModLoaded("GraveStone"))) {
+			event.setCanceled(false);
+		}
+	}
+	
+	/** compatibility with EuhDawson Grave Mod */
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onLivingDropsStart(LivingDropsEvent event) {
+		if (Loader.isModLoaded("gravestone") || Loader.isModLoaded("GraveStone")) {
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+	public void onLivingDropsEnd(LivingDropsEvent event) {
+		if (Loader.isModLoaded("gravestone") || Loader.isModLoaded("GraveStone")) {
+			event.setCanceled(false);
+		}
 	}
 }

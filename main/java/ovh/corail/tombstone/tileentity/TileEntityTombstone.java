@@ -41,6 +41,7 @@ public class TileEntityTombstone extends TileEntityInventory {
 				setInventorySlotContents(i, Helper.addToInventoryWithLeftover(stack, player.inventory, false));
 			}
 		}
+		player.inventoryContainer.detectAndSendChanges();
 		world.setBlockToAir(pos);
 		Helper.sendMessage("gui.message.tombEnd", player, true);
 		/** TODO SOUND */

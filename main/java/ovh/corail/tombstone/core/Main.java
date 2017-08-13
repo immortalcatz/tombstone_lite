@@ -38,7 +38,7 @@ import ovh.corail.tombstone.item.ItemScrollOfRecall;
 import ovh.corail.tombstone.item.ItemSoul;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER,  updateJSON = MOD_UPDATE, guiFactory = "ovh.corail." + MOD_ID + ".gui.GuiFactory")
+@Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER,  updateJSON = MOD_UPDATE, guiFactory = "ovh.corail." + MOD_ID + ".gui.GuiFactory", dependencies="before:gravestone;before:GraveStone")
 public class Main {
 	@Instance(MOD_ID)
 	public static Main instance;
