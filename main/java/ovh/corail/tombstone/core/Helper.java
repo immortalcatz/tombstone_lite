@@ -87,6 +87,7 @@ public class Helper {
 			whitelist.add("minecraft:double_plant:3");
 			whitelist.add("minecraft:double_plant:4");
 			whitelist.add("minecraft:double_plant:5");
+			whitelist.add("minecraft:snow_layer:0");
 			Helper.saveAsJson(whitelistFile, whitelist);
 		} else {
 			Type token = new TypeToken<Set<String>>() {}.getType();
@@ -206,6 +207,7 @@ public class Helper {
 		IBlockState state = world.getBlockState(currentPos);
 		Block block = state.getBlock();
 		if (currentPos.getY() < 0) { return false; }
+		if (world.getTileEntity(currentPos) != null) {return false; }
 		if (world.isAirBlock(currentPos)) { return true; }
 		/** replaceable blocks */
 		if (Main.whitelist.contains(block.getRegistryName().toString() + ":" + block.getMetaFromState(state))) { return true; }

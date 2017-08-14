@@ -4,6 +4,7 @@ import java.util.Date;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.ModProps;
 import ovh.corail.tombstone.item.ItemGraveKey;
+import ovh.corail.tombstone.packet.TombstoneActivatedMessage;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class EventHandler {
@@ -139,7 +141,7 @@ public class EventHandler {
 		world.notifyBlockUpdate(currentPos, state, state, 2);
 	}
 	
-	/** compatibility with Claimed Block Mod */
+	/** compatibility with Claimed Block Mod & Vanilla Spawn Protection */
 	@SubscribeEvent(priority = EventPriority.LOWEST,receiveCanceled=true)
 	public void uncancelGraveRightClick(PlayerInteractEvent.RightClickBlock event) {
 		if (event.isCanceled()) {
@@ -148,6 +150,14 @@ public class EventHandler {
 				event.setCanceled(false);
 				event.setUseBlock(Result.DEFAULT);
 				event.setUseItem(Result.DEFAULT);
+			}
+		}
+		if (event.getWorld().isRemote && !Minecraft.getMinecraft().isIntegratedServerRunning()) {
+			BlockPos currentPos = event.getPos();
+			IBlockState state = event.getWorld().getBlockState(event.getPos());
+			Block block = state.getBlock();
+			if (block instanceof BlockTombstone) {
+				PacketHandler.INSTANCE.sendToServer(new TombstoneActivatedMessage(event.getPos()));
 			}
 		}
 	}
