@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ovh.corail.tombstone.core.Helper;
+import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.NBTStackHelper;
 import ovh.corail.tombstone.core.TeleportUtils;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
@@ -116,9 +117,12 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 		if (stack.hasTagCompound()) {
 			int tombDimId = getTombDim(stack);
 			BlockPos tombPos = getTombPos(stack);
-			String tombDim = (tombDimId==0 ? "The Overworld" : (tombDimId == -1 ? "The Nether" : (tombDimId==-1? "The End": "Unknown Land " + tombDimId)));
-			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.dimTitle") + " : " + tombDim);
-			list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.posTitle") + " :  " + tombPos.getX() + ", " + tombPos.getY() + ", " + tombPos.getZ());			if (hasEffect(stack)) {
+			if (tombDimId != Integer.MAX_VALUE && tombPos != BlockPos.ORIGIN) {
+				String tombDim = (tombDimId==0 ? "The Overworld" : (tombDimId == -1 ? "The Nether" : (tombDimId==-1? "The End": "Unknown Land " + tombDimId)));
+				list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.dimTitle") + " : " + tombDim);
+				list.add(TextFormatting.WHITE + Helper.getTranslation("item.info.posTitle") + " :  " + tombPos.getX() + ", " + tombPos.getY() + ", " + tombPos.getZ());
+			}
+			if (hasEffect(stack)) {
 				list.add(TextFormatting.AQUA + Helper.getTranslation("item.info.tele"));
 			}
 		}
@@ -131,11 +135,13 @@ public class ItemGraveKey extends Item implements ISoulConsumption {
 			BlockPos pos = getTombPos(stack);
 			int dimId = getTombDim(stack);
 			if (player.dimension != dimId && !ConfigurationHandler.teleportDim) {
-				Helper.sendMessage("config.teleportDim", player, true);
+				Helper.sendMessage("message.teleport_near_grave.sameDimension", player, true);
 			} else {
 				stack.getTagCompound().setBoolean("enchant", false);
 				TeleportUtils.teleportEntity(player, dimId, (double)pos.getX()+0.5d, (double)pos.getY()+1.05d, (double)pos.getZ()+0.5d);
-				player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
+				SoundHandler.playSoundAllAround("magic_use01", world, player.getPosition(), 10d);
+				Main.proxy.useMagic(world, player.getPosition());
+				Helper.sendMessage("message.teleport_near_grave.success", player, true);
 			}	
 		}
 		return super.onItemRightClick(world, player, hand);

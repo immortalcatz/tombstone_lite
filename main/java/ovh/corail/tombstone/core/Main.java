@@ -1,18 +1,25 @@
 package ovh.corail.tombstone.core;
 
+import static ovh.corail.tombstone.core.ModProps.MC_ACCEPT;
 import static ovh.corail.tombstone.core.ModProps.MOD_ID;
 import static ovh.corail.tombstone.core.ModProps.MOD_NAME;
 import static ovh.corail.tombstone.core.ModProps.MOD_UPDATE;
 import static ovh.corail.tombstone.core.ModProps.MOD_VER;
+import static ovh.corail.tombstone.core.ModProps.ROOT;
 
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.Logger;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -20,12 +27,18 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import nightkosh.gravestone.api.GraveStoneAPI;
 import ovh.corail.tombstone.block.BlockDecorativeGraveCross;
 import ovh.corail.tombstone.block.BlockDecorativeGraveNormal;
 import ovh.corail.tombstone.block.BlockDecorativeGraveSimple;
 import ovh.corail.tombstone.block.BlockDecorativeTombstone;
+import ovh.corail.tombstone.block.BlockGraveCross;
+import ovh.corail.tombstone.block.BlockGraveNormal;
+import ovh.corail.tombstone.block.BlockGraveSimple;
 import ovh.corail.tombstone.block.BlockTombstone;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
+import ovh.corail.tombstone.handler.DeathHandler;
 import ovh.corail.tombstone.handler.EventHandler;
 import ovh.corail.tombstone.handler.PacketHandler;
 import ovh.corail.tombstone.handler.SoundHandler;
@@ -37,13 +50,15 @@ import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.item.ItemScrollOfRecall;
 import ovh.corail.tombstone.item.ItemSoul;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
+import ovh.corail.tombstone.tileentity.TileEntityWritableGrave;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER,  updateJSON = MOD_UPDATE, guiFactory = "ovh.corail." + MOD_ID + ".gui.GuiFactory", dependencies="before:gravestone;before:GraveStone")
+@Mod(modid = MOD_ID, name = MOD_NAME, version = MOD_VER, acceptedMinecraftVersions = MC_ACCEPT, updateJSON = MOD_UPDATE, guiFactory = ROOT + ".gui.GuiFactory", dependencies="before:gravestone;before:GraveStone")
 public class Main {
 	@Instance(MOD_ID)
 	public static Main instance;
-	@SidedProxy(clientSide = "ovh.corail." + MOD_ID + ".core.ClientProxy", serverSide = "ovh.corail." + MOD_ID + ".core.CommonProxy")
+	@SidedProxy(clientSide = ROOT + ".core.ClientProxy", serverSide = ROOT + ".core.CommonProxy")
 	public static CommonProxy proxy;
+	public static Logger logger;
 	public static CreativeTabs tabTombstone = new CreativeTabs(MOD_ID) {
 		@Override
 		public ItemStack getTabIconItem() {
@@ -55,6 +70,9 @@ public class Main {
 			return MOD_NAME;
 		}
 	};
+	public static BlockGraveSimple grave_simple = new BlockGraveSimple();
+	public static BlockGraveNormal grave_normal = new BlockGraveNormal();
+	public static BlockGraveCross grave_cross = new BlockGraveCross();
 	public static BlockTombstone tombstone = new BlockTombstone();
 	public static ItemGraveKey grave_key = new ItemGraveKey();
 	public static ItemFakeFog fake_fog = new ItemFakeFog();
@@ -74,15 +92,19 @@ public class Main {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		/** TODO init advancements */
+		logger = event.getModLog();
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
+		if (proxy.getSide() == Side.SERVER) {
+			DeathHandler.getInstance();
+		}
+		SoundHandler.registerSounds();
 		/** config */
 		ConfigurationHandler.loadConfig(new File(event.getModConfigurationDirectory(), ModProps.MOD_ID));
 		Main.whitelistFile = new File(ConfigurationHandler.getConfigDir(), "whitelist_blocks.json");
 		Main.whitelist = Helper.loadWhitelist(Main.whitelistFile);
-		SoundHandler.registerSounds();
 		/** register tileentities */
-		GameRegistry.registerTileEntity(TileEntityTombstone.class, "inventoryTombstone");
+		GameRegistry.registerTileEntity(TileEntityWritableGrave.class, "writable_grave");
+		GameRegistry.registerTileEntity(TileEntityTombstone.class, "tombstone");
 		/** register items and blocks */
 		Helper.register();
 		/** register encoded recipes */
@@ -94,8 +116,17 @@ public class Main {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		/** TODO register advancements */
 		proxy.init(event);
+		/** register loot tables */
+		LootTableList.register(new ResourceLocation(MOD_ID, "decorative_graves"));
+		/** compatibility with NighKosh Grave Mod */
+		if (Loader.isModLoaded("GraveStone") || Loader.isModLoaded("gravestone")) {
+			if (ConfigurationHandler.handlePlayerDeath) {
+				if (GraveStoneAPI.graveGenerationAtDeath != null) {
+					GraveStoneAPI.graveGenerationAtDeath.addPlayerDeathHandler((player, source) -> { return true; });
+				}
+			}
+		}
 	}
 
 	@Mod.EventHandler

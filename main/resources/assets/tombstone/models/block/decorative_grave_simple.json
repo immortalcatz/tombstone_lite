@@ -1,15 +1,41 @@
 {
-"__comment":"Simple Grave",
-"elements":[{"from":[4,0,4],"to":[12,1,12],"faces":{
-    "down":{"uv":[4,4,12,12],"texture":"#0"},
-    "up":{"uv":[4,4,12,12],"texture":"#0"},
+"__comment":"Corail Tombstone : Simple Grave",
+"textures":{
+  "ground":"tombstone:blocks/ground",
+  "grave_plate":"tombstone:blocks/grave_plate"
+},
+"elements":[{
+  "name":"ground",
+  "from":[0,0,0],"to":[16,1,16],"faces":{
+    "down":{"uv":[0,0,16,16],"texture":"#ground", "cullface": "down"},
+    "up":{"uv":[0,0,16,16],"texture":"#ground"},
+    "north":{"uv":[0,0,16,1],"texture":"#ground"},
+    "south":{"uv":[0,0,16,1],"texture":"#ground"},
+    "west":{"uv":[0,0,16,1],"texture":"#ground"},
+    "east":{"uv":[0,0,16,1],"texture":"#ground"}
+}},{
+  "name":"grave_down",
+  "from":[3,1,13],"to":[13,13,16],"faces":{
+    "up":{"uv":[3,13,13,16],"texture":"#0"},
+	"north":{"uv":[3,1,13,13],"texture":"#0"},
+	"south":{"uv":[3,1,13,13],"texture":"#0"},
+	"west":{"uv":[13,1,16,13],"texture":"#0"},
+	"east":{"uv":[0,1,3,13],"texture":"#0"}
+}},{
+  "name":"grave_top",
+  "from":[4,13,13],"to":[12,14,16],"faces":{
+    "up":{"uv":[4,11,12,14],"texture":"#0"},
     "north":{"uv":[4,0,12,1],"texture":"#0"},
     "south":{"uv":[4,0,12,1],"texture":"#0"},
-    "west":{"uv":[4,0,12,1],"texture":"#0"},
-    "east":{"uv":[4,0,12,1],"texture":"#0"}}},
-{"from":[5,1,10],"to":[11,8,11],"faces":{
-    "up":{"uv":[5,10,11,11],"texture":"#0"},
-	"north":{"uv":[5,1,11,8],"texture":"#0"},
-	"south":{"uv":[5,1,11,8],"texture":"#0"},
-	"west":{"uv":[10,1,11,8],"texture":"#0"},
-	"east":{"uv":[10,1,11,8],"texture":"#0"}}}]}
+    "west":{"uv":[13,0,16,1],"texture":"#0"},
+    "east":{"uv":[0,0,3,1],"texture":"#0"}
+}},{
+  "name":"grave_plate_down",
+  "from":[4,1,12.998],"to":[12,8,12.998],"faces":{
+    "north":{"uv":[1.5,11.375,14.5,0],"texture":"#grave_plate"}
+}},{
+  "name":"grave_plate_top",
+  "from":[4,8,12.998],"to":[12,13,12.998],"faces":{
+    "north":{"uv":[14.5,0,1.5,8.125],"texture":"#grave_plate"}
+}}
+]}

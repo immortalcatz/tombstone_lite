@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:anvil"
+        },
+        "title": {
+            "translate": "advancement.engrave_decorative_grave.title"
+        },
+        "description": {
+            "translate": "advancement.engrave_decorative_grave.desc"
+        },
+		"frame": "challenge",
+		"hidden": false
+    },
+	"parent": "tombstone:tutorial/create_decorative_grave",
+    "criteria": {
+      "coded_trigger": {
+        "trigger": "minecraft:impossible"
+      }
+    },
+	"requirements": [
+      [  "coded_trigger" ]
+    ]
+}

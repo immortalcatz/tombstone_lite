@@ -106,13 +106,13 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote && !player.getHeldItemMainhand().isEmpty()) {//&& player.isSneaking()
+		if (!player.getHeldItemMainhand().isEmpty()) {//&& player.isSneaking()
 			ItemStack stack = player.getHeldItemMainhand();
 			if (((ItemScrollOfRecall) stack.getItem()).isEnchanted(stack)) {
 				BlockPos tombPos = ItemScrollOfRecall.getTombPos(stack);
 				int tombDim = ItemScrollOfRecall.getTombDim(stack);
 				if (world.provider.getDimension() == tombDim && tombPos.distanceSq(player.posX, player.posY, player.posZ) < 10) {
-					Helper.sendMessage("item.scroll_of_recall.message.tooClose", player, true);
+					Helper.sendMessage("message.teleport_near_grave.too_close", player, true);
 					return super.onItemRightClick(world, player, hand);
 				}
 				int useCount = getUseCount(stack)-1;
@@ -124,13 +124,14 @@ public class ItemScrollOfRecall extends Item implements ISoulConsumption {
 				}
 				if (useCount >= 0) {
 					TeleportUtils.teleportEntity(player, tombDim, (double)tombPos.getX()+0.5d, (double)tombPos.getY()+1.05d, (double)tombPos.getZ()+0.5d);
-					player.playSound(SoundHandler.magic_use01, 1.0F, 1.0F);
-					Helper.sendMessage("item.scroll_of_recall.message.success", player, true);
+					SoundHandler.playSoundAllAround("magic_use01", world, player.getPosition(), 10d);
+					Main.proxy.useMagic(world, player.getPosition());
+					Helper.sendMessage("message.teleport_near_grave.success", player, true);
 				}
 				/** advancement recall */
 				Helper.grantAdvancement(player, "tutorial/recall");
 			} else {
-				Helper.sendMessage("item.scroll_of_recall.message.needSoul", player, true);
+				Helper.sendMessage("message.teleport_near_grave.not_activate", player, true);
 			}
 		}
 		return super.onItemRightClick(world, player, hand);

@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "tombstone:upgrade_grave_key"
+    ]
+  },
+  "criteria": {
+    "has_key": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tombstone:grave_key"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_key"
+    ]
+  ]
+}

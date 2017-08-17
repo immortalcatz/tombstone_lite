@@ -1,0 +1,27 @@
+{
+    "display": {
+        "icon": {
+            "item": "tombstone:decorative_grave_cross"
+        },
+        "title": {
+            "translate": "advancement.choose_grave_type.title"
+        },
+        "description": {
+            "translate": "advancement.choose_grave_type.desc"
+        },
+		"frame": "goal",
+		"hidden": false
+    },
+	"parent": "tombstone:tutorial/root",
+    "criteria": {
+      "coded_trigger": {
+        "trigger": "minecraft:impossible"
+      }
+    },
+	"requirements": [
+      [  "coded_trigger" ]
+    ],
+	"rewards": {
+		"loot": ["tombstone:decorative_graves"]
+	}
+}

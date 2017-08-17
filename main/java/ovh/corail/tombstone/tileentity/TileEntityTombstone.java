@@ -1,6 +1,5 @@
 package ovh.corail.tombstone.tileentity;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import net.minecraft.entity.Entity;
@@ -8,96 +7,76 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
+import ovh.corail.tombstone.handler.SoundHandler;
 
-public class TileEntityTombstone extends TileEntityInventory {
-	private final String name = "tileEntityTombstone";
-	private boolean needAccess = false;
-	private String ownerName = "Unknown";
-	private long deathDate;
+public class TileEntityTombstone extends TileEntityWritableGrave {
+	protected ItemStackHandler inventory = new ItemStackHandler(64);
+	protected boolean needAccess = false;
 	
 	public TileEntityTombstone() {
 		super();
 	}
 	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	  return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	  return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) inventory : super.getCapability(capability, facing);
+	}
+	
 	public void giveInventory(EntityPlayer player) {
 		if (player == null || world.isRemote) { return; }
-		for (int i = 0; i < inventory.size() ; i++) {
-			if (getStackInSlot(i).isEmpty()) { continue; }
-			ItemStack stack = getStackInSlot(i);
+		for (int i = 0; i < inventory.getSlots() ; i++) {
+			
+			ItemStack stack = inventory.getStackInSlot(i);
+			if (stack.isEmpty()) { continue; }
 			boolean set = false;
 			if (stack.getItem() instanceof ItemArmor) {
 				int slotId = ((ItemArmor) stack.getItem()).armorType.getIndex();
 				if (player.inventory.armorInventory.get(slotId).isEmpty()) {
 					player.inventory.armorInventory.set(slotId, stack);
-					setInventorySlotContents(i, ItemStack.EMPTY);
+					inventory.setStackInSlot(i, ItemStack.EMPTY);
 					set = true;
 				}
 			}
 			if (!set) {
-				setInventorySlotContents(i, Helper.addToInventoryWithLeftover(stack, player.inventory, false));
+				ItemHandlerHelper.giveItemToPlayer(player, stack);
+				inventory.setStackInSlot(i, ItemStack.EMPTY);
 			}
 		}
 		player.inventoryContainer.detectAndSendChanges();
 		world.setBlockToAir(pos);
-		Helper.sendMessage("gui.message.tombEnd", player, true);
-		/** TODO SOUND */
+		SoundHandler.playSoundAllAround("block.wooden_door.close", world, player.getPosition(), 10d);
+		Helper.sendMessage("message.open_grave.success", player, true);
 		world.removeTileEntity(this.pos);
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-	
-	@Override
-	public TextComponentString getDisplayName() {
-		return new TextComponentString(Helper.getTranslation("gui.message.tombOf") + " " + ownerName);
-	}
-
-	public <T extends Entity> void setOwner(T owner, long deathDate) {
-		setOwner(owner, deathDate, false);
 	}
 	
 	public <T extends Entity> void setOwner(T owner, long deathDate, boolean needAccess) {
-		this.ownerName = owner.getDisplayName().getUnformattedText();
-		this.deathDate = deathDate;
-		this.needAccess = needAccess;
-		
+		super.setOwner(owner, deathDate);
+		this.needAccess = needAccess;	
 	}
-
-	public String getOwnerName() {
-		return ownerName;
-	}
-
-	public String getOwnerDeathDate(int part) {
-		Date date = new Date(deathDate);
-		String dateString = new SimpleDateFormat("dd/MM/yyyy").format(date);
-		String timeString = new SimpleDateFormat(Helper.getTranslation("HH:mm:ss")).format(date);
-		String part1 = Helper.getTranslation("gui.message.diedOn") + " " + dateString;
-		String part2 = Helper.getTranslation("gui.message.prefixAt") + " " + timeString;
-		return part==0 ? part1 + " " + part2 : (part==1 ? part1 : part2);
-		
-		
-	}
-
+	
 	public boolean getNeedAccess() {
 		if (!needAccess) { return false; }
 		if (ConfigurationHandler.decayTime == -1) { return true; }
-		/** decay time before access are no more needed */
-		int seconds = 0;
-		long timeElapsed = new Date().getTime() - deathDate;
-		seconds = (int) (timeElapsed % 60);
-		return seconds > ConfigurationHandler.decayTime ? false : true;
+		/** decay time in minutes before access are no more needed */
+		return (new Date().getTime() - deathDate)/60000 >= (long)ConfigurationHandler.decayTime ? false : true;
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setString("ownerName", ownerName);
-		compound.setLong("deathDate", deathDate);
+		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setBoolean("needAccess", needAccess);
 		super.writeToNBT(compound);
 		return compound;
@@ -105,8 +84,7 @@ public class TileEntityTombstone extends TileEntityInventory {
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		ownerName = compound.getString("ownerName");
-		deathDate = compound.getLong("deathDate");
+		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		needAccess = compound.getBoolean("needAccess");
 		super.readFromNBT(compound);
 	}

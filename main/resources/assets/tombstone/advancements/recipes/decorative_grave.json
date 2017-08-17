@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "tombstone:decorative_grave_simple",
+      "tombstone:decorative_grave_normal",
+      "tombstone:decorative_grave_cross",
+      "tombstone:decorative_tombstone"
+    ]
+  },
+  "criteria": {
+    "has_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stone",
+			"data": 0
+          }
+        ]
+      }
+    },
+    "has_skull": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:skull",
+			"data": 32767
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_stone",
+      "has_skull"
+    ]
+  ]
+}

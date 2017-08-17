@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -19,7 +21,6 @@ import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -38,10 +39,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
+import ovh.corail.tombstone.block.ItemBlockGrave;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 
 public class Helper {
@@ -65,11 +68,11 @@ public class Helper {
 		Advancement advancement = am.getAdvancement(new ResourceLocation(domain, name));
 		if (advancement == null) { return false; }
 		AdvancementProgress advancementprogress = player_mp.getAdvancements().getProgress(advancement);
-        if (!advancementprogress.isDone()) {
-        	for (String criteria : advancementprogress.getRemaningCriteria()) {
-                player_mp.getAdvancements().grantCriterion(advancement, criteria);
-            }
-        }
+		if (!advancementprogress.isDone()) {
+			for (String criteria : advancementprogress.getRemaningCriteria()) {
+				player_mp.getAdvancements().grantCriterion(advancement, criteria);
+			}
+		}
 		return true;
 	}
 	
@@ -117,12 +120,12 @@ public class Helper {
 		return list;
 	}
 	
-	public static void sendMessage(String message, EntityPlayer currentPlayer, boolean translate) {
-		if (currentPlayer != null) {
+	public static void sendMessage(String message, EntityPlayer player, boolean translate) {
+		if (player != null && !player.world.isRemote) {
 			if (translate) {
 				message = getTranslation(message);
 			}
-			currentPlayer.sendMessage(new TextComponentString(message));
+			player.sendMessage(new TextComponentString(message));
 		}
 	}
 	
@@ -131,8 +134,9 @@ public class Helper {
 	}
 	
 	public static void sendLog(String message) {
-		boolean develop = false;
-		if (develop) {
+		if (Main.logger != null) {
+			Main.logger.log(Level.INFO, message);
+		} else {
 			System.out.println(message);
 		}
 	}
@@ -143,7 +147,6 @@ public class Helper {
 
 	public static void render() {
 		/** render blocks */
-		render(Main.tombstone);
 		render(Main.decorative_grave_simple);
 		render(Main.decorative_grave_normal);
 		render(Main.decorative_grave_cross);
@@ -172,17 +175,19 @@ public class Helper {
 	}
 
 	private static void render(Item item, int meta) {
-		/** only for meta 0 for now */
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta,	new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 	
 	public static void register() {
 		/** register blocks */
-		register(Main.tombstone);
-		register(Main.decorative_grave_simple);
-		register(Main.decorative_grave_normal);
-		register(Main.decorative_grave_cross);
-		register(Main.decorative_tombstone);
+		registerGrave(Main.grave_simple, false);
+		registerGrave(Main.grave_normal, false);
+		registerGrave(Main.grave_cross, false);
+		registerGrave(Main.tombstone, false);
+		registerGrave(Main.decorative_grave_simple);
+		registerGrave(Main.decorative_grave_normal);
+		registerGrave(Main.decorative_grave_cross);
+		registerGrave(Main.decorative_tombstone);
 		/** register achievement icon items */
 		register(Main.itemAchievement001);
 		register(Main.itemAchievement002);
@@ -192,6 +197,17 @@ public class Helper {
 		register(Main.fake_fog);
 		register(Main.soul);
 		register(Main.scroll_of_recall);	
+	}
+	
+	public static void registerGrave(Block block) {
+		registerGrave(block, true);
+	}
+	
+	public static void registerGrave(Block block, boolean hasItem) {
+		ForgeRegistries.BLOCKS.register(block);
+		if (hasItem) {
+			ForgeRegistries.ITEMS.register(new ItemBlockGrave(block).setRegistryName(block.getRegistryName()));
+		}
 	}
 	
 	public static void register(Block block) {
@@ -207,7 +223,7 @@ public class Helper {
 		IBlockState state = world.getBlockState(currentPos);
 		Block block = state.getBlock();
 		if (currentPos.getY() < 0) { return false; }
-		if (world.getTileEntity(currentPos) != null) {return false; }
+		if (world.getTileEntity(currentPos) != null) { return false; }
 		if (world.isAirBlock(currentPos)) { return true; }
 		/** replaceable blocks */
 		if (Main.whitelist.contains(block.getRegistryName().toString() + ":" + block.getMetaFromState(state))) { return true; }
@@ -317,7 +333,7 @@ public class Helper {
 			RecipeSorter.register(ModProps.MOD_ID + ":upgrade_key", UpgradeGraveKeyRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
 			ResourceLocation group = new ResourceLocation("tombstone", "grave");
 			UpgradeGraveKeyRecipe recipe_upgrade_key = new UpgradeGraveKeyRecipe(group, res, inputList);
-			recipe_upgrade_key.setRegistryName(new ResourceLocation(ModProps.MOD_ID, "upgrade_key"));
+			recipe_upgrade_key.setRegistryName(new ResourceLocation(ModProps.MOD_ID, "upgrade_grave_key"));
 			ForgeRegistries.RECIPES.register(recipe_upgrade_key);
 		}
 	}

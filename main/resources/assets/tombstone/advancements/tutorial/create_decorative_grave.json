@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "tombstone:decorative_grave_simple"
+        },
+        "title": {
+            "translate": "advancement.create_decorative_grave.title"
+        },
+        "description": {
+            "translate": "advancement.create_decorative_grave.desc"
+        },
+		"frame": "task",
+		"hidden": false
+    },
+	"parent": "tombstone:tutorial/root",
+    "criteria": {
+      "coded_trigger": {
+        "trigger": "minecraft:impossible"
+      }
+    },
+	"requirements": [
+      [  "coded_trigger" ]
+    ]
+}
