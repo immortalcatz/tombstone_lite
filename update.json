@@ -5,7 +5,8 @@
 	"1.2.8": "Recipes in json format, advancements (tutorial part)",
 	"1.2.9": "Compatibility with claimed lands mods",
 	"1.2.10": "Compatibility with claimed lands mods (again) + grave mods",
-	"1.2.11": "Compatibility with vanilla spawn protection on dedicated server"
+	"1.2.11": "Compatibility with vanilla spawn protection on dedicated server",
+	"1.3.0": "Lots of changes, see the changelog"
   },
   "1.11.2": {
     "1.2.7": "Add an option to set the number of uses of Scroll of Recall",
@@ -28,8 +29,8 @@
 	"1.2.10": "Compatibility with claimed lands mods (again) + grave mods"
   },
   "promos": {
-    "1.12-latest": "1.2.11",
-    "1.12-recommended": "1.2.11",
+    "1.12-latest": "1.3.0",
+    "1.12-recommended": "1.3.0",
     "1.11.2-latest": "1.2.10",
     "1.11.2-recommended": "1.2.10",
 	"1.10.2-latest": "1.2.10",
