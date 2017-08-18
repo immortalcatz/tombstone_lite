@@ -13,7 +13,7 @@ import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
-public class BlockGraveSimple extends BlockDecorativeGraveSimple<TileEntityTombstone> {
+public class BlockGraveSimple extends BlockDecorativeGraveSimple<TileEntityTombstone> implements IPlayerGrave {
 	protected final static String name = "grave_simple";
 	public BlockGraveSimple() {
 		super(name);
