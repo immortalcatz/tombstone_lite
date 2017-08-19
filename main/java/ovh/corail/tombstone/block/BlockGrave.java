@@ -103,7 +103,7 @@ public class BlockGrave<T extends TileEntityWritableGrave> extends BlockTileEnti
 			if (!tile.getNeedAccess() || player.isCreative()) {
 				valid = true;
 			/** if the tomb is linked with a key */
-			} else if (player.getHeldItemMainhand().getItem() == Main.grave_key) {
+			} else if (player.getHeldItemMainhand().getItem() instanceof ItemGraveKey) {
 				/** only check the same position/dimension for the tomb and the key */
 				ItemStack stack = player.getHeldItemMainhand();
 				if (ItemGraveKey.getTombPos(stack).compareTo(tile.getPos()) == 0 && ItemGraveKey.getTombDim(stack)==world.provider.getDimension()) {

@@ -5,7 +5,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import ovh.corail.tombstone.core.ModProps;
 import ovh.corail.tombstone.packet.SoundMessage;
 import ovh.corail.tombstone.packet.TombstoneActivatedMessage;
-import ovh.corail.tombstone.packet.UpdateFavoriteGraveMessage;
+import ovh.corail.tombstone.packet.UpdateClientMessage;
+import ovh.corail.tombstone.packet.UpdateServerMessage;
 import ovh.corail.tombstone.packet.UpdateSoulMessage;
 
 public class PacketHandler {
@@ -17,6 +18,7 @@ public class PacketHandler {
 		INSTANCE.registerMessage(UpdateSoulMessage.Handler.class, UpdateSoulMessage.class, id++, Side.SERVER);
 		INSTANCE.registerMessage(TombstoneActivatedMessage.Handler.class, TombstoneActivatedMessage.class, id++, Side.SERVER);
 		INSTANCE.registerMessage(SoundMessage.Handler.class, SoundMessage.class, id++, Side.CLIENT);
-		INSTANCE.registerMessage(UpdateFavoriteGraveMessage.Handler.class, UpdateFavoriteGraveMessage.class, id++, Side.SERVER);
+		INSTANCE.registerMessage(UpdateServerMessage.Handler.class, UpdateServerMessage.class, id++, Side.SERVER);
+		INSTANCE.registerMessage(UpdateClientMessage.Handler.class, UpdateClientMessage.class, id++, Side.CLIENT);
 	}
 }

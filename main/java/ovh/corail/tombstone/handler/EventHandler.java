@@ -4,7 +4,6 @@ import java.util.Date;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +38,7 @@ import ovh.corail.tombstone.core.Main;
 import ovh.corail.tombstone.core.ModProps;
 import ovh.corail.tombstone.item.ItemGraveKey;
 import ovh.corail.tombstone.packet.TombstoneActivatedMessage;
-import ovh.corail.tombstone.packet.UpdateFavoriteGraveMessage;
+import ovh.corail.tombstone.packet.UpdateServerMessage;
 import ovh.corail.tombstone.tileentity.TileEntityTombstone;
 
 public class EventHandler {
@@ -51,7 +50,7 @@ public class EventHandler {
 			ConfigurationHandler.refreshConfig();
 			if (!ConfigurationHandler.lastFavoriteGrave.equals(ConfigurationHandler.favoriteGrave)) {
 				ConfigurationHandler.lastFavoriteGrave = ConfigurationHandler.favoriteGrave;
-				PacketHandler.INSTANCE.sendToServer(new UpdateFavoriteGraveMessage(ConfigurationHandler.favoriteGrave, true));
+				PacketHandler.INSTANCE.sendToServer(new UpdateServerMessage(ConfigurationHandler.favoriteGrave, false));
 			}
 		}
 	}
@@ -61,7 +60,7 @@ public class EventHandler {
 		if (event.getEntity() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)event.getEntity();
 			if (event.getWorld().isRemote) {
-				PacketHandler.INSTANCE.sendToServer(new UpdateFavoriteGraveMessage(ConfigurationHandler.favoriteGrave, false));
+				PacketHandler.INSTANCE.sendToServer(new UpdateServerMessage(ConfigurationHandler.favoriteGrave, true));
 			}
 		}
 	}
@@ -203,19 +202,15 @@ public class EventHandler {
 	/** compatibility with Claimed Block Mod & Vanilla Spawn Protection */
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
 	public void uncancelGraveRightClick(PlayerInteractEvent.RightClickBlock event) {
-		if (event.isCanceled()) {
-			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			if (block instanceof BlockGrave && !((BlockGrave)block).isDecorative()) {
+		Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+		if (block instanceof BlockGrave && !((BlockGrave)block).isDecorative()) {
+			if (event.isCanceled()) {
 				event.setCanceled(false);
 				event.setUseBlock(Result.DEFAULT);
 				event.setUseItem(Result.DEFAULT);
 			}
-		}
-		if (event.getWorld().isRemote && !Minecraft.getMinecraft().isIntegratedServerRunning()) {
-			BlockPos currentPos = event.getPos();
-			IBlockState state = event.getWorld().getBlockState(event.getPos());
-			Block block = state.getBlock();
-			if (block instanceof BlockGrave && !((BlockGrave)block).isDecorative()) {
+			SpawnProtectionHandler handler = SpawnProtectionHandler.getInstance();
+			if (handler.isBlockProtected(event.getPos())) {
 				PacketHandler.INSTANCE.sendToServer(new TombstoneActivatedMessage(event.getPos()));
 			}
 		}
