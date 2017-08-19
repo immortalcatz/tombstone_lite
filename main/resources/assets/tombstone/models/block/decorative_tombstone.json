@@ -54,7 +54,7 @@
     "east":{"uv":[2,7,14,7.5],"texture":"#0"}
 }},{
   "name": "plate",
-  "from":[4,2,6.998],"to":[12,9,6.998],"faces":{
+  "from":[4,2,6.99],"to":[12,9,6.99],"faces":{
     "north":{"uv":[14.5,0,1.5,11.375],"texture":"#grave_plate"}
 }},{
   "name": "pillar_east",

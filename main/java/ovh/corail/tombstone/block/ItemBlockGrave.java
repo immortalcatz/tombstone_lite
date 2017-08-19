@@ -41,8 +41,7 @@ public class ItemBlockGrave extends ItemBlock {
     	} else {
     		tooltip.clear();
 	    	tooltip.add(0, I18n.translateToLocal(stack.getUnlocalizedName()+".name"));
-	    	// TODO translate
-	    	tooltip.add(TextFormatting.GRAY + "The grave seems to be engraved, a name can be read : \"" + customName + "\"");
+	    	tooltip.add(TextFormatting.GRAY + Helper.getTranslation("item.decorative_grave.desc") +"\"" + customName + "\"");
     	}
     }
     

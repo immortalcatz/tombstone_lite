@@ -1,6 +1,7 @@
 package ovh.corail.tombstone.packet;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -34,7 +35,7 @@ public class UpdateClientMessage implements IMessage {
 	public static class Handler implements IMessageHandler<UpdateClientMessage, IMessage> {
 		@Override
 		public IMessage onMessage(final UpdateClientMessage message, final MessageContext ctx) {
-			IThreadListener mainThread = (IThreadListener) ctx.getServerHandler().player.world;
+			IThreadListener mainThread = Minecraft.getMinecraft();
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {

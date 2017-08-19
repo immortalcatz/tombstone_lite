@@ -31,11 +31,11 @@
     "east":{"uv":[0,0,3,1],"texture":"#0"}
 }},{
   "name":"grave_plate_down",
-  "from":[4,1,12.998],"to":[12,8,12.998],"faces":{
+  "from":[4,1,12.99],"to":[12,8,12.99],"faces":{
     "north":{"uv":[1.5,11.375,14.5,0],"texture":"#grave_plate"}
 }},{
   "name":"grave_plate_top",
-  "from":[4,8,12.998],"to":[12,13,12.998],"faces":{
+  "from":[4,8,12.99],"to":[12,13,12.99],"faces":{
     "north":{"uv":[14.5,0,1.5,8.125],"texture":"#grave_plate"}
 }}
 ]}

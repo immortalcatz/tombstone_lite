@@ -55,11 +55,11 @@
     "east":{"uv":[0,0,5,1],"texture":"#0"}
 }},{
   "name":"grave_plate_top",
-  "from":[3,1.002,0],"to":[13,1.002,5.5],"faces":{
+  "from":[3,1.01,0],"to":[13,1.01,5.5],"faces":{
     "up":{"uv":[1.5,0,14.5,5.0555],"texture":"#grave_plate"}
 }},{
   "name":"grave_plate_down",
-  "from":[3,1.002,5.5],"to":[13,1.002,9],"faces":{
+  "from":[3,1.01,5.5],"to":[13,1.01,9],"faces":{
     "up":{"uv":[14.5,5.0555,1.5,0],"texture":"#grave_plate"}
 }}
 ]}

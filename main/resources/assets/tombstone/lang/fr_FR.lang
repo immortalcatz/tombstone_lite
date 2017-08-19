@@ -13,6 +13,7 @@ item.info.useCount=Nombre d'utilisation
 item.scroll_of_recall.name=Parchemin de Rappel
 item.scroll_of_recall.desc1=Click droit sur une âme de tombe pour activer le parchemin
 item.scroll_of_recall.desc2=Vous téléporte à la tombe
+item.decorative_grave.desc=La tombe semble être gravée, on peut y lire un nom : 
 message.death_date.died_on=décédé le
 message.death_date.at=à
 message.enchant_item.success=La magie de la tombe se répand dans votre objet.

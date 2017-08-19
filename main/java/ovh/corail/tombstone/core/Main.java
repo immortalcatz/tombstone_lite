@@ -87,6 +87,7 @@ public class Main {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
+		PacketHandler.init();
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		if (proxy.getSide() == Side.SERVER) {
 			DeathHandler.getInstance();
@@ -104,7 +105,6 @@ public class Main {
 		/** register encoded recipes */
 		Helper.registerEncodedRecipes();
 		/** packet handler */
-		PacketHandler.init();
 		proxy.preInit(event);
 	}
 

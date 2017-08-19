@@ -31,18 +31,18 @@ public class RenderWritableGrave extends TileEntitySpecialRenderer<TileEntityWri
 		switch (block.getGraveType()) {
 		case GRAVE_CROSS:
 			value = 0.25f;
-			modY = 0.06275f;
+			modY = 0.06375f;
 			break;
 		case GRAVE_NORMAL:
-			value = 0.12525f;
+			value = 0.12625f;
 			modY = 0.5f;
 			break;
 		case GRAVE_SIMPLE:
-			value = 0.18775f;
+			value = 0.18875f;
 			modY = 0.4f;
 			break;
 		case TOMBSTONE:default:
-			value = 0.56275f;
+			value = 0.56375f;
 			modY = 0.25f;
 			break;
 		}
