@@ -209,9 +209,11 @@ public class EventHandler {
 				event.setUseBlock(Result.DEFAULT);
 				event.setUseItem(Result.DEFAULT);
 			}
-			SpawnProtectionHandler handler = SpawnProtectionHandler.getInstance();
-			if (handler.isBlockProtected(event.getPos())) {
-				PacketHandler.INSTANCE.sendToServer(new TombstoneActivatedMessage(event.getPos()));
+			if (event.getWorld().isRemote) {
+				SpawnProtectionHandler handler = SpawnProtectionHandler.getInstance();
+				if (handler.isBlockProtected(event.getWorld().provider.getDimension(), event.getPos())) {
+					PacketHandler.INSTANCE.sendToServer(new TombstoneActivatedMessage(event.getPos()));
+				}
 			}
 		}
 	}

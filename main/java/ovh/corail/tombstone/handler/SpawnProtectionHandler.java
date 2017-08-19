@@ -26,8 +26,8 @@ public class SpawnProtectionHandler {
 		return isActive;
 	}
 	
-	public boolean isBlockProtected(BlockPos currentPos) {
-		if (!isActive) { return false; }
+	public boolean isBlockProtected(int dimension, BlockPos currentPos) {
+		if (!isActive || dimension != 0) { return false; }
         int i = MathHelper.abs(currentPos.getX() - spawnPos.getX());
         int j = MathHelper.abs(currentPos.getZ() - spawnPos.getZ());
         int k = Math.max(i, j);
