@@ -7,9 +7,9 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import ovh.corail.tombstone.block.BlockGrave.GraveType;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.handler.DeathHandler;
-import ovh.corail.tombstone.handler.DeathHandler.GraveType;
 
 public class UpdateFavoriteGraveMessage implements IMessage {
 	private String graveType;

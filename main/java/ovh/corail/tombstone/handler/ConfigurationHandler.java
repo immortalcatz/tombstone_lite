@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.stream.Stream;
 
 import net.minecraftforge.common.config.Configuration;
+import ovh.corail.tombstone.block.BlockGrave.GraveType;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.ModProps;
-import ovh.corail.tombstone.handler.DeathHandler.GraveType;
 import scala.Int;
 
 public class ConfigurationHandler {

@@ -1,7 +1,6 @@
 package ovh.corail.tombstone.block;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -13,15 +12,12 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -29,12 +25,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
-import ovh.corail.tombstone.core.ParticleShowItemOver;
-import ovh.corail.tombstone.handler.ConfigurationHandler;
-import ovh.corail.tombstone.handler.PacketHandler;
-import ovh.corail.tombstone.handler.SoundHandler;
-import ovh.corail.tombstone.item.ISoulConsumption;
-import ovh.corail.tombstone.packet.UpdateSoulMessage;
 
 public class BlockFacingGrave extends Block {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -60,47 +50,6 @@ public class BlockFacingGrave extends Block {
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, ground_bounds);
-	}
-
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-		super.randomDisplayTick(state, world, pos, rand);
-		/** add particle to show soul */
-		if (state.getValue(HAS_SOUL)) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleShowItemOver(world, Main.soul, pos.getX(), pos.getY(), pos.getZ()));
-		/** update has_soul property */
-		} else if (world.isThundering() && world.thunderingStrength > 0.5f && this.canHoldSoul() && Helper.getRandom(1, ConfigurationHandler.chanceSoul) <= 1) {
-			PacketHandler.INSTANCE.sendToServer(new UpdateSoulMessage(pos, true));
-		}
-		/** fog particle */
-		if (!ConfigurationHandler.showFog) { return; }
-		if (!(this instanceof BlockTombstone) && ((double)world.getCelestialAngle(0.0f) < 0.245d || (double)world.getCelestialAngle(0.0f) > 0.755d)) { return; }
-		Main.proxy.produceTombstoneParticles(pos);
-	}
-	
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (world.isRemote) { return true; }
-		if (state.getValue(HAS_SOUL)) {
-			ItemStack stack = player.getHeldItemMainhand();
-			if (!stack.isEmpty() && stack.getItem() instanceof ISoulConsumption) {
-				ISoulConsumption item = ((ISoulConsumption)stack.getItem());
-				if (!item.isEnchanted(stack)) {
-					if (item.setEnchant(world, pos, player, stack)) {
-						world.setBlockState(pos, state.withProperty(HAS_SOUL, false), 3);
-						SoundHandler.playSoundAllAround("magic_use01", world, player.getPosition(), 10d);
-						Helper.sendMessage("message.enchant_item.success", player, true);
-					} else {
-						Helper.sendMessage("message.enchant_item.cant_enchant", player, true);
-					}
-				} else {
-					Helper.sendMessage("message.enchant_item.already_enchanted", player, true);
-				}
-			}
-		}
-		return true;
 	}
 
 	@Override
@@ -145,10 +94,6 @@ public class BlockFacingGrave extends Block {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
     	worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(HAS_SOUL, false));
-	}
-	
-	public boolean canHoldSoul() {
-		return true;
 	}
 	
 	@Override

@@ -32,8 +32,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import nightkosh.gravestone.api.GraveStoneAPI;
 import ovh.corail.tombstone.block.BlockFacingGrave;
-import ovh.corail.tombstone.block.BlockTombstone;
-import ovh.corail.tombstone.block.IPlayerGrave;
+import ovh.corail.tombstone.block.BlockGrave;
 import ovh.corail.tombstone.block.ItemBlockGrave;
 import ovh.corail.tombstone.core.Helper;
 import ovh.corail.tombstone.core.Main;
@@ -206,7 +205,7 @@ public class EventHandler {
 	public void uncancelGraveRightClick(PlayerInteractEvent.RightClickBlock event) {
 		if (event.isCanceled()) {
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			if (block instanceof IPlayerGrave) {
+			if (block instanceof BlockGrave && !((BlockGrave)block).isDecorative()) {
 				event.setCanceled(false);
 				event.setUseBlock(Result.DEFAULT);
 				event.setUseItem(Result.DEFAULT);
@@ -216,7 +215,7 @@ public class EventHandler {
 			BlockPos currentPos = event.getPos();
 			IBlockState state = event.getWorld().getBlockState(event.getPos());
 			Block block = state.getBlock();
-			if (block instanceof IPlayerGrave) {
+			if (block instanceof BlockGrave && !((BlockGrave)block).isDecorative()) {
 				PacketHandler.INSTANCE.sendToServer(new TombstoneActivatedMessage(event.getPos()));
 			}
 		}
@@ -226,7 +225,7 @@ public class EventHandler {
 	public void uncancelGraveBuild(BlockEvent.PlaceEvent event) {
 		if (event.isCanceled()) {
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			if (block instanceof IPlayerGrave) {
+			if (block instanceof BlockGrave && !((BlockGrave)block).isDecorative()) {
 				event.setCanceled(false);
 			}
 		}

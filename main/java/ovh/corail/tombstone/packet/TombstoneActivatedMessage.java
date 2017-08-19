@@ -12,8 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import ovh.corail.tombstone.block.BlockTombstone;
-import ovh.corail.tombstone.block.IPlayerGrave;
+import ovh.corail.tombstone.block.BlockGrave;
 
 public class TombstoneActivatedMessage implements IMessage {
 	private BlockPos currentPos; 
@@ -46,7 +45,7 @@ public class TombstoneActivatedMessage implements IMessage {
 					World world = player.world;
 					IBlockState state = world.getBlockState(message.currentPos);
 					Block block = state.getBlock();
-					if (block instanceof IPlayerGrave) {
+					if (block instanceof BlockGrave && !((BlockGrave)block).isDecorative()) {
 						if (player.getServer().isDedicatedServer()) {
 							DedicatedServer server = (DedicatedServer)player.getServer();
 							if (server.isBlockProtected(world, message.currentPos, player)) {

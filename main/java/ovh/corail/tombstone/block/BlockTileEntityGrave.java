@@ -21,6 +21,7 @@ import net.minecraftforge.items.IItemHandler;
 import ovh.corail.tombstone.tileentity.TileEntityWritableGrave;
 
 public abstract class BlockTileEntityGrave<TE extends TileEntityWritableGrave> extends BlockFacingGrave {
+	
 
 	public BlockTileEntityGrave(Material material, String name) {
 		super(material, name);
@@ -38,6 +39,8 @@ public abstract class BlockTileEntityGrave<TE extends TileEntityWritableGrave> e
 	@Nullable
 	@Override
 	public abstract TE createTileEntity(World world, IBlockState state);
+	
+	//public abstract boolean isDecorativeGrave();
 	
 	@Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {

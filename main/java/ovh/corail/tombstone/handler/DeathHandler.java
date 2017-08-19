@@ -8,11 +8,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import ovh.corail.tombstone.block.BlockGrave.GraveType;
 import ovh.corail.tombstone.core.Main;
 
 public class DeathHandler {
 	private static final DeathHandler instance = new DeathHandler();
-	public static enum GraveType { GRAVE_SIMPLE, GRAVE_NORMAL, GRAVE_CROSS, TOMBSTONE }
 	private HashMap<UUID, GraveType> favorite_graves = new HashMap<UUID, GraveType>();
 	
 	private DeathHandler() {}
