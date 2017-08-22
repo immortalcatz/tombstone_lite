@@ -2,9 +2,12 @@ package ovh.corail.tombstone.tileentity;
 
 import java.util.Date;
 
+import baubles.api.cap.BaublesCapabilities;
+import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -37,12 +40,28 @@ public class TileEntityTombstone extends TileEntityWritableGrave {
 	
 	public void giveInventory(EntityPlayer player) {
 		if (player == null || world.isRemote) { return; }
+		IBaublesItemHandler handler = player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES, null);
 		for (int i = 0; i < inventory.getSlots() ; i++) {
-			
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack.isEmpty()) { continue; }
 			boolean set = false;
-			if (stack.getItem() instanceof ItemArmor) {
+			/** auto equip */
+			if (handler != null) {
+				for (int slot = 0 ; slot < handler.getSlots() ; slot++) {
+					if (handler.getStackInSlot(slot).isEmpty() && handler.isItemValidForSlot(slot, stack, player)) {
+						handler.setStackInSlot(slot, stack);
+						inventory.setStackInSlot(i, ItemStack.EMPTY);
+						set = true;
+						break;
+					}
+				}
+			}
+			if (!set && stack.getItem() instanceof ItemShield && player.inventory.offHandInventory.get(0).isEmpty()) {
+				player.inventory.offHandInventory.set(0, stack);
+				inventory.setStackInSlot(i, ItemStack.EMPTY);
+				set = true;
+			}
+			if (!set && stack.getItem() instanceof ItemArmor) {
 				int slotId = ((ItemArmor) stack.getItem()).armorType.getIndex();
 				if (player.inventory.armorInventory.get(slotId).isEmpty()) {
 					player.inventory.armorInventory.set(slotId, stack);

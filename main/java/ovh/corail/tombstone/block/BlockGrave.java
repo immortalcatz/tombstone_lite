@@ -152,6 +152,7 @@ public class BlockGrave<T extends TileEntityWritableGrave> extends BlockTileEnti
 		for (AxisAlignedBB collision : collisionList) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, collision);
 		}
+		super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
 	}
 	
 	private void loadCollisions() {
@@ -210,7 +211,6 @@ public class BlockGrave<T extends TileEntityWritableGrave> extends BlockTileEnti
 			addCollision(EnumFacing.EAST, new AxisAlignedBB(0.78125d, 0.0625d, 0.0625d, 0.9375d, 0.09375d, 0.9375d));
 			break;
 		}
-		
 	}
 	
 	private void addCollision(EnumFacing facing, AxisAlignedBB bounds) {
