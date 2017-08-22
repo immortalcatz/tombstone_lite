@@ -2,6 +2,7 @@ package ovh.corail.tombstone.tileentity;
 
 import java.util.Date;
 
+import baubles.api.BaublesApi;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.Entity;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -40,13 +42,14 @@ public class TileEntityTombstone extends TileEntityWritableGrave {
 	
 	public void giveInventory(EntityPlayer player) {
 		if (player == null || world.isRemote) { return; }
-		IBaublesItemHandler handler = player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES, null);
+		boolean isBaublesLoaded = Loader.isModLoaded("Baubles") || Loader.isModLoaded("baubles");
+		IBaublesItemHandler handler = isBaublesLoaded ? BaublesApi.getBaublesHandler(player) : null;
 		for (int i = 0; i < inventory.getSlots() ; i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack.isEmpty()) { continue; }
 			boolean set = false;
 			/** auto equip */
-			if (handler != null) {
+			if (isBaublesLoaded) {
 				for (int slot = 0 ; slot < handler.getSlots() ; slot++) {
 					if (handler.getStackInSlot(slot).isEmpty() && handler.isItemValidForSlot(slot, stack, player)) {
 						handler.setStackInSlot(slot, stack);
