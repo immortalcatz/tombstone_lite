@@ -21,7 +21,7 @@ public class RenderWritableGrave extends TileEntitySpecialRenderer<TileEntityWri
 	public void render(TileEntityWritableGrave te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if  (te == null || te.getOwnerName().isEmpty()) { return; }
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
-		if (state.getBlock() == null || !(state.getBlock() instanceof BlockGrave)) { return; }
+		if (!(state.getBlock() instanceof BlockGrave)) { return; }
 		BlockGrave block = (BlockGrave)state.getBlock();
 		EnumFacing facing = state.getValue(block.FACING);
 		int rotationIndex = 0;
@@ -87,32 +87,37 @@ public class RenderWritableGrave extends TileEntitySpecialRenderer<TileEntityWri
 		GlStateManager.disableLighting();
 		GlStateManager.translate((float) x + modX, (float) y + modY, (float) z + modZ);
 		GlStateManager.rotate(90f * rotationIndex, 0f, 1f, 0f);
-		
 		if (is_cross) {
 			GlStateManager.rotate(90f, -1f, 0f, 0f);
 		}
+		GlStateManager.depthMask(false);
+		FontRenderer fontRender = getFontRenderer();
 		
-		/** string size */
+		/** rip message */
+		GlStateManager.pushMatrix();
 		float scale = 0.007f;
 		GlStateManager.scale(scale, -scale, scale);
-		GlStateManager.depthMask(false);
-		/** draw string */
-		showString(TextFormatting.BOLD + "R.I.P.", getFontRenderer(), 0, ConfigurationHandler.textColorRIP+0xff000000);
-		GlStateManager.scale(1/scale, 1/scale, 1/scale);
+		showString(TextFormatting.BOLD + "R.I.P.", fontRender, 0, ConfigurationHandler.textColorRIP+0xff000000);
+		GlStateManager.popMatrix();
 		
+		/** owner message */
+		GlStateManager.pushMatrix();
 		scale = 0.005f;
-		GlStateManager.scale(scale, scale, scale);
+		GlStateManager.scale(scale, -scale, scale);
 		int textPos=0;
-		showString(TextFormatting.BOLD + te.getOwnerName(), getFontRenderer(), 11, ConfigurationHandler.textColorOwner+0xff000000);		
-		GlStateManager.scale(1/scale, 1/scale, 1/scale);
+		showString(TextFormatting.BOLD + te.getOwnerName(), fontRender, 11, ConfigurationHandler.textColorOwner+0xff000000);		
+		GlStateManager.popMatrix();
 		
+		/** death date message */
+		GlStateManager.pushMatrix();
 		scale = 0.004f;
-		GlStateManager.scale(scale, scale, scale);
+		GlStateManager.scale(scale, -scale, scale);
 		int textColorDeathDate = ConfigurationHandler.textColorDeathDate+0xff000000;
-		showString(TextFormatting.BOLD + Helper.getTranslation("message.death_date.died_on"), getFontRenderer(), 26, textColorDeathDate);
-		showString(TextFormatting.BOLD + te.getOwnerDeathDate(1, false), getFontRenderer(), 36, textColorDeathDate);
-		showString(TextFormatting.BOLD + te.getOwnerDeathDate(2, true), getFontRenderer(), 46, textColorDeathDate);
-		GlStateManager.scale(1/scale, 1/scale, 1/scale);
+		showString(TextFormatting.BOLD + Helper.getTranslation("message.death_date.died_on"), fontRender, 26, textColorDeathDate);
+		showString(TextFormatting.BOLD + te.getOwnerDeathDate(1, false), fontRender, 36, textColorDeathDate);
+		showString(TextFormatting.BOLD + te.getOwnerDeathDate(2, true), fontRender, 46, textColorDeathDate);
+		GlStateManager.popMatrix();
+		
 		GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
 		GlStateManager.enableLighting();
@@ -120,11 +125,6 @@ public class RenderWritableGrave extends TileEntitySpecialRenderer<TileEntityWri
 	}
 	
 	private void showString(String content, FontRenderer fontRenderer, int posY, int color) {
-		String deathText = content;
-		String[] splitString = new String[1];
-		splitString[0] = deathText;
-		for (int i = 0; i < splitString.length; i++) {
-			fontRenderer.drawString(splitString[i], -fontRenderer.getStringWidth(splitString[i]) / 2, (i * 10) - 30 + posY, color, true);
-		}
+		fontRenderer.drawString(content, -fontRenderer.getStringWidth(content) / 2, posY-30, color, true);
 	}
 }

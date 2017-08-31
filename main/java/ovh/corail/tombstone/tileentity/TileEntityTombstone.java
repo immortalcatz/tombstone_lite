@@ -3,7 +3,6 @@ package ovh.corail.tombstone.tileentity;
 import java.util.Date;
 
 import baubles.api.BaublesApi;
-import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,6 +1,7 @@
 package ovh.corail.tombstone.handler;
 
 import java.util.Date;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +12,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -152,16 +154,22 @@ public class EventHandler {
 		IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
 		tile.setOwner(player, new Date().getTime(), needAccess);
 		ItemStack stack;
-		for (int i = event.getDrops().size() - 1; i >= 0; i--) {
-			stack = event.getDrops().get(i).getItem();
+		for (EntityItem drop : event.getDrops()) {
+			stack = drop.getItem();
 			if (stack.isEmpty()) { continue; }
-			EntityItem n = event.getDrops().get(i);
-			if (!stack.getItem().equals(Main.grave_key)) {
-				n.setItem(ItemHandlerHelper.insertItem(itemHandler, stack, false));
+			if (stack.getItem() != Main.grave_key) {
+				drop.setItem(ItemHandlerHelper.insertItem(itemHandler, stack, false));
 			} else {
-				n.setItem(Helper.addToInventoryWithLeftover(stack, player.inventory, false));
+				drop.setItem(Helper.addToInventoryWithLeftover(stack, player.inventory, false));
 			}
-			event.getDrops().remove(i);
+		}
+		/** sniffer */
+		int range = ConfigurationHandler.snifferRange;
+		List<EntityItem> itemList = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(currentPos.getX() - range, currentPos.getY() - range, currentPos.getZ() - range, currentPos.getX() + range, currentPos.getY() + range, currentPos.getZ() + range));
+		for (EntityItem entityItem : itemList) {
+			stack = entityItem.getItem();
+			if (stack.isEmpty()) { continue; }
+			entityItem.setItem(ItemHandlerHelper.insertItem(itemHandler, stack, false));
 		}
 		/** add a grave key to player inventory if access are needed */
 		if (ConfigurationHandler.tombAccess) {;

@@ -15,7 +15,7 @@ public class ConfigurationHandler {
 	public static String lastFavoriteGrave;
 	public static boolean handlePlayerDeath, tombAccess, upgradeTombKey, xpLoss, highlight, teleportDim, showFog, pvpMode;
 	public static String ingredientToUpgradeKey, favoriteGrave;
-	public static int percentXpLoss, decayTime, scrollOfRecallUseCount, chanceSoul, textColorRIP, textColorOwner, textColorDeathDate;
+	public static int percentXpLoss, decayTime, scrollOfRecallUseCount, chanceSoul, textColorRIP, textColorOwner, textColorDeathDate, snifferRange;
 	
 	private ConfigurationHandler() {
 	}
@@ -38,7 +38,8 @@ public class ConfigurationHandler {
 		chanceSoul = config.getInt("chanceSoul", Configuration.CATEGORY_GENERAL, 3000, 1000, 5000, Helper.getTranslation("config.chanceSoul"));
 		textColorRIP = config.getInt("textColorRIP", Configuration.CATEGORY_CLIENT, 2962496, 0, 16777215, Helper.getTranslation("config.textColorRIP"));
 		textColorOwner = config.getInt("textColorOwner", Configuration.CATEGORY_CLIENT, 5991302, 0, 16777215, Helper.getTranslation("config.textColorOwner"));
-		textColorDeathDate = config.getInt("textColorDeathDate", Configuration.CATEGORY_CLIENT, 2962496, 0, 16777215, Helper.getTranslation("config.textColorDeathDate"));		
+		textColorDeathDate = config.getInt("textColorDeathDate", Configuration.CATEGORY_CLIENT, 2962496, 0, 16777215, Helper.getTranslation("config.textColorDeathDate"));
+		snifferRange = config.getInt("snifferRange", Configuration.CATEGORY_GENERAL, 3, 0, 10, Helper.getTranslation("config.snifferRange"));
 		if (config.hasChanged()) {
 			config.save();
 		}

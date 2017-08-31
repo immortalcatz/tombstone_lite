@@ -107,6 +107,7 @@ public class BlockGrave<T extends TileEntityWritableGrave> extends BlockTileEnti
 				/** only check the same position/dimension for the tomb and the key */
 				ItemStack stack = player.getHeldItemMainhand();
 				if (ItemGraveKey.getTombPos(stack).compareTo(tile.getPos()) == 0 && ItemGraveKey.getTombDim(stack)==world.provider.getDimension()) {
+					player.inventory.mainInventory.set(0, ItemStack.EMPTY);
 					valid = true;
 				} else {
 					Helper.sendMessage("message.open_grave.wrong_key", player, true);

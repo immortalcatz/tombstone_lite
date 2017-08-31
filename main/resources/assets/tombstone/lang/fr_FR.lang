@@ -42,6 +42,7 @@ config.chanceSoul=Chance pour les tombes d'obtenir une âme quand il tonne
 config.textColorRIP=Valeur décimale pour la couleur du texte de tombe <R.I.P.>
 config.textColorOwner=Valeur décimale pour la couleur du texte de tombe <Owner Name>
 config.textColorDeathDate=Valeur décimale pour la couleur du texte de tombe <Death Date>
+config.snifferRange=Portée pour aspirer les objets autour quand une tombe de joueur apparait
 advancement.tutorial.title=Tutoriel
 advancement.tutorial.desc=Tutoriel expliquant certaines fonctionnalités de Tombstone
 advancement.first_tomb.title=Votre première tombe !

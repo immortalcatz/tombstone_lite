@@ -42,6 +42,7 @@ config.chanceSoul=Chance for graves to get a soul when it thunders
 config.textColorRIP=Decimal value for the color of the grave text <R.I.P.>
 config.textColorOwner=Decimal value for the color of the grave text <Owner Name>
 config.textColorDeathDate=Decimal value for the color of the grave text <Death Date>
+config.snifferRange=Range to aspirate items around when a player grave is spawn
 advancement.tutorial.title=Tutorial
 advancement.tutorial.desc=Tutorial to explain some features of Tombstone
 advancement.first_tomb.title=Dein erstes Grab!

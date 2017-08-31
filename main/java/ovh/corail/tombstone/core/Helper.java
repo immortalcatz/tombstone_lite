@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
+import ovh.corail.tombstone.block.BlockGrave;
 import ovh.corail.tombstone.block.ItemBlockGrave;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 
@@ -180,14 +181,14 @@ public class Helper {
 	
 	public static void register() {
 		/** register blocks */
-		registerGrave(Main.grave_simple, false);
-		registerGrave(Main.grave_normal, false);
-		registerGrave(Main.grave_cross, false);
-		registerGrave(Main.tombstone, false);
-		registerGrave(Main.decorative_grave_simple);
-		registerGrave(Main.decorative_grave_normal);
-		registerGrave(Main.decorative_grave_cross);
-		registerGrave(Main.decorative_tombstone);
+		register(Main.grave_simple);
+		register(Main.grave_normal);
+		register(Main.grave_cross);
+		register(Main.tombstone);
+		register(Main.decorative_grave_simple);
+		register(Main.decorative_grave_normal);
+		register(Main.decorative_grave_cross);
+		register(Main.decorative_tombstone);
 		/** register achievement icon items */
 		register(Main.itemAchievement001);
 		register(Main.itemAchievement002);
@@ -199,14 +200,10 @@ public class Helper {
 		register(Main.scroll_of_recall);	
 	}
 	
-	public static void registerGrave(Block block) {
-		registerGrave(block, true);
-	}
-	
-	public static void registerGrave(Block block, boolean hasItem) {
-		ForgeRegistries.BLOCKS.register(block);
-		if (hasItem) {
-			ForgeRegistries.ITEMS.register(new ItemBlockGrave(block).setRegistryName(block.getRegistryName()));
+	public static void register(BlockGrave grave) {
+		ForgeRegistries.BLOCKS.register(grave);
+		if (grave.isDecorative()) {
+			ForgeRegistries.ITEMS.register(new ItemBlockGrave(grave).setRegistryName(grave.getRegistryName()));
 		}
 	}
 	
