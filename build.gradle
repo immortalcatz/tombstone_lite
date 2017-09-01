@@ -9,11 +9,11 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.3.3-1.12"
+version = "1.3.4-1.12"
 group = "ovh.corail" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "tombstone"
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
@@ -30,7 +30,7 @@ repositories {
     }
 }
 dependencies {
-	deobfCompile "baubles:Baubles:1.12:1.5.1"
+	provided files("libs/Baubles-1.12-1.5.1.jar")
 	provided files("libs/GraveStone-1.12-Graves-1.0.12.jar")
 }
 
