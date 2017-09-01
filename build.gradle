@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.3.4-1.12"
+version = "1.3.5-1.12"
 group = "ovh.corail" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "tombstone"
 

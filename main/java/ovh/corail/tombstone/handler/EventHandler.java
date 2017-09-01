@@ -162,17 +162,17 @@ public class EventHandler {
 			} else {
 				Helper.addToInventoryWithLeftover(stack, player.inventory, false);
 			}
-			drop.setDead();
 		}
+		event.getDrops().clear();
 		/** sniffer */
-		int range = ConfigurationHandler.snifferRange;
-		List<EntityItem> itemList = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(currentPos.getX() - range, currentPos.getY() - range, currentPos.getZ() - range, currentPos.getX() + range, currentPos.getY() + range, currentPos.getZ() + range));
+		double range = (double)ConfigurationHandler.snifferRange;
+		List<EntityItem> itemList = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB((double)currentPos.getX() - range, (double)currentPos.getY() - range, (double)currentPos.getZ() - range, (double)currentPos.getX() + range, (double)currentPos.getY() + range, (double)currentPos.getZ() + range));
 		for (EntityItem entityItem : itemList) {
 			stack = entityItem.getItem();
 			if (stack.isEmpty()) { continue; }
 			ItemStack leftOver = ItemHandlerHelper.insertItem(itemHandler, stack, false);
 			if (leftOver.isEmpty()) {
-				entityItem.setDead();
+				world.removeEntity(entityItem);
 			} else {
 				entityItem.setItem(leftOver);
 			}
