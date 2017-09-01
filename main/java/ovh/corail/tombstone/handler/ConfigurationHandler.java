@@ -39,7 +39,7 @@ public class ConfigurationHandler {
 		textColorRIP = config.getInt("textColorRIP", Configuration.CATEGORY_CLIENT, 2962496, 0, 16777215, Helper.getTranslation("config.textColorRIP"));
 		textColorOwner = config.getInt("textColorOwner", Configuration.CATEGORY_CLIENT, 5991302, 0, 16777215, Helper.getTranslation("config.textColorOwner"));
 		textColorDeathDate = config.getInt("textColorDeathDate", Configuration.CATEGORY_CLIENT, 2962496, 0, 16777215, Helper.getTranslation("config.textColorDeathDate"));
-		snifferRange = config.getInt("snifferRange", Configuration.CATEGORY_GENERAL, 3, 0, 10, Helper.getTranslation("config.snifferRange"));
+		snifferRange = config.getInt("snifferRange", Configuration.CATEGORY_GENERAL, 5, 0, 10, Helper.getTranslation("config.snifferRange"));
 		if (config.hasChanged()) {
 			config.save();
 		}

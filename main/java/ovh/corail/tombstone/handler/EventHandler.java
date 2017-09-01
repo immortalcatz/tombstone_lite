@@ -158,10 +158,11 @@ public class EventHandler {
 			stack = drop.getItem();
 			if (stack.isEmpty()) { continue; }
 			if (stack.getItem() != Main.grave_key) {
-				drop.setItem(ItemHandlerHelper.insertItem(itemHandler, stack, false));
+				ItemHandlerHelper.insertItem(itemHandler, stack, false);
 			} else {
-				drop.setItem(Helper.addToInventoryWithLeftover(stack, player.inventory, false));
+				Helper.addToInventoryWithLeftover(stack, player.inventory, false);
 			}
+			drop.setDead();
 		}
 		/** sniffer */
 		int range = ConfigurationHandler.snifferRange;
@@ -169,7 +170,12 @@ public class EventHandler {
 		for (EntityItem entityItem : itemList) {
 			stack = entityItem.getItem();
 			if (stack.isEmpty()) { continue; }
-			entityItem.setItem(ItemHandlerHelper.insertItem(itemHandler, stack, false));
+			ItemStack leftOver = ItemHandlerHelper.insertItem(itemHandler, stack, false);
+			if (leftOver.isEmpty()) {
+				entityItem.setDead();
+			} else {
+				entityItem.setItem(leftOver);
+			}
 		}
 		/** add a grave key to player inventory if access are needed */
 		if (ConfigurationHandler.tombAccess) {;
@@ -239,6 +245,7 @@ public class EventHandler {
 	/** compatibility with EuhDawson Grave Mod */
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onLivingDropsStart(LivingDropsEvent event) {
+		if (!ConfigurationHandler.handlePlayerDeath) { return; }
 		if (Loader.isModLoaded("gravestone") || Loader.isModLoaded("GraveStone")) {
 			if (GraveStoneAPI.graveGenerationAtDeath == null) {
 				event.setCanceled(true);
@@ -248,6 +255,7 @@ public class EventHandler {
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
 	public void onLivingDropsEnd(LivingDropsEvent event) {
+		if (!ConfigurationHandler.handlePlayerDeath) { return; }
 		if (Loader.isModLoaded("gravestone") || Loader.isModLoaded("GraveStone")) {
 			if (GraveStoneAPI.graveGenerationAtDeath == null) {
 				event.setCanceled(false);
