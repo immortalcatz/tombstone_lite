@@ -172,7 +172,7 @@ public class EventHandler {
 			if (stack.isEmpty()) { continue; }
 			ItemStack leftOver = ItemHandlerHelper.insertItem(itemHandler, stack, false);
 			if (leftOver.isEmpty()) {
-				world.removeEntity(entityItem);
+				entityItem.setDead();
 			} else {
 				entityItem.setItem(leftOver);
 			}

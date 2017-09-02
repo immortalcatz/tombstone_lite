@@ -21,14 +21,12 @@ import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,13 +37,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
-import ovh.corail.tombstone.block.BlockGrave;
-import ovh.corail.tombstone.block.ItemBlockGrave;
 import ovh.corail.tombstone.handler.ConfigurationHandler;
 
 public class Helper {
@@ -144,76 +139,6 @@ public class Helper {
 	
 	public static boolean areItemEqual(ItemStack s1, ItemStack s2) {
 		return s1.isItemEqual(s2) && s1.getMetadata() == s2.getMetadata() && ItemStack.areItemStackTagsEqual(s1, s2);
-	}
-
-	public static void render() {
-		/** render blocks */
-		render(Main.decorative_grave_simple);
-		render(Main.decorative_grave_normal);
-		render(Main.decorative_grave_cross);
-		render(Main.decorative_tombstone);
-		/** render achievement icon items */
-		render(Main.itemAchievement001);
-		render(Main.itemAchievement002);
-		render(Main.itemAchievement003);
-		/** render items */
-		render(Main.grave_key);
-		render(Main.fake_fog);
-		render(Main.soul);
-		render(Main.scroll_of_recall);
-	}
-	
-	public static void render(Block block) {
-		render(Item.getItemFromBlock(block), 0);
-	}
-	
-	public static void render(Item item) {
-		render(item, 0);
-	}
-
-	public static void render(Block block, int meta) {
-		render(Item.getItemFromBlock(block), meta);
-	}
-
-	private static void render(Item item, int meta) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-	}
-	
-	public static void register() {
-		/** register blocks */
-		register(Main.grave_simple);
-		register(Main.grave_normal);
-		register(Main.grave_cross);
-		register(Main.tombstone);
-		register(Main.decorative_grave_simple);
-		register(Main.decorative_grave_normal);
-		register(Main.decorative_grave_cross);
-		register(Main.decorative_tombstone);
-		/** register achievement icon items */
-		register(Main.itemAchievement001);
-		register(Main.itemAchievement002);
-		register(Main.itemAchievement003);
-		/** register items */
-		register(Main.grave_key);
-		register(Main.fake_fog);
-		register(Main.soul);
-		register(Main.scroll_of_recall);	
-	}
-	
-	public static void register(BlockGrave grave) {
-		ForgeRegistries.BLOCKS.register(grave);
-		if (grave.isDecorative()) {
-			ForgeRegistries.ITEMS.register(new ItemBlockGrave(grave).setRegistryName(grave.getRegistryName()));
-		}
-	}
-	
-	public static void register(Block block) {
-		ForgeRegistries.BLOCKS.register(block);
-		ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-	}
-
-	public static void register(Item item) {
-		ForgeRegistries.ITEMS.register(item);
 	}
 	
 	public static boolean isSafeBlock(World world, BlockPos currentPos) {

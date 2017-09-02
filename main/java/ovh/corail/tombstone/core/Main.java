@@ -100,10 +100,6 @@ public class Main {
 		/** register tileentities */
 		GameRegistry.registerTileEntity(TileEntityWritableGrave.class, "writable_grave");
 		GameRegistry.registerTileEntity(TileEntityTombstone.class, "tombstone");
-		/** register items and blocks */
-		Helper.register();
-		/** register encoded recipes */
-		Helper.registerEncodedRecipes();
 		/** packet handler */
 		proxy.preInit(event);
 	}
